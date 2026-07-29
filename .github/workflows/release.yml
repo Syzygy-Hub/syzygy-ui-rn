@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  workflow_run:
+    workflows: ['Node CI']
+    types:
+      - completed
+
+jobs:
+  release:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.head_commit.message, 'release:')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Extract version
+        id: version
+        run: |
+          COMMIT_MSG="${{ github.event.workflow_run.head_commit.message }}"
+          VERSION=$(echo "$COMMIT_MSG" | sed -n 's/^release: *//p' | head -n1 | awk '{print $1}')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ steps.version.outputs.version }}" \
+            --title "v${{ steps.version.outputs.version }}" \
+            --notes "${{ github.event.workflow_run.head_commit.message }}" \
+            --target "${{ github.event.workflow_run.head_sha }}"
