@@ -31,6 +31,36 @@ npm install @aks5686/rn-ui-library
 | `npm run clean` | Remove dist/ and node_modules/ |
 | `npm run reinstall` | Clean and reinstall all dependencies |
 
+## Contributing & Releases
+
+### Making a release
+Releases are fully automated. To publish a new version:
+
+1. Make your changes and ensure all tests pass:
+```sh
+   npm test
+   npm run typecheck
+   npm run lint
+```
+
+2. Commit with the release prefix:
+```sh
+   git commit -m "release: v1.2.0 — description of changes"
+   git push origin main
+```
+
+3. The CI pipeline will automatically:
+   - Run all tests
+   - Sync package.json version to match the commit message
+   - Publish to npm via OIDC trusted publishing (no tokens needed)
+   - Create a GitHub release with the version tag
+
+### Version format
+Follow semver: `v{major}.{minor}.{patch}`
+- Patch: `v1.0.1` — bug fixes
+- Minor: `v1.1.0` — new components or features
+- Major: `v2.0.0` — breaking changes
+
 ## Usage
 
 ```tsx
