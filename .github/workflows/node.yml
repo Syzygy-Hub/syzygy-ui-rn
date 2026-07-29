@@ -16,3 +16,7 @@ jobs:
           node-version: 18
       - run: npm install
       - run: npm test
+      - name: Type check
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
