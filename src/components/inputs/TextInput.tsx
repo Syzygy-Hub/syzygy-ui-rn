@@ -26,6 +26,8 @@ export const TextInput: React.FC<TextInputProps> = ({
   error,
   style,
   accessibilityLabel,
+  maxLength,
+  value,
   ...rest
 }) => {
   const scheme = useColorScheme();
@@ -46,10 +48,17 @@ export const TextInput: React.FC<TextInputProps> = ({
             color: colors.textPrimary,
           },
         ]}
+        maxLength={maxLength}
+        value={value}
         {...rest}
       />
       {hasError ? (
         <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
+      ) : null}
+      {maxLength != null ? (
+        <Text style={[styles.counter, { color: colors.textSecondary }]}>
+          {`${(value ?? '').length}/${maxLength}`}
+        </Text>
       ) : null}
     </View>
   );
@@ -71,5 +80,10 @@ const styles = StyleSheet.create({
   error: {
     fontSize: fontSizes.xs,
     marginTop: spacing.xs,
+  },
+  counter: {
+    fontSize: fontSizes.xs,
+    marginTop: spacing.xs,
+    textAlign: 'right',
   },
 });

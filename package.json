@@ -13,7 +13,13 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "lint": "tsc --noEmit"
+    "clean": "rm -rf dist node_modules",
+    "reinstall": "npm run clean && npm install",
+    "prebuild": "rm -rf dist",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "typecheck": "tsc --noEmit",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
@@ -30,7 +36,10 @@
     "react": "18.2.0",
     "react-native": "^0.73.0",
     "react-test-renderer": "18.2.0",
-    "@types/react-test-renderer": "^18.0.0"
+    "@types/react-test-renderer": "^18.0.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0"
   },
   "files": [
     "src"

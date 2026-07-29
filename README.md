@@ -18,6 +18,18 @@ Production-ready React Native component library with design tokens, Dark Mode, a
 npm install rn-ui-library
 ```
 
+## Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run build` | Compile TypeScript to dist/ |
+| `npm test` | Run Jest test suite |
+| `npm run lint` | Run ESLint |
+| `npm run lint:fix` | Run ESLint with auto-fix |
+| `npm run typecheck` | Type check without emitting files |
+| `npm run clean` | Remove dist/ and node_modules/ |
+| `npm run reinstall` | Clean and reinstall all dependencies |
+
 ## Usage
 
 ```tsx

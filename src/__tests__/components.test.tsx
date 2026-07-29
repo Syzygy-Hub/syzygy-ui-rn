@@ -73,6 +73,18 @@ describe('component smoke tests', () => {
     expect(tree.toJSON()).toBeTruthy();
   });
 
+  it('renders TextInput with maxLength counter', () => {
+    const tree = renderer.create(
+      <TextInput
+        label="Bio"
+        value="Hello"
+        onChangeText={() => {}}
+        maxLength={100}
+      />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
   it('renders SecureInput', () => {
     const tree = renderer.create(
       <SecureInput label="Password" value="" onChangeText={() => {}} />
