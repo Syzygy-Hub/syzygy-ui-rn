@@ -1,5 +1,5 @@
 {
-  "name": "rn-ui-library",
+  "name": "@aks5686/rn-ui-library",
   "version": "1.0.0",
   "description": "Production-ready React Native component library with design tokens, Dark Mode, and zero third-party dependencies",
   "main": "src/index.ts",

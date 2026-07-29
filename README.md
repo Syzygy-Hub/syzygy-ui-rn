@@ -1,6 +1,7 @@
 # rn-ui-library
 
-[![npm](https://img.shields.io/npm/v/rn-ui-library)](https://www.npmjs.com/package/rn-ui-library)
+[![npm](https://img.shields.io/npm/v/@aks5686/rn-ui-library)](https://www.npmjs.com/package/@aks5686/rn-ui-library)
+[![Release](https://img.shields.io/github/v/release/aks5686/rn-ui-library)](https://github.com/aks5686/rn-ui-library/releases)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android%20%7C%20Web-lightgrey)](https://reactnative.dev)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -15,7 +16,7 @@ Production-ready React Native component library with design tokens, Dark Mode, a
 
 ## Installation
 ```sh
-npm install rn-ui-library
+npm install @aks5686/rn-ui-library
 ```
 
 ## Scripts
@@ -33,7 +34,7 @@ npm install rn-ui-library
 ## Usage
 
 ```tsx
-import { PrimaryButton, TextInput, Badge } from 'rn-ui-library';
+import { PrimaryButton, TextInput, Badge } from '@aks5686/rn-ui-library';
 
 // Button
 <PrimaryButton title="Get Started" onPress={() => {}} />
