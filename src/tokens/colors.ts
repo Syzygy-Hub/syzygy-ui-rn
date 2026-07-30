@@ -80,5 +80,5 @@ export const colors: Record<ColorScheme, ColorPalette> = {
   dark: darkColors,
 };
 
-export const getColors = (scheme: ColorScheme | null | undefined): ColorPalette =>
+export const getColors = (scheme: ColorScheme | 'unspecified' | null | undefined): ColorPalette =>
   colors[scheme === 'dark' ? 'dark' : 'light'];
