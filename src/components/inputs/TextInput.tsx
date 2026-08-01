@@ -9,10 +9,11 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+
 import { getColors } from '../../tokens/colors';
-import { fontSizes, fontWeights } from '../../tokens/typography';
-import { spacing } from '../../tokens/spacing';
 import { radius } from '../../tokens/radius';
+import { spacing } from '../../tokens/spacing';
+import { fontSizes, fontWeights } from '../../tokens/typography';
 
 export interface TextInputProps extends Omit<RNTextInputProps, 'style'> {
   label: string;

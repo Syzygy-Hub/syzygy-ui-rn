@@ -1,34 +1,29 @@
 import React from 'react';
-import {
-  StyleProp,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, useColorScheme, View, ViewStyle } from 'react-native';
 
 import { getColors } from '../../tokens/colors';
 import { radius } from '../../tokens/radius';
 import { spacing } from '../../tokens/spacing';
 import { fontSizes, fontWeights } from '../../tokens/typography';
 
-export interface EmptyStateViewProps {
-  icon?: React.ReactNode;
+export interface ErrorStateViewProps {
   title: string;
   subtitle?: string;
-  ctaLabel?: string;
-  onCtaPress?: () => void;
+  retryLabel?: string;
+  onRetryPress: () => void;
   style?: StyleProp<ViewStyle>;
 }
 
-export const EmptyStateView: React.FC<EmptyStateViewProps> = ({
-  icon,
+/**
+ * An icon, title, subtitle, and retry action for error states. Mirrors
+ * `EmptyStateView`'s structure with a destructive-tinted icon and a
+ * mandatory retry action.
+ */
+export const ErrorStateView: React.FC<ErrorStateViewProps> = ({
   title,
   subtitle,
-  ctaLabel,
-  onCtaPress,
+  retryLabel = 'Retry',
+  onRetryPress,
   style,
 }) => {
   const scheme = useColorScheme();
@@ -36,25 +31,19 @@ export const EmptyStateView: React.FC<EmptyStateViewProps> = ({
 
   return (
     <View style={[styles.container, style]} accessibilityRole="text">
-      {icon ? <View style={styles.icon}>{icon}</View> : null}
+      <Text style={{ fontSize: 40, color: colors.destructive }}>{'⚠'}</Text>
       <Text style={[styles.title, { color: colors.textPrimary }]}>{title}</Text>
       {subtitle ? (
-        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          {subtitle}
-        </Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
       ) : null}
-      {ctaLabel && onCtaPress ? (
-        <TouchableOpacity
-          onPress={onCtaPress}
-          accessibilityRole="button"
-          accessibilityLabel={ctaLabel}
-          style={[styles.cta, { backgroundColor: colors.primary }]}
-        >
-          <Text style={[styles.ctaText, { color: colors.primaryText }]}>
-            {ctaLabel}
-          </Text>
-        </TouchableOpacity>
-      ) : null}
+      <TouchableOpacity
+        onPress={onRetryPress}
+        accessibilityRole="button"
+        accessibilityLabel={retryLabel}
+        style={[styles.cta, { backgroundColor: colors.primary }]}
+      >
+        <Text style={{ color: colors.primaryText, fontWeight: fontWeights.semibold }}>{retryLabel}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -65,13 +54,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.xl,
   },
-  icon: {
-    marginBottom: spacing.md,
-  },
   title: {
     fontSize: fontSizes.lg,
     fontWeight: fontWeights.semibold,
     textAlign: 'center',
+    marginTop: spacing.sm,
   },
   subtitle: {
     fontSize: fontSizes.sm,
@@ -84,10 +71,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: radius.md,
     marginTop: spacing.md,
-  },
-  ctaText: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.semibold,
-    textAlign: 'center',
   },
 });

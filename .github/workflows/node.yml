@@ -18,5 +18,22 @@ jobs:
       - run: npm test
       - name: Type check
         run: npm run typecheck
+
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm install
+
+      - name: Fetch shared ESLint/Prettier config
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/Syzygy-Hub/syzygy-lint-config/v1.0.0/.eslintrc.json -o .eslintrc.json
+          curl -fsSL https://raw.githubusercontent.com/Syzygy-Hub/syzygy-lint-config/v1.0.0/.prettierrc -o .prettierrc
+          rm -f .eslintrc.js
+
       - name: Lint
         run: npm run lint

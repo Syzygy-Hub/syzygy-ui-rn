@@ -8,9 +8,10 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+
 import { getColors } from '../../tokens/colors';
-import { fontSizes } from '../../tokens/typography';
 import { spacing } from '../../tokens/spacing';
+import { fontSizes } from '../../tokens/typography';
 
 export interface LoadingViewProps {
   message?: string;

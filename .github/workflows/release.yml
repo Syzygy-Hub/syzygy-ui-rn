@@ -59,7 +59,7 @@ jobs:
       - name: Verify npm publish
         run: |
           PKG_VERSION=$(node -p "require('./package.json').version")
-          npm view @aks5686/rn-ui-library@$PKG_VERSION version || (echo "Publish verification failed" && exit 1)
+          npm view syzygy-ui-rn@$PKG_VERSION version || (echo "Publish verification failed" && exit 1)
 
       - name: Delete existing tag if exists
         run: git push origin :refs/tags/${{ env.VERSION }} || true
@@ -75,5 +75,5 @@ jobs:
 
       - name: Summary
         run: |
-          echo "✅ Published @aks5686/rn-ui-library@${{ env.VERSION }} to npm"
+          echo "✅ Published syzygy-ui-rn@${{ env.VERSION }} to npm"
           echo "✅ GitHub Release ${{ env.VERSION }} created"
