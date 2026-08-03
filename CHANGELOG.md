@@ -5,6 +5,31 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-08-03
+
+### Added
+
+- **Buttons**: `LoadingButton` (built-in `ActivityIndicator`, disables itself while loading), `FloatingActionButton` (circular, elevated primary action button), `ButtonGroup` (segmented row; single- or multi-select via `multiSelect`).
+- **Inputs**: `TextArea` (multi-line, configurable min/max lines), `OTPInput` (fixed-length, auto-advancing focus), `TagInput` (renders entered tags as dismissible `Chip`s), `DatePickerField` / `TimePickerField` (field + open-state UI only — RN core has no built-in date/time picker and this library takes on no third-party dependencies, so wiring an actual native picker is left to the host app), `FormField` (generic label/error/helper wrapper), `PasswordStrengthIndicator` (live length + character-class heuristic, not hardcoded).
+- **Display**: `AvatarGroup` (overlapping `Avatar` stack with "+N" overflow), `StatsCard` (aka `MetricCard`; label/value/trend), `RatingInput` (always-tappable counterpart to the read-only `StarRatingView`).
+- **Feedback**: `SkeletonView` (shape-aware shimmer placeholder, mirrors `ShimmerView`'s animation), `CircularProgress` (determinate + indeterminate; approximated via a rotated bordered ring since RN core has no arc-drawing primitive), `InlineAlert` (aka `Banner`; 4 variants using the new `*Muted` color tokens), `Snackbar` (auto-dismissing, optional action button, mirrors `ToastView`'s presentational pattern).
+- **Overlay**: `ActionSheet` (bottom-anchored action list, same `visible`/`onClose` convention as `BottomSheet`/`ModalDialog`), `Popover` (anchored floating content via measure + absolute positioning — no native anchor-positioning primitive in RN core), `Tooltip` (long-press label, same positioning approach as `Popover`).
+- **Navigation**: `SideMenu` (aka `Drawer`; slide-in panel with a dimming scrim), `FloatingTabBar` (floating pill, icon **+** label — distinct from `BottomNavigationBar`'s floating icon-only pill, filling the last cell in the {edge-to-edge vs floating} x {icon-only vs icon+label} matrix), `StepIndicator` (aka `WizardSteps`), `Breadcrumbs`.
+- **Layout**: `AdaptiveStack` (row above `breakpoint` width, column below), `FlowLayout` (wrapping row with consistent spacing — uses margins rather than the flexbox `gap` property, since `gap` isn't reliably supported across this library's `react-native >=0.70.0` peer range), `StickyHeader` (built on core `ScrollView`'s `stickyHeaderIndices`).
+- **Transitions**: `scaleTransition` (scale in/out + fade), `fadeThroughTransition` (sequential fade-out-then-fade-in, not a simultaneous cross-fade).
+- **Design Tokens**:
+  - **Colors**: `primaryMuted`, `destructiveMuted`, `successMuted`, `warningMuted`, `surfaceSecondary`, `surfaceTertiary`, `textTertiary`, `link`, `focus`, `separator` added to both light and dark palettes (`overlay` already existed and is unchanged).
+  - **Typography**: `fontSizes.largeTitle` (34).
+  - **Spacing**: `xxs` (2), `xxxl` (64).
+  - **Radius**: `xs` (2), `xl` (16).
+  - **New token files**: `elevation.ts` (`none`/`sm`/`md`/`lg`, cross-platform Android `elevation` + iOS `shadow*` objects), `opacity.ts` (`disabled`/`secondary`/`overlay`), `borderWidth.ts` (`thin`/`regular`/`thick`), `iconSize.ts` (`sm`/`md`/`lg`/`xl`), `animation.ts` (`duration` and `easing`, the latter including a `spring` config object distinct in shape from the `Easing`-curve entries).
+
+This repo required no carry-over patch fixes for this release (PagerView's Display-category listing was already correct from a previous release).
+
+### Changed
+
+- Design Tokens section of the README condensed from per-token prose into compact reference tables, for both existing and newly added token categories.
+
 ## [2.0.0] - 2026-08-01
 
 ### Changed — BREAKING

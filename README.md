@@ -1,7 +1,8 @@
 # syzygy-ui-rn
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![npm](https://img.shields.io/npm/v/syzygy-ui-rn)](https://www.npmjs.com/package/syzygy-ui-rn)
+[![npm](https://img.shields.io/npm/v/syzygy-ui-rn?label=npm&color=2F6FED)](https://www.npmjs.com/package/syzygy-ui-rn)
+[![Version](https://img.shields.io/badge/version-2.1.0-2F6FED)](CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android%20%7C%20Web-lightgrey)](https://reactnative.dev)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/Syzygy-Hub/syzygy-ui-rn/actions/workflows/node.yml/badge.svg)](https://github.com/Syzygy-Hub/syzygy-ui-rn/actions/workflows/node.yml)
@@ -24,41 +25,55 @@ npm install syzygy-ui-rn
 ```
 
 ## Components
-- **Buttons:** PrimaryButton, SecondaryButton, DestructiveButton, GhostButton, IconButton
-- **Inputs:** TextInput, SecureInput, SearchInput (debounced, with clear button), ToggleSwitch, CheckboxInput, RadioButtonInput, SliderInput, Dropdown, SegmentedControl, QuantityStepper
-- **Display:** Avatar, DividerLine, Chip, ListRow, SectionHeader, LazyImageView, StarRatingView, CountBadge, PagerView (swipeable paged content, not navigation chrome; `onPageChange` reports the current page index for you to use as local state — e.g. a carousel — or feed into a navigator, as needed)
-- **Feedback:** LoadingView, EmptyStateView, ToastView, ShimmerView, ProgressBar, PullToRefresh, ErrorStateView
-- **Overlay:** ModalDialog, BottomSheet, CollapsibleView
-- **Navigation:** BackButton, TabBar, BottomNavigationBar, AppBar — presentational only; this library has no navigation dependency, so wire `onPress`/`onSelectionChange` into your own navigator
+
+68 components across 9 categories, plus a set of `Animated`-driven transition helpers.
+
+- **Buttons:** PrimaryButton, SecondaryButton, DestructiveButton, GhostButton, IconButton, LoadingButton (built-in spinner, disables itself while loading), FloatingActionButton (circular, elevated), ButtonGroup (segmented row; single- or multi-select via `multiSelect`)
+- **Inputs:** TextInput, SecureInput, SearchInput (debounced, with clear button), ToggleSwitch, CheckboxInput, RadioButtonInput, SliderInput, Dropdown, SegmentedControl, QuantityStepper, TextArea, OTPInput (auto-advancing focus), TagInput (chips via `Chip`), DatePickerField, TimePickerField (field/trigger only — RN core has no built-in date/time picker; consumer is responsible for rendering the picker UI), FormField (label/error/helper wrapper), PasswordStrengthIndicator (live length + character-class heuristic)
+- **Display:** Avatar, DividerLine, Chip, ListRow, SectionHeader, LazyImageView, StarRatingView, CountBadge, PagerView (swipeable paged content, not navigation chrome; `onPageChange` reports the current page index for you to use as local state — e.g. a carousel — or feed into a navigator, as needed), AvatarGroup (overlapping stack with "+N" overflow), StatsCard (aka MetricCard; label + value + trend), RatingInput (tappable counterpart to the read-only StarRatingView)
+- **Feedback:** LoadingView, EmptyStateView, ToastView, ShimmerView, ProgressBar, PullToRefresh, ErrorStateView, SkeletonView (shape-aware shimmer placeholder), CircularProgress (determinate + indeterminate), InlineAlert (aka Banner; 4 variants using the `*Muted` tokens), Snackbar (auto-dismissing, optional action)
+- **Overlay:** ModalDialog, BottomSheet, CollapsibleView, ActionSheet (bottom-anchored action list), Popover (anchored floating content), Tooltip (long-press label)
+- **Navigation:** BackButton, TabBar, BottomNavigationBar, AppBar, SideMenu (aka Drawer), FloatingTabBar (floating pill, icon **+** label — distinct from BottomNavigationBar's floating icon-only pill), StepIndicator (aka WizardSteps), Breadcrumbs — presentational only; this library has no navigation dependency, so wire `onPress`/`onSelectionChange` into your own navigator
 - **Cards:** CardView
 - **Badges:** Badge
-- **Transitions:** `slideTransition`, `crossFadeTransition`, `slideVerticalTransition`, `modalPresentationTransition` — `Animated`-driven style helpers
+- **Layout:** KeyboardAvoidingScrollView, AdaptiveStack (row above `breakpoint` width, column below), FlowLayout (wrapping row with consistent inter-item spacing), StickyHeader (via core `ScrollView`'s `stickyHeaderIndices`)
+- **Transitions:** `slideTransition`, `crossFadeTransition`, `slideVerticalTransition`, `modalPresentationTransition`, `scaleTransition`, `fadeThroughTransition` — `Animated`-driven style helpers
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## Design Tokens
 
-All tokens live under `src/tokens/` and are consumed as plain objects — e.g. `spacing.md`, `getColors(scheme).primary`.
+All tokens live under `src/tokens/` and are consumed as plain objects — e.g. `spacing.md`, `getColors(scheme).primary`, `elevation.md`.
 
-### Colors (`getColors`)
-`getColors(scheme)` returns a full `ColorPalette` for `'light'` or `'dark'` (falls back to light for `'unspecified'`/`null`/`undefined`):
+### Colors (`getColors(scheme)`)
+
+Falls back to light for `'unspecified'`/`null`/`undefined`. Every color also has a matching `*Text` counterpart (e.g. `primaryText`) for text placed on top of it.
 
 | Token | Light | Dark |
 |---|---|---|
 | `background` | `#FFFFFF` | `#101012` |
 | `surface` | `#F5F5F7` | `#1C1C1F` |
 | `surfaceAlt` | `#ECECEE` | `#27272B` |
+| `surfaceSecondary` | `#EFEFF2` | `#232327` |
+| `surfaceTertiary` | `#E4E4E8` | `#2C2C31` |
 | `border` | `#D8D8DC` | `#3A3A3F` |
+| `separator` | `#D8D8DC` | `#3A3A3F` |
 | `textPrimary` | `#1A1A1E` | `#F5F5F7` |
 | `textSecondary` | `#6B6B72` | `#A5A5AC` |
+| `textTertiary` | `#9A9AA1` | `#6B6B72` |
 | `primary` | `#2F6FED` | `#5C8DF6` |
+| `primaryMuted` | `#E3ECFC` | `#1E2C47` |
 | `secondary` | `#ECECEE` | `#27272B` |
 | `destructive` / `error` | `#E5484D` | `#F2555A` |
+| `destructiveMuted` | `#FBE4E5` | `#3B2023` |
 | `success` | `#1F9254` | `#3DD68C` |
+| `successMuted` | `#E1F2E8` | `#1B3327` |
 | `warning` | `#B7791F` | `#E3A008` |
+| `warningMuted` | `#F8ECD9` | `#3A2E14` |
 | `disabled` | `#D8D8DC` | `#3A3A3F` |
-
-Each color also has a matching `*Text` counterpart (e.g. `primaryText`) for text placed on top of it.
+| `overlay` | `rgba(0,0,0,0.4)` | `rgba(0,0,0,0.6)` |
+| `link` | `#2F6FED` | `#5C8DF6` |
+| `focus` | `#2F6FED` | `#5C8DF6` |
 
 ### Typography (`fontSizes`, `fontWeights`, `lineHeights`)
 
@@ -70,6 +85,7 @@ Each color also has a matching `*Text` counterpart (e.g. `primaryText`) for text
 | `lg` | 18 | | `lg` | 24 |
 | `xl` | 22 | | `xl` | 28 |
 | `xxl` | 28 | | `xxl` | 34 |
+| `largeTitle` | 34 | | | |
 
 `fontWeights`: `regular` (400) · `medium` (500) · `semibold` (600) · `bold` (700)
 
@@ -77,21 +93,70 @@ Each color also has a matching `*Text` counterpart (e.g. `primaryText`) for text
 
 | Token | Value |
 |---|---|
+| `xxs` | 2 |
 | `xs` | 4 |
 | `sm` | 8 |
 | `md` | 16 |
 | `lg` | 24 |
 | `xl` | 32 |
 | `xxl` | 48 |
+| `xxxl` | 64 |
 
 ### Corner Radius (`radius`)
 
 | Token | Value |
 |---|---|
+| `xs` | 2 |
 | `sm` | 4 |
 | `md` | 8 |
 | `lg` | 16 |
+| `xl` | 16 |
 | `full` | 9999 (pill/capsule shapes) |
+
+### Elevation (`elevation`)
+
+Each level is one style object carrying both Android's `elevation` and iOS's `shadow*` props — spread directly onto a `View`'s style.
+
+| Token | `elevation` | `shadowOpacity` | `shadowRadius` |
+|---|---|---|---|
+| `none` | 0 | 0 | 0 |
+| `sm` | 2 | 0.10 | 2 |
+| `md` | 4 | 0.15 | 4 |
+| `lg` | 8 | 0.20 | 8 |
+
+### Opacity (`opacity`)
+
+| Token | Value |
+|---|---|
+| `disabled` | 0.38 |
+| `secondary` | 0.60 |
+| `overlay` | 0.54 |
+
+### Border Width (`borderWidth`)
+
+| Token | Value |
+|---|---|
+| `thin` | 0.5 |
+| `regular` | 1 |
+| `thick` | 2 |
+
+### Icon Size (`iconSize`)
+
+| Token | Value |
+|---|---|
+| `sm` | 16 |
+| `md` | 20 |
+| `lg` | 24 |
+| `xl` | 32 |
+
+### Animation (`duration`, `easing`)
+
+| `duration` | ms | | `easing` | Maps to |
+|---|---|---|---|---|
+| `fast` | 150 | | `standard` | `Easing.inOut(Easing.ease)` |
+| `normal` | 300 | | `decelerate` | `Easing.out(Easing.ease)` |
+| `slow` | 500 | | `accelerate` | `Easing.in(Easing.ease)` |
+| | | | `spring` | `{ damping: 15, stiffness: 150 }` (a spring config, not an `Easing` curve — for `Animated.spring()`) |
 
 ## Usage
 

@@ -23,6 +23,16 @@ export interface ColorPalette {
   disabled: string;
   disabledText: string;
   overlay: string;
+  primaryMuted: string;
+  destructiveMuted: string;
+  successMuted: string;
+  warningMuted: string;
+  surfaceSecondary: string;
+  surfaceTertiary: string;
+  textTertiary: string;
+  link: string;
+  focus: string;
+  separator: string;
 }
 
 export const lightColors: ColorPalette = {
@@ -48,6 +58,16 @@ export const lightColors: ColorPalette = {
   disabled: '#D8D8DC',
   disabledText: '#9A9AA1',
   overlay: 'rgba(0,0,0,0.4)',
+  primaryMuted: '#E3ECFC',
+  destructiveMuted: '#FBE4E5',
+  successMuted: '#E1F2E8',
+  warningMuted: '#F8ECD9',
+  surfaceSecondary: '#EFEFF2',
+  surfaceTertiary: '#E4E4E8',
+  textTertiary: '#9A9AA1',
+  link: '#2F6FED',
+  focus: '#2F6FED',
+  separator: '#D8D8DC',
 };
 
 export const darkColors: ColorPalette = {
@@ -73,6 +93,16 @@ export const darkColors: ColorPalette = {
   disabled: '#3A3A3F',
   disabledText: '#6B6B72',
   overlay: 'rgba(0,0,0,0.6)',
+  primaryMuted: '#1E2C47',
+  destructiveMuted: '#3B2023',
+  successMuted: '#1B3327',
+  warningMuted: '#3A2E14',
+  surfaceSecondary: '#232327',
+  surfaceTertiary: '#2C2C31',
+  textTertiary: '#6B6B72',
+  link: '#5C8DF6',
+  focus: '#5C8DF6',
+  separator: '#3A3A3F',
 };
 
 export const colors: Record<ColorScheme, ColorPalette> = {

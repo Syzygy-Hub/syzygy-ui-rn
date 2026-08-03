@@ -5,6 +5,7 @@ export const fontSizes = {
   lg: 18,
   xl: 22,
   xxl: 28,
+  largeTitle: 34,
 } as const;
 
 export const fontWeights = {

@@ -64,3 +64,30 @@ export const modalPresentationTransition = (progress: Animated.Value, height: nu
     },
   ],
 });
+
+/** A scale-in/out transition combined with a fade, as `progress` animates 0 -> 1. */
+export const scaleTransition = (progress: Animated.Value) => ({
+  opacity: progress,
+  transform: [
+    {
+      scale: progress.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0.85, 1],
+      }),
+    },
+  ],
+});
+
+/**
+ * A fade-through transition: the outgoing content fades out, then the
+ * incoming content fades in — sequentially, not as a simultaneous
+ * cross-fade. Drive two `Animated.Value`s with `Animated.sequence` (out,
+ * then in) and apply this to each side's content respectively; `progress`
+ * for each side still runs 0 -> 1 like the other helpers here.
+ */
+export const fadeThroughTransition = (progress: Animated.Value, phase: 'out' | 'in') => ({
+  opacity:
+    phase === 'out'
+      ? progress.interpolate({ inputRange: [0, 1], outputRange: [1, 0] })
+      : progress.interpolate({ inputRange: [0, 1], outputRange: [0, 1] }),
+});

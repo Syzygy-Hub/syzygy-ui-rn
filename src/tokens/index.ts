@@ -2,3 +2,8 @@ export * from './colors';
 export * from './typography';
 export * from './spacing';
 export * from './radius';
+export * from './elevation';
+export * from './opacity';
+export * from './borderWidth';
+export * from './iconSize';
+export * from './animation';

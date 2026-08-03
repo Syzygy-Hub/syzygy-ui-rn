@@ -43,6 +43,33 @@ import { TabBar } from '../components/navigation/TabBar';
 import { BottomSheet } from '../components/overlay/BottomSheet';
 import { CollapsibleView } from '../components/overlay/CollapsibleView';
 import { ModalDialog } from '../components/overlay/ModalDialog';
+import { LoadingButton } from '../components/buttons/LoadingButton';
+import { FloatingActionButton } from '../components/buttons/FloatingActionButton';
+import { ButtonGroup } from '../components/buttons/ButtonGroup';
+import { TextArea } from '../components/inputs/TextArea';
+import { OTPInput } from '../components/inputs/OTPInput';
+import { TagInput } from '../components/inputs/TagInput';
+import { DatePickerField } from '../components/inputs/DatePickerField';
+import { TimePickerField } from '../components/inputs/TimePickerField';
+import { FormField } from '../components/inputs/FormField';
+import { PasswordStrengthIndicator } from '../components/inputs/PasswordStrengthIndicator';
+import { AvatarGroup } from '../components/display/AvatarGroup';
+import { StatsCard } from '../components/display/StatsCard';
+import { RatingInput } from '../components/display/RatingInput';
+import { SkeletonView } from '../components/feedback/SkeletonView';
+import { CircularProgress } from '../components/feedback/CircularProgress';
+import { InlineAlert } from '../components/feedback/InlineAlert';
+import { Snackbar } from '../components/feedback/Snackbar';
+import { ActionSheet } from '../components/overlay/ActionSheet';
+import { Popover } from '../components/overlay/Popover';
+import { Tooltip } from '../components/overlay/Tooltip';
+import { SideMenu } from '../components/navigation/SideMenu';
+import { FloatingTabBar } from '../components/navigation/FloatingTabBar';
+import { StepIndicator } from '../components/navigation/StepIndicator';
+import { Breadcrumbs } from '../components/navigation/Breadcrumbs';
+import { AdaptiveStack } from '../components/layout/AdaptiveStack';
+import { FlowLayout } from '../components/layout/FlowLayout';
+import { StickyHeader } from '../components/layout/StickyHeader';
 
 describe('component smoke tests', () => {
   it('renders PrimaryButton', () => {
@@ -362,6 +389,233 @@ describe('component smoke tests', () => {
       <KeyboardAvoidingScrollView>
         <Text>Content</Text>
       </KeyboardAvoidingScrollView>
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders LoadingButton', () => {
+    const tree = renderer.create(
+      <LoadingButton label="Save" isLoading={false} onPress={() => {}} />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders LoadingButton while loading', () => {
+    const tree = renderer.create(
+      <LoadingButton label="Save" isLoading={true} onPress={() => {}} />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders FloatingActionButton', () => {
+    const tree = renderer.create(
+      <FloatingActionButton icon={<Text>+</Text>} onPress={() => {}} />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders ButtonGroup', () => {
+    const tree = renderer.create(
+      <ButtonGroup options={['Day', 'Week']} selectedIndices={[0]} onSelectionChange={() => {}} />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders TextArea', () => {
+    const tree = renderer.create(<TextArea label="Bio" value="" onChangeText={() => {}} />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders OTPInput', () => {
+    const tree = renderer.create(<OTPInput code="12" onCodeChange={() => {}} />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders TagInput', () => {
+    const tree = renderer.create(<TagInput tags={['react', 'native']} onTagsChange={() => {}} />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders DatePickerField', () => {
+    const tree = renderer.create(
+      <DatePickerField label="Birthday" date={null} onDateChange={() => {}} />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders TimePickerField', () => {
+    const tree = renderer.create(
+      <TimePickerField label="Reminder" time={null} onTimeChange={() => {}} />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders FormField', () => {
+    const tree = renderer.create(
+      <FormField label="Email" helperText="We'll never share it">
+        <Text>input</Text>
+      </FormField>
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders FormField with error', () => {
+    const tree = renderer.create(
+      <FormField label="Email" error="Required">
+        <Text>input</Text>
+      </FormField>
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders PasswordStrengthIndicator', () => {
+    const tree = renderer.create(<PasswordStrengthIndicator password="Sup3r$ecret!" />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders AvatarGroup', () => {
+    const tree = renderer.create(
+      <AvatarGroup avatars={[{ initials: 'AK' }, { initials: 'JS' }, { initials: 'TS' }]} max={2} />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders StatsCard', () => {
+    const tree = renderer.create(
+      <StatsCard label="Revenue" value="$12,400" trend="up" trendValue="+12%" />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders RatingInput', () => {
+    const tree = renderer.create(<RatingInput rating={3} onRatingChange={() => {}} />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders SkeletonView', () => {
+    const tree = renderer.create(<SkeletonView shape="circle" height={40} />);
+    expect(tree.toJSON()).toBeTruthy();
+    tree.unmount();
+  });
+
+  it('renders CircularProgress (determinate)', () => {
+    const tree = renderer.create(<CircularProgress progress={0.5} />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders CircularProgress (indeterminate)', () => {
+    const tree = renderer.create(<CircularProgress />);
+    expect(tree.toJSON()).toBeTruthy();
+    tree.unmount();
+  });
+
+  it('renders InlineAlert', () => {
+    const tree = renderer.create(<InlineAlert message="Saved successfully" variant="success" />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders Snackbar', () => {
+    const tree = renderer.create(
+      <Snackbar message="Undo?" actionLabel="Undo" isVisible={true} onDismiss={() => {}} onAction={() => {}} />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+    // Snackbar schedules an auto-dismiss setTimeout while visible; unmount to
+    // clear it so it doesn't fire after the Jest environment tears down.
+    tree.unmount();
+  });
+
+  it('renders ActionSheet', () => {
+    const tree = renderer.create(
+      <ActionSheet
+        visible={true}
+        onClose={() => {}}
+        actions={[{ label: 'Delete', isDestructive: true, onPress: () => {} }]}
+      />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders Popover', () => {
+    const tree = renderer.create(
+      <Popover trigger={<Text>Open</Text>}>
+        <Text>Content</Text>
+      </Popover>
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders Tooltip', () => {
+    const tree = renderer.create(
+      <Tooltip label="More info">
+        <Text>Hover me</Text>
+      </Tooltip>
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders SideMenu', () => {
+    const tree = renderer.create(
+      <SideMenu isOpen={true} onClose={() => {}}>
+        <Text>Menu</Text>
+      </SideMenu>
+    );
+    expect(tree.toJSON()).toBeTruthy();
+    tree.unmount();
+  });
+
+  it('renders FloatingTabBar', () => {
+    const tree = renderer.create(
+      <FloatingTabBar
+        items={[{ tag: 'home', icon: <Text>H</Text>, label: 'Home' }]}
+        selection="home"
+        onSelectionChange={() => {}}
+      />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders StepIndicator', () => {
+    const tree = renderer.create(<StepIndicator steps={['Info', 'Payment', 'Review']} currentStep={1} />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders Breadcrumbs', () => {
+    const tree = renderer.create(
+      <Breadcrumbs
+        items={[
+          { label: 'Home', onPress: () => {} },
+          { label: 'Settings', onPress: () => {} },
+        ]}
+      />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders AdaptiveStack', () => {
+    const tree = renderer.create(
+      <AdaptiveStack breakpoint={600}>
+        <Text>A</Text>
+        <Text>B</Text>
+      </AdaptiveStack>
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders FlowLayout', () => {
+    const tree = renderer.create(
+      <FlowLayout>
+        <Text>Tag 1</Text>
+        <Text>Tag 2</Text>
+      </FlowLayout>
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders StickyHeader', () => {
+    const tree = renderer.create(
+      <StickyHeader header={<Text>Header</Text>}>
+        <Text>Content</Text>
+      </StickyHeader>
     );
     expect(tree.toJSON()).toBeTruthy();
   });
