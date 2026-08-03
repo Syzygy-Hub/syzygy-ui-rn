@@ -36,7 +36,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep
                   isCompleted
                     ? { backgroundColor: colors.primary, borderColor: colors.primary }
                     : isActive
-                    ? { backgroundColor: 'transparent', borderColor: colors.primary, borderWidth: 2 }
+                    ? [styles.nodeActive, { borderColor: colors.primary }]
                     : { backgroundColor: colors.surfaceAlt, borderColor: colors.border },
                 ]}
               >
@@ -78,6 +78,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  nodeActive: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
   },
   label: {
     fontSize: fontSizes.xs,

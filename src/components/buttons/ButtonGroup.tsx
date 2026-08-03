@@ -53,11 +53,11 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
             accessibilityLabel={option}
             style={[
               styles.item,
-              index > 0 ? { borderLeftWidth: 1, borderLeftColor: colors.border } : null,
+              index > 0 ? [styles.itemDivider, { borderLeftColor: colors.border }] : null,
               selected ? { backgroundColor: colors.primary } : null,
             ]}
           >
-            <Text style={{ color: selected ? colors.primaryText : colors.textPrimary, fontSize: fontSizes.sm }}>
+            <Text style={[styles.itemLabel, { color: selected ? colors.primaryText : colors.textPrimary }]}>
               {option}
             </Text>
           </TouchableOpacity>
@@ -80,5 +80,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  itemDivider: {
+    borderLeftWidth: 1,
+  },
+  itemLabel: {
+    fontSize: fontSizes.sm,
   },
 });

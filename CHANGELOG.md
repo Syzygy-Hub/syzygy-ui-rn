@@ -5,6 +5,20 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-08-04
+
+### Added
+
+- **Display**: `PageControl` (aka `DotIndicator`; read-only row of dots tracking `PagerView`'s current page), `Accordion` (vertically stacked expandable sections built on `CollapsibleView`'s expand/collapse logic; single-open by default, `allowMultipleOpen` to allow independent toggling), `Timeline` (aka `ActivityFeed`; connected dots/icons with title/subtitle/timestamp, `leading`/`trailing` alignment), `ColorSwatch` (circle/square color preview with optional label; `isSelected` border uses the `focus` token).
+- **Inputs**: `SearchableDropdown` (composed on top of `Dropdown`'s trigger + sheet rendering, adding an inline case-insensitive filter field), `PhoneInput` (tappable flag + dial-code prefix selector, numeric keyboard; exposes both a formatted display string and the raw digits-only number; small real starter country list of 15 countries, overridable via `countries`), `CurrencyInput` (`Intl.NumberFormat`-based currency display with configurable `locale`/`currency`; raw numeric value parsed back out of the typed input).
+- **Feedback**: `NetworkStatusBanner` (top/bottom-anchored "no internet connection" banner; controlled/presentational via an `isOffline` prop rather than self-detecting, since real connectivity detection has no first-party RN API and this library takes on no third-party dependencies — consumers wire it to their own detection or `@react-native-community/netinfo`), `ConfirmDialog` (preset confirm/cancel modal built on `ModalDialog`; configurable button labels, `isDestructive` tints the confirm button with the destructive/error token).
+- **Layout**: `SafeAreaWrapper` (core-only best-effort safe-area inset wrapper — real `SafeAreaView` on iOS, `StatusBar.currentHeight` top-inset fallback on Android; does not handle bottom gesture-bar insets or precise notch cutouts on Android — use `react-native-safe-area-context` in the host app for full cross-platform coverage), `LabeledDivider` (`DividerLine` segments flanking a centered/leading/trailing label).
+
+### Fixed
+
+- Resolved all 74 ESLint warnings surfaced by the `syzygy-lint-config@v1.0.0` config-parity fix: `import/order` (60, mostly auto-fixed via `eslint --fix`), `react-native/no-inline-styles` (10, moved into each file's `StyleSheet.create` block, keeping only genuinely dynamic values inline as array styles), `@typescript-eslint/no-unused-vars` (4 — removed unused `StyleSheet`/`spacing` imports in `SkeletonView`/`OTPInput`, suppressed with a documented `eslint-disable-next-line` for `DatePickerField`/`TimePickerField`'s intentional-but-unused public API props).
+- The `lint` script now runs with `--max-warnings=0`, so newly introduced lint warnings fail CI instead of accumulating silently.
+
 ## [2.1.0] - 2026-08-03
 
 ### Added

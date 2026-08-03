@@ -31,6 +31,10 @@ export const CheckboxInput: React.FC<CheckboxInputProps> = ({
 }) => {
   const scheme = useColorScheme();
   const colors = getColors(scheme);
+  const dynamicBoxStyle = {
+    backgroundColor: checked ? colors.primary : 'transparent',
+    borderColor: checked ? colors.primary : colors.border,
+  };
 
   return (
     <TouchableOpacity
@@ -40,15 +44,7 @@ export const CheckboxInput: React.FC<CheckboxInputProps> = ({
       accessibilityLabel={accessibilityLabel ?? label}
       style={[styles.container, style]}
     >
-      <View
-        style={[
-          styles.box,
-          {
-            backgroundColor: checked ? colors.primary : 'transparent',
-            borderColor: checked ? colors.primary : colors.border,
-          },
-        ]}
-      >
+      <View style={[styles.box, dynamicBoxStyle]}>
         {checked ? <Text style={{ color: colors.primaryText }}>{'✓'}</Text> : null}
       </View>
       <Text style={{ color: colors.textPrimary, marginLeft: spacing.sm }}>{label}</Text>

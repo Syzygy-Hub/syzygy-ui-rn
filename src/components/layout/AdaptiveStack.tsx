@@ -22,12 +22,10 @@ export const AdaptiveStack: React.FC<AdaptiveStackProps> = ({ breakpoint, childr
   };
 
   const isHorizontal = width == null || width >= breakpoint;
+  const dynamicDirectionStyle: ViewStyle = { flexDirection: isHorizontal ? 'row' : 'column' };
 
   return (
-    <View
-      onLayout={handleLayout}
-      style={[styles.base, { flexDirection: isHorizontal ? 'row' : 'column' }, style]}
-    >
+    <View onLayout={handleLayout} style={[styles.base, dynamicDirectionStyle, style]}>
       {children}
     </View>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, Modal, Pressable, StyleSheet, useColorScheme } from 'react-native';
+import { Animated, Modal, Pressable, StyleSheet, useColorScheme } from 'react-native';
 
 import { getColors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
@@ -11,7 +11,6 @@ export interface SideMenuProps {
   width?: number;
 }
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
 
 /**
  * A slide-in side navigation panel (also known as a `Drawer`), sliding in

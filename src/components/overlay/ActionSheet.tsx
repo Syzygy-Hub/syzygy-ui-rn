@@ -40,7 +40,10 @@ export const ActionSheet: React.FC<ActionSheetProps> = ({ visible, onClose, acti
               }}
               accessibilityRole="button"
               accessibilityLabel={action.label}
-              style={[styles.action, index > 0 ? { borderTopColor: colors.border, borderTopWidth: 1 } : null]}
+              style={[
+                styles.action,
+                index > 0 ? [styles.actionDivider, { borderTopColor: colors.border }] : null,
+              ]}
             >
               <Text
                 style={[
@@ -72,6 +75,9 @@ const styles = StyleSheet.create({
     minHeight: 48,
     justifyContent: 'center',
     paddingHorizontal: spacing.lg,
+  },
+  actionDivider: {
+    borderTopWidth: 1,
   },
   actionText: {
     fontSize: fontSizes.md,

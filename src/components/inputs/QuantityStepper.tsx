@@ -45,7 +45,7 @@ export const QuantityStepper: React.FC<QuantityStepperProps> = ({
           {'−'}
         </Text>
       </TouchableOpacity>
-      <Text style={{ color: colors.textPrimary, fontSize: fontSizes.md, minWidth: 24, textAlign: 'center' }}>
+      <Text style={[styles.valueText, { color: colors.textPrimary, fontSize: fontSizes.md }]}>
         {value}
       </Text>
       <TouchableOpacity
@@ -77,5 +77,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: spacing.xs,
+  },
+  valueText: {
+    minWidth: 24,
+    textAlign: 'center',
   },
 });

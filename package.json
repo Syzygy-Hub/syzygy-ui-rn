@@ -1,6 +1,6 @@
 {
   "name": "syzygy-ui-rn",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Production-ready React Native component library with design tokens, Dark Mode, and zero third-party dependencies",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -16,7 +16,7 @@
     "clean": "rm -rf dist node_modules",
     "reinstall": "npm run clean && npm install",
     "prebuild": "rm -rf dist",
-    "lint": "eslint src --ext .ts,.tsx",
+    "lint": "eslint src --ext .ts,.tsx --max-warnings=0",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "typecheck": "tsc --noEmit",
     "prepare": "npm run build"

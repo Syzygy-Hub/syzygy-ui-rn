@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 
 import { getColors } from '../../tokens/colors';
+import { elevation } from '../../tokens/elevation';
 import { radius } from '../../tokens/radius';
 import { spacing } from '../../tokens/spacing';
 import { fontSizes } from '../../tokens/typography';
-import { elevation } from '../../tokens/elevation';
 
 export interface TooltipProps {
   label: string;

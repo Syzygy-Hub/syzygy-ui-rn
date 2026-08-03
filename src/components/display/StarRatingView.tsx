@@ -36,7 +36,7 @@ export const StarRatingView: React.FC<StarRatingViewProps> = ({
 
         if (!onRatingChanged) {
           return (
-            <Text key={star} style={{ color, fontSize: 20 }}>
+            <Text key={star} style={[styles.starText, { color }]}>
               {glyph}
             </Text>
           );
@@ -49,7 +49,7 @@ export const StarRatingView: React.FC<StarRatingViewProps> = ({
             accessibilityLabel={`${star} star${star === 1 ? '' : 's'}`}
             style={styles.star}
           >
-            <Text style={{ color, fontSize: 20 }}>{glyph}</Text>
+            <Text style={[styles.starText, { color }]}>{glyph}</Text>
           </TouchableOpacity>
         );
       })}
@@ -66,5 +66,8 @@ const styles = StyleSheet.create({
     minHeight: 44,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  starText: {
+    fontSize: 20,
   },
 });

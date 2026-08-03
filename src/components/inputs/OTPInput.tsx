@@ -10,7 +10,6 @@ import {
 
 import { getColors } from '../../tokens/colors';
 import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
 import { fontSizes, fontWeights } from '../../tokens/typography';
 
 export interface OTPInputProps {

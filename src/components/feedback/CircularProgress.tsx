@@ -78,12 +78,12 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
       <Animated.View
         style={[
           styles.track,
+          styles.sweepBorder,
           {
             width: size,
             height: size,
             borderRadius: size / 2,
             borderWidth: strokeWidth,
-            borderColor: 'transparent',
             borderTopColor: colors.primary,
             transform: [{ rotate: rotateDeg }],
           },
@@ -96,5 +96,8 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
 const styles = StyleSheet.create({
   track: {
     position: 'absolute',
+  },
+  sweepBorder: {
+    borderColor: 'transparent',
   },
 });

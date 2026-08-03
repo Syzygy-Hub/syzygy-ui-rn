@@ -2,74 +2,85 @@ import React from 'react';
 import { Text } from 'react-native';
 import renderer from 'react-test-renderer';
 
-import { CardView } from '../components/cards/CardView';
 import { Badge } from '../components/badges/Badge';
+import { ButtonGroup } from '../components/buttons/ButtonGroup';
 import { DestructiveButton } from '../components/buttons/DestructiveButton';
+import { FloatingActionButton } from '../components/buttons/FloatingActionButton';
 import { GhostButton } from '../components/buttons/GhostButton';
 import { IconButton } from '../components/buttons/IconButton';
+import { LoadingButton } from '../components/buttons/LoadingButton';
 import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { SecondaryButton } from '../components/buttons/SecondaryButton';
-import { SliderInput } from '../components/inputs/SliderInput';
-import { Dropdown } from '../components/inputs/Dropdown';
-import { SegmentedControl } from '../components/inputs/SegmentedControl';
-import { QuantityStepper } from '../components/inputs/QuantityStepper';
+import { CardView } from '../components/cards/CardView';
+import { Accordion } from '../components/display/Accordion';
 import { Avatar } from '../components/display/Avatar';
-import { DividerLine } from '../components/display/DividerLine';
+import { AvatarGroup } from '../components/display/AvatarGroup';
 import { Chip } from '../components/display/Chip';
-import { ListRow } from '../components/display/ListRow';
-import { SectionHeader } from '../components/display/SectionHeader';
-import { LazyImageView } from '../components/display/LazyImageView';
-import { StarRatingView } from '../components/display/StarRatingView';
+import { ColorSwatch } from '../components/display/ColorSwatch';
 import { CountBadge } from '../components/display/CountBadge';
+import { DividerLine } from '../components/display/DividerLine';
+import { LazyImageView } from '../components/display/LazyImageView';
+import { ListRow } from '../components/display/ListRow';
+import { PageControl } from '../components/display/PageControl';
+import { RatingInput } from '../components/display/RatingInput';
+import { SectionHeader } from '../components/display/SectionHeader';
+import { StarRatingView } from '../components/display/StarRatingView';
+import { StatsCard } from '../components/display/StatsCard';
+import { Timeline } from '../components/display/Timeline';
+import { CircularProgress } from '../components/feedback/CircularProgress';
+import { ConfirmDialog } from '../components/feedback/ConfirmDialog';
 import { EmptyStateView } from '../components/feedback/EmptyStateView';
-import { ShimmerView } from '../components/feedback/ShimmerView';
-import { PullToRefresh } from '../components/feedback/PullToRefresh';
 import { ErrorStateView } from '../components/feedback/ErrorStateView';
+import { InlineAlert } from '../components/feedback/InlineAlert';
 import { LoadingView } from '../components/feedback/LoadingView';
+import { NetworkStatusBanner } from '../components/feedback/NetworkStatusBanner';
 import { ProgressBar } from '../components/feedback/ProgressBar';
+import { PullToRefresh } from '../components/feedback/PullToRefresh';
+import { ShimmerView } from '../components/feedback/ShimmerView';
+import { SkeletonView } from '../components/feedback/SkeletonView';
+import { Snackbar } from '../components/feedback/Snackbar';
 import { ToastView } from '../components/feedback/ToastView';
 import { CheckboxInput } from '../components/inputs/CheckboxInput';
+import { CurrencyInput } from '../components/inputs/CurrencyInput';
+import { DatePickerField } from '../components/inputs/DatePickerField';
+import { Dropdown } from '../components/inputs/Dropdown';
+import { FormField } from '../components/inputs/FormField';
+import { OTPInput } from '../components/inputs/OTPInput';
+import { PasswordStrengthIndicator } from '../components/inputs/PasswordStrengthIndicator';
+import { PhoneInput } from '../components/inputs/PhoneInput';
+import { QuantityStepper } from '../components/inputs/QuantityStepper';
 import { RadioButtonInput } from '../components/inputs/RadioButtonInput';
+import { SearchableDropdown } from '../components/inputs/SearchableDropdown';
 import { SearchInput } from '../components/inputs/SearchInput';
 import { SecureInput } from '../components/inputs/SecureInput';
+import { SegmentedControl } from '../components/inputs/SegmentedControl';
+import { SliderInput } from '../components/inputs/SliderInput';
+import { TagInput } from '../components/inputs/TagInput';
+import { TextArea } from '../components/inputs/TextArea';
 import { TextInput } from '../components/inputs/TextInput';
+import { TimePickerField } from '../components/inputs/TimePickerField';
 import { ToggleSwitch } from '../components/inputs/ToggleSwitch';
+import { AdaptiveStack } from '../components/layout/AdaptiveStack';
+import { FlowLayout } from '../components/layout/FlowLayout';
 import { KeyboardAvoidingScrollView } from '../components/layout/KeyboardAvoidingScrollView';
+import { LabeledDivider } from '../components/layout/LabeledDivider';
+import { SafeAreaWrapper } from '../components/layout/SafeAreaWrapper';
+import { StickyHeader } from '../components/layout/StickyHeader';
 import { AppBar } from '../components/navigation/AppBar';
 import { BackButton } from '../components/navigation/BackButton';
 import { BottomNavigationBar } from '../components/navigation/BottomNavigationBar';
+import { Breadcrumbs } from '../components/navigation/Breadcrumbs';
+import { FloatingTabBar } from '../components/navigation/FloatingTabBar';
 import { PagerView } from '../components/navigation/PagerView';
+import { SideMenu } from '../components/navigation/SideMenu';
+import { StepIndicator } from '../components/navigation/StepIndicator';
 import { TabBar } from '../components/navigation/TabBar';
+import { ActionSheet } from '../components/overlay/ActionSheet';
 import { BottomSheet } from '../components/overlay/BottomSheet';
 import { CollapsibleView } from '../components/overlay/CollapsibleView';
 import { ModalDialog } from '../components/overlay/ModalDialog';
-import { LoadingButton } from '../components/buttons/LoadingButton';
-import { FloatingActionButton } from '../components/buttons/FloatingActionButton';
-import { ButtonGroup } from '../components/buttons/ButtonGroup';
-import { TextArea } from '../components/inputs/TextArea';
-import { OTPInput } from '../components/inputs/OTPInput';
-import { TagInput } from '../components/inputs/TagInput';
-import { DatePickerField } from '../components/inputs/DatePickerField';
-import { TimePickerField } from '../components/inputs/TimePickerField';
-import { FormField } from '../components/inputs/FormField';
-import { PasswordStrengthIndicator } from '../components/inputs/PasswordStrengthIndicator';
-import { AvatarGroup } from '../components/display/AvatarGroup';
-import { StatsCard } from '../components/display/StatsCard';
-import { RatingInput } from '../components/display/RatingInput';
-import { SkeletonView } from '../components/feedback/SkeletonView';
-import { CircularProgress } from '../components/feedback/CircularProgress';
-import { InlineAlert } from '../components/feedback/InlineAlert';
-import { Snackbar } from '../components/feedback/Snackbar';
-import { ActionSheet } from '../components/overlay/ActionSheet';
 import { Popover } from '../components/overlay/Popover';
 import { Tooltip } from '../components/overlay/Tooltip';
-import { SideMenu } from '../components/navigation/SideMenu';
-import { FloatingTabBar } from '../components/navigation/FloatingTabBar';
-import { StepIndicator } from '../components/navigation/StepIndicator';
-import { Breadcrumbs } from '../components/navigation/Breadcrumbs';
-import { AdaptiveStack } from '../components/layout/AdaptiveStack';
-import { FlowLayout } from '../components/layout/FlowLayout';
-import { StickyHeader } from '../components/layout/StickyHeader';
 
 describe('component smoke tests', () => {
   it('renders PrimaryButton', () => {
@@ -617,6 +628,96 @@ describe('component smoke tests', () => {
         <Text>Content</Text>
       </StickyHeader>
     );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders PageControl', () => {
+    const tree = renderer.create(<PageControl pageCount={3} currentPage={1} />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders Accordion', () => {
+    const tree = renderer.create(
+      <Accordion
+        sections={[
+          { key: 'a', title: 'Section A', content: <Text>Content A</Text> },
+          { key: 'b', title: 'Section B', content: <Text>Content B</Text> },
+        ]}
+      />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders Timeline', () => {
+    const tree = renderer.create(
+      <Timeline
+        events={[
+          { key: '1', title: 'Order placed', subtitle: 'Your order was placed', timestamp: '9:00 AM' },
+          { key: '2', title: 'Shipped', timestamp: '2:00 PM' },
+        ]}
+      />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders ColorSwatch', () => {
+    const tree = renderer.create(<ColorSwatch color="#2F6FED" label="Blue" isSelected />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders SearchableDropdown', () => {
+    const tree = renderer.create(
+      <SearchableDropdown
+        label="Country"
+        selection="USA"
+        options={['USA', 'Canada', 'Mexico']}
+        onSelectionChange={() => {}}
+        optionTitle={(option) => option}
+      />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders PhoneInput', () => {
+    const tree = renderer.create(<PhoneInput value="" onChangeText={() => {}} />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders CurrencyInput', () => {
+    const tree = renderer.create(<CurrencyInput value={19.99} onValueChange={() => {}} />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders NetworkStatusBanner', () => {
+    const tree = renderer.create(<NetworkStatusBanner isOffline />);
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders ConfirmDialog', () => {
+    const tree = renderer.create(
+      <ConfirmDialog
+        visible
+        title="Delete item?"
+        message="This cannot be undone."
+        onConfirm={() => {}}
+        onCancel={() => {}}
+        isDestructive
+      />
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders SafeAreaWrapper', () => {
+    const tree = renderer.create(
+      <SafeAreaWrapper>
+        <Text>Content</Text>
+      </SafeAreaWrapper>
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('renders LabeledDivider', () => {
+    const tree = renderer.create(<LabeledDivider label="OR" alignment="center" />);
     expect(tree.toJSON()).toBeTruthy();
   });
 });

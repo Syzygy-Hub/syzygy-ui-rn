@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleProp, StyleSheet, ViewStyle, useColorScheme } from 'react-native';
+import { Animated, StyleProp, ViewStyle, useColorScheme } from 'react-native';
 
 import { getColors } from '../../tokens/colors';
 import { radius } from '../../tokens/radius';

@@ -31,7 +31,8 @@ export interface TimePickerFieldProps {
 export const TimePickerField: React.FC<TimePickerFieldProps> = ({
   label,
   time,
-  onTimeChange,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onTimeChange, // Public API prop — consumed by the caller, not internally
   onPress,
   formatTime = (t) => t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
   style,

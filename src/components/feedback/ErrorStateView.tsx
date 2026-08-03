@@ -31,7 +31,7 @@ export const ErrorStateView: React.FC<ErrorStateViewProps> = ({
 
   return (
     <View style={[styles.container, style]} accessibilityRole="text">
-      <Text style={{ fontSize: 40, color: colors.destructive }}>{'⚠'}</Text>
+      <Text style={[styles.icon, { color: colors.destructive }]}>{'⚠'}</Text>
       <Text style={[styles.title, { color: colors.textPrimary }]}>{title}</Text>
       {subtitle ? (
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
@@ -53,6 +53,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xl,
+  },
+  icon: {
+    fontSize: 40,
   },
   title: {
     fontSize: fontSizes.lg,

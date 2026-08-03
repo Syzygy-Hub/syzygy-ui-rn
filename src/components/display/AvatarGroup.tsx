@@ -3,6 +3,7 @@ import { StyleProp, StyleSheet, Text, useColorScheme, View, ViewStyle } from 're
 
 import { getColors } from '../../tokens/colors';
 import { fontSizes, fontWeights } from '../../tokens/typography';
+
 import { Avatar, AvatarProps } from './Avatar';
 
 export interface AvatarGroupProps {
@@ -22,17 +23,18 @@ export const AvatarGroup: React.FC<AvatarGroupProps> = ({ avatars, max = 4, styl
 
   return (
     <View style={[styles.container, style]} accessibilityLabel={`${avatars.length} people`}>
-      {visible.map((avatarProps, index) => (
-        <View
-          key={index}
-          style={[
-            styles.item,
-            { marginLeft: index === 0 ? 0 : OVERLAP, borderColor: colors.background, zIndex: visible.length - index },
-          ]}
-        >
-          <Avatar {...avatarProps} />
-        </View>
-      ))}
+      {visible.map((avatarProps, index) => {
+        const dynamicItemStyle = {
+          marginLeft: index === 0 ? 0 : OVERLAP,
+          borderColor: colors.background,
+          zIndex: visible.length - index,
+        };
+        return (
+          <View key={index} style={[styles.item, dynamicItemStyle]}>
+            <Avatar {...avatarProps} />
+          </View>
+        );
+      })}
       {overflow > 0 ? (
         <View
           style={[

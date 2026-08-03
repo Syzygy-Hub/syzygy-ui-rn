@@ -26,6 +26,9 @@ export * from './components/inputs/DatePickerField';
 export * from './components/inputs/TimePickerField';
 export * from './components/inputs/FormField';
 export * from './components/inputs/PasswordStrengthIndicator';
+export * from './components/inputs/SearchableDropdown';
+export * from './components/inputs/PhoneInput';
+export * from './components/inputs/CurrencyInput';
 
 export * from './components/feedback/LoadingView';
 export * from './components/feedback/EmptyStateView';
@@ -38,6 +41,8 @@ export * from './components/feedback/SkeletonView';
 export * from './components/feedback/CircularProgress';
 export * from './components/feedback/InlineAlert';
 export * from './components/feedback/Snackbar';
+export * from './components/feedback/NetworkStatusBanner';
+export * from './components/feedback/ConfirmDialog';
 
 export * from './components/cards/CardView';
 
@@ -54,6 +59,10 @@ export * from './components/display/CountBadge';
 export * from './components/display/AvatarGroup';
 export * from './components/display/StatsCard';
 export * from './components/display/RatingInput';
+export * from './components/display/PageControl';
+export * from './components/display/Accordion';
+export * from './components/display/Timeline';
+export * from './components/display/ColorSwatch';
 
 export * from './components/overlay/ModalDialog';
 export * from './components/overlay/BottomSheet';
@@ -77,5 +86,7 @@ export * from './components/layout/KeyboardAvoidingScrollView';
 export * from './components/layout/AdaptiveStack';
 export * from './components/layout/FlowLayout';
 export * from './components/layout/StickyHeader';
+export * from './components/layout/SafeAreaWrapper';
+export * from './components/layout/LabeledDivider';
 
 export * from './transitions/navigationTransitions';

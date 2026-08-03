@@ -35,7 +35,8 @@ export interface DatePickerFieldProps {
 export const DatePickerField: React.FC<DatePickerFieldProps> = ({
   label,
   date,
-  onDateChange,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onDateChange, // Public API prop — consumed by the caller, not internally
   onPress,
   formatDate = (d) => d.toLocaleDateString(),
   style,

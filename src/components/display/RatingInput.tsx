@@ -32,7 +32,7 @@ export const RatingInput: React.FC<RatingInputProps> = ({ rating, onRatingChange
             accessibilityLabel={`${star} star${star === 1 ? '' : 's'}`}
             style={styles.star}
           >
-            <Text style={{ color: filled ? colors.warning : colors.textSecondary, fontSize: 20 }}>
+            <Text style={[styles.starText, { color: filled ? colors.warning : colors.textSecondary }]}>
               {filled ? '★' : '☆'}
             </Text>
           </TouchableOpacity>
@@ -51,5 +51,8 @@ const styles = StyleSheet.create({
     minHeight: 44,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  starText: {
+    fontSize: 20,
   },
 });
