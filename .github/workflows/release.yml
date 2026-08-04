@@ -25,13 +25,13 @@ jobs:
         run: |
           COMMIT_MSG="${{ github.event.workflow_run.head_commit.message }}"
           VERSION=$(echo "$COMMIT_MSG" | sed -n 's/^release: *//p' | head -n1 | awk '{print $1}')
+          VERSION="${VERSION#v}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
       - name: Sync package.json version
         run: |
           COMMIT_VERSION="${{ env.VERSION }}"
-          COMMIT_VERSION="${COMMIT_VERSION#v}"  # strip leading v
           PKG_VERSION=$(node -p "require('./package.json').version")
           if [ "$PKG_VERSION" != "$COMMIT_VERSION" ]; then
             echo "Version mismatch: package.json=$PKG_VERSION, commit=$COMMIT_VERSION — updating package.json"
@@ -55,6 +55,9 @@ jobs:
       - name: Publish to npm
         continue-on-error: false
         run: npm publish --access=public --provenance
+
+      - name: Wait for npm registry propagation
+        run: sleep 30
 
       - name: Verify npm publish
         run: |

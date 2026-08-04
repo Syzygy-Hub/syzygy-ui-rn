@@ -51,12 +51,12 @@ export const DestructiveButton: React.FC<DestructiveButtonProps> = ({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.destructiveText} />
+        <ActivityIndicator color={colors.onDestructive} />
       ) : (
         <Text
           style={[
             styles.text,
-            { color: isDisabled ? colors.disabledText : colors.destructiveText },
+            { color: isDisabled ? colors.textDisabled : colors.onDestructive },
           ]}
         >
           {title}

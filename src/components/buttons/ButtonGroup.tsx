@@ -57,7 +57,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
               selected ? { backgroundColor: colors.primary } : null,
             ]}
           >
-            <Text style={[styles.itemLabel, { color: selected ? colors.primaryText : colors.textPrimary }]}>
+            <Text style={[styles.itemLabel, { color: selected ? colors.onPrimary : colors.textPrimary }]}>
               {option}
             </Text>
           </TouchableOpacity>

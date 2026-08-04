@@ -24,7 +24,7 @@ export const LazyImageView: React.FC<LazyImageViewProps> = ({ uri, style, resize
   if (!uri || status === 'error') {
     return (
       <View
-        style={[styles.fallback, { backgroundColor: colors.surfaceAlt }, style]}
+        style={[styles.fallback, { backgroundColor: colors.surfaceSecondary }, style]}
         accessibilityLabel="Image failed to load"
       >
         <Text style={{ color: colors.textSecondary }}>{'🖼'}</Text>

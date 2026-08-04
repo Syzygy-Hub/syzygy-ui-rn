@@ -38,7 +38,7 @@ export const Avatar: React.FC<AvatarProps> = ({ initials, size = 'medium', style
         style,
       ]}
     >
-      <Text style={[styles.initials, { color: colors.primaryText }]}>
+      <Text style={[styles.initials, { color: colors.onPrimary }]}>
         {initials}
       </Text>
     </View>

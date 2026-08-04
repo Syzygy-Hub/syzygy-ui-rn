@@ -61,7 +61,7 @@ export const NetworkStatusBanner: React.FC<NetworkStatusBannerProps> = ({
       accessibilityRole="alert"
       accessibilityLabel={message}
     >
-      <Text style={[styles.text, { color: colors.errorText }]}>{message}</Text>
+      <Text style={[styles.text, { color: colors.onError }]}>{message}</Text>
     </View>
   );
 };

@@ -50,7 +50,7 @@ export const GhostButton: React.FC<GhostButtonProps> = ({
         <Text
           style={[
             styles.text,
-            { color: isDisabled ? colors.disabledText : colors.primary },
+            { color: isDisabled ? colors.textDisabled : colors.primary },
           ]}
         >
           {title}

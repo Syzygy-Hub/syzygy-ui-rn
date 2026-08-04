@@ -31,7 +31,7 @@ export const ShimmerView: React.FC<ShimmerViewProps> = ({ style }) => {
       importantForAccessibility="no"
       style={[
         styles.base,
-        { backgroundColor: colors.surfaceAlt, opacity },
+        { backgroundColor: colors.surfaceSecondary, opacity },
         style,
       ]}
     />

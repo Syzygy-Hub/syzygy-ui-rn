@@ -47,9 +47,9 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
       ]}
     >
       {isLoading ? (
-        <ActivityIndicator color={colors.primaryText} />
+        <ActivityIndicator color={colors.onPrimary} />
       ) : (
-        <Text style={[styles.text, { color: colors.primaryText }]}>{label}</Text>
+        <Text style={[styles.text, { color: colors.onPrimary }]}>{label}</Text>
       )}
     </TouchableOpacity>
   );

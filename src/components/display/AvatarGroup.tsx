@@ -43,7 +43,7 @@ export const AvatarGroup: React.FC<AvatarGroupProps> = ({ avatars, max = 4, styl
             {
               marginLeft: OVERLAP,
               borderColor: colors.background,
-              backgroundColor: colors.surfaceAlt,
+              backgroundColor: colors.surfaceSecondary,
             },
           ]}
         >

@@ -51,7 +51,7 @@ export const SkeletonView: React.FC<SkeletonViewProps> = ({
           width: shape === 'circle' ? height : width,
           height,
           borderRadius: resolvedRadius,
-          backgroundColor: colors.surfaceAlt,
+          backgroundColor: colors.surfaceSecondary,
           opacity,
         },
         style,

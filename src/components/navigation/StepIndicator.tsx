@@ -37,10 +37,10 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep
                     ? { backgroundColor: colors.primary, borderColor: colors.primary }
                     : isActive
                     ? [styles.nodeActive, { borderColor: colors.primary }]
-                    : { backgroundColor: colors.surfaceAlt, borderColor: colors.border },
+                    : { backgroundColor: colors.surfaceSecondary, borderColor: colors.border },
                 ]}
               >
-                {isCompleted ? <Text style={[styles.checkmark, { color: colors.primaryText }]}>{'✓'}</Text> : null}
+                {isCompleted ? <Text style={[styles.checkmark, { color: colors.onPrimary }]}>{'✓'}</Text> : null}
               </View>
               <Text
                 style={[

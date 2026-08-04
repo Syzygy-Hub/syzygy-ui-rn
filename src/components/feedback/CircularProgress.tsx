@@ -71,7 +71,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
             height: size,
             borderRadius: size / 2,
             borderWidth: strokeWidth,
-            borderColor: colors.surfaceAlt,
+            borderColor: colors.surfaceSecondary,
           },
         ]}
       />

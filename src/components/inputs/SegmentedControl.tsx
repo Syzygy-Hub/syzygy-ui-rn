@@ -42,7 +42,7 @@ export function SegmentedControl<T>({
             accessibilityLabel={optionTitle(option)}
             style={[styles.segment, selected ? { backgroundColor: colors.primary } : null]}
           >
-            <Text style={{ color: selected ? colors.primaryText : colors.textPrimary, fontSize: fontSizes.sm }}>
+            <Text style={{ color: selected ? colors.onPrimary : colors.textPrimary, fontSize: fontSizes.sm }}>
               {optionTitle(option)}
             </Text>
           </TouchableOpacity>

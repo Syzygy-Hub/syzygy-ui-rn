@@ -51,7 +51,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           accessibilityLabel={cancelLabel}
           style={[styles.button, styles.cancelButton, { backgroundColor: colors.secondary }]}
         >
-          <Text style={[styles.buttonText, { color: colors.secondaryText }]}>{cancelLabel}</Text>
+          <Text style={[styles.buttonText, { color: colors.textPrimary }]}>{cancelLabel}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={onConfirm}
@@ -65,7 +65,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           <Text
             style={[
               styles.buttonText,
-              { color: isDestructive ? colors.destructiveText : colors.primaryText },
+              { color: isDestructive ? colors.onDestructive : colors.onPrimary },
             ]}
           >
             {confirmLabel}

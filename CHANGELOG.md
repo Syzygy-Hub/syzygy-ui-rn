@@ -5,6 +5,25 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2026-08-05
+
+### Changed (Breaking)
+- **Color token vocabulary alignment** — `ColorPalette` interface and `lightColors`/`darkColors` objects updated to canonical token set; renamed/removed tokens:
+  - `primaryText` → `onPrimary`
+  - `destructiveText` → `onDestructive`
+  - `secondaryText` → `textPrimary` (same hex values)
+  - `surfaceAlt` → `surfaceSecondary`
+  - `successText` → `onSuccess`
+  - `warningText` → `onWarning`
+  - `errorText` → `onError`
+  - `disabledText` → `textDisabled`
+  - All 26 component files updated
+- **New tokens added**: `onPrimary`, `onDestructive`, `onSuccess`, `onWarning`, `onError`, `onSurface`, `textDisabled`, `textInverse`, `primarySubtle`, `errorMuted`, `scrim`
+- **Removed tokens**: `surfaceAlt`, `primaryText`, `secondaryText`, `destructiveText`, `successText`, `warningText`, `errorText`, `disabledText`
+
+### Fixed
+- CI `release.yml`: added `VERSION="${VERSION#v}"` defensive strip; added `sleep 30` step before npm verify to allow registry propagation
+
 ## [2.2.1] - 2026-08-04
 
 ### Fixed

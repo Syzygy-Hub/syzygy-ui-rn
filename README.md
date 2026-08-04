@@ -2,7 +2,7 @@
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![npm](https://img.shields.io/npm/v/syzygy-ui-rn?label=npm&color=2F6FED)](https://www.npmjs.com/package/syzygy-ui-rn)
-[![Version](https://img.shields.io/badge/version-2.2.1-2F6FED)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.3.0-2F6FED)](CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android%20%7C%20Web-lightgrey)](https://reactnative.dev)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/Syzygy-Hub/syzygy-ui-rn/actions/workflows/node.yml/badge.svg)](https://github.com/Syzygy-Hub/syzygy-ui-rn/actions/workflows/node.yml)

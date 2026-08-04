@@ -42,7 +42,7 @@ export const ErrorStateView: React.FC<ErrorStateViewProps> = ({
         accessibilityLabel={retryLabel}
         style={[styles.cta, { backgroundColor: colors.primary }]}
       >
-        <Text style={{ color: colors.primaryText, fontWeight: fontWeights.semibold }}>{retryLabel}</Text>
+        <Text style={{ color: colors.onPrimary, fontWeight: fontWeights.semibold }}>{retryLabel}</Text>
       </TouchableOpacity>
     </View>
   );

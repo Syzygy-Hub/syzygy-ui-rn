@@ -42,12 +42,12 @@ export const Badge: React.FC<BadgeProps> = ({
 
   const textColor =
     variant === 'primary'
-      ? colors.primaryText
+      ? colors.onPrimary
       : variant === 'success'
-      ? colors.successText
+      ? colors.onSuccess
       : variant === 'warning'
-      ? colors.warningText
-      : colors.errorText;
+      ? colors.onWarning
+      : colors.onError;
 
   return (
     <View

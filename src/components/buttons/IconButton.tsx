@@ -39,7 +39,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
       style={[
         styles.base,
         {
-          backgroundColor: disabled ? colors.disabled : colors.surfaceAlt,
+          backgroundColor: disabled ? colors.disabled : colors.surfaceSecondary,
         },
         style,
       ]}

@@ -45,7 +45,7 @@ export const CheckboxInput: React.FC<CheckboxInputProps> = ({
       style={[styles.container, style]}
     >
       <View style={[styles.box, dynamicBoxStyle]}>
-        {checked ? <Text style={{ color: colors.primaryText }}>{'✓'}</Text> : null}
+        {checked ? <Text style={{ color: colors.onPrimary }}>{'✓'}</Text> : null}
       </View>
       <Text style={[styles.label, { color: colors.textPrimary }]}>{label}</Text>
     </TouchableOpacity>

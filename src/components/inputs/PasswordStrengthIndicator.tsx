@@ -62,7 +62,7 @@ export const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps>
             key={segment}
             style={[
               styles.segment,
-              { backgroundColor: segment <= strength ? colorForStrength : colors.surfaceAlt },
+              { backgroundColor: segment <= strength ? colorForStrength : colors.surfaceSecondary },
             ]}
           />
         ))}

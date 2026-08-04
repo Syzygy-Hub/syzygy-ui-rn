@@ -50,7 +50,7 @@ export const EmptyStateView: React.FC<EmptyStateViewProps> = ({
           accessibilityLabel={ctaLabel}
           style={[styles.cta, { backgroundColor: colors.primary }]}
         >
-          <Text style={[styles.ctaText, { color: colors.primaryText }]}>
+          <Text style={[styles.ctaText, { color: colors.onPrimary }]}>
             {ctaLabel}
           </Text>
         </TouchableOpacity>

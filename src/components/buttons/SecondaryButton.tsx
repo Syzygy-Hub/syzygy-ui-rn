@@ -52,12 +52,12 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.secondaryText} />
+        <ActivityIndicator color={colors.textPrimary} />
       ) : (
         <Text
           style={[
             styles.text,
-            { color: isDisabled ? colors.disabledText : colors.secondaryText },
+            { color: isDisabled ? colors.textDisabled : colors.textPrimary },
           ]}
         >
           {title}

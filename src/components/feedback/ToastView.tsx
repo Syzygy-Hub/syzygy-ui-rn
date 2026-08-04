@@ -40,10 +40,10 @@ export const ToastView: React.FC<ToastViewProps> = ({
 
   const textColor =
     variant === 'success'
-      ? colors.successText
+      ? colors.onSuccess
       : variant === 'warning'
-      ? colors.warningText
-      : colors.errorText;
+      ? colors.onWarning
+      : colors.onError;
 
   return (
     <View

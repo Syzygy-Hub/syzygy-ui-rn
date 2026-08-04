@@ -27,7 +27,7 @@ export const Chip: React.FC<ChipProps> = ({ text, onRemove, style }) => {
 
   return (
     <View
-      style={[styles.container, { backgroundColor: colors.surfaceAlt }, style]}
+      style={[styles.container, { backgroundColor: colors.surfaceSecondary }, style]}
       accessibilityLabel={text}
     >
       <Text style={[styles.text, { color: colors.textPrimary }]}>{text}</Text>

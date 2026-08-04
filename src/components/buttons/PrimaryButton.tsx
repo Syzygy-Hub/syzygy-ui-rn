@@ -51,12 +51,12 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.primaryText} />
+        <ActivityIndicator color={colors.onPrimary} />
       ) : (
         <Text
           style={[
             styles.text,
-            { color: isDisabled ? colors.disabledText : colors.primaryText },
+            { color: isDisabled ? colors.textDisabled : colors.onPrimary },
           ]}
         >
           {title}
