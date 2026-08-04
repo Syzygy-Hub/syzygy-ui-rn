@@ -47,7 +47,7 @@ export const AvatarGroup: React.FC<AvatarGroupProps> = ({ avatars, max = 4, styl
             },
           ]}
         >
-          <Text style={{ color: colors.textPrimary, fontSize: fontSizes.sm, fontWeight: fontWeights.semibold }}>
+          <Text style={[styles.overflowText, { color: colors.textPrimary }]}>
             {`+${overflow}`}
           </Text>
         </View>
@@ -71,5 +71,9 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  overflowText: {
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.semibold,
   },
 });

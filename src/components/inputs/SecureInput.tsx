@@ -61,7 +61,7 @@ export const SecureInput: React.FC<SecureInputProps> = ({
           accessibilityLabel={visible ? 'Hide password' : 'Show password'}
           style={styles.toggle}
         >
-          <Text style={{ color: colors.primary, fontWeight: fontWeights.medium }}>
+          <Text style={[styles.toggleText, { color: colors.primary }]}>
             {visible ? 'Hide' : 'Show'}
           </Text>
         </TouchableOpacity>
@@ -101,5 +101,8 @@ const styles = StyleSheet.create({
   error: {
     fontSize: fontSizes.xs,
     marginTop: spacing.xs,
+  },
+  toggleText: {
+    fontWeight: fontWeights.medium,
   },
 });

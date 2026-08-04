@@ -47,7 +47,7 @@ export const CheckboxInput: React.FC<CheckboxInputProps> = ({
       <View style={[styles.box, dynamicBoxStyle]}>
         {checked ? <Text style={{ color: colors.primaryText }}>{'✓'}</Text> : null}
       </View>
-      <Text style={{ color: colors.textPrimary, marginLeft: spacing.sm }}>{label}</Text>
+      <Text style={[styles.label, { color: colors.textPrimary }]}>{label}</Text>
     </TouchableOpacity>
   );
 };
@@ -65,5 +65,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.sm,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  label: {
+    marginLeft: spacing.sm,
   },
 });

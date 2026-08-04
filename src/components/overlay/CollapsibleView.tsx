@@ -54,7 +54,7 @@ export const CollapsibleView: React.FC<CollapsibleViewProps> = ({
         accessibilityLabel={`${title}, ${expanded ? 'expanded' : 'collapsed'}`}
         style={styles.header}
       >
-        <Text style={{ color: colors.textPrimary, fontSize: fontSizes.lg, fontWeight: fontWeights.semibold }}>
+        <Text style={[styles.title, { color: colors.textPrimary }]}>
           {title}
         </Text>
         <Text style={{ color: colors.textSecondary }}>{expanded ? '⌃' : '⌄'}</Text>
@@ -78,5 +78,9 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.md,
+  },
+  title: {
+    fontSize: fontSizes.lg,
+    fontWeight: fontWeights.semibold,
   },
 });

@@ -42,9 +42,9 @@ export const ListRow: React.FC<ListRowProps> = ({
     >
       {leading}
       <View style={styles.textContainer}>
-        <Text style={{ color: colors.textPrimary, fontSize: fontSizes.md }}>{title}</Text>
+        <Text style={[styles.title, { color: colors.textPrimary }]}>{title}</Text>
         {subtitle ? (
-          <Text style={{ color: colors.textSecondary, fontSize: fontSizes.sm }}>{subtitle}</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
         ) : null}
       </View>
       {trailing}
@@ -72,5 +72,11 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     marginLeft: spacing.sm,
+  },
+  title: {
+    fontSize: fontSizes.md,
+  },
+  subtitle: {
+    fontSize: fontSizes.sm,
   },
 });

@@ -70,8 +70,8 @@ export const SliderInput: React.FC<SliderInputProps> = ({
   return (
     <View style={style}>
       <View style={styles.header}>
-        <Text style={{ color: colors.textPrimary, fontSize: fontSizes.sm }}>{label}</Text>
-        <Text style={{ color: colors.textSecondary, fontSize: fontSizes.sm }}>
+        <Text style={[styles.headerText, { color: colors.textPrimary }]}>{label}</Text>
+        <Text style={[styles.headerText, { color: colors.textSecondary }]}>
           {value.toFixed(2)}
         </Text>
       </View>
@@ -108,6 +108,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: spacing.xs,
+  },
+  headerText: {
+    fontSize: fontSizes.sm,
   },
   track: {
     height: TRACK_HEIGHT,

@@ -40,7 +40,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep
                     : { backgroundColor: colors.surfaceAlt, borderColor: colors.border },
                 ]}
               >
-                {isCompleted ? <Text style={{ color: colors.primaryText, fontSize: fontSizes.xs }}>{'✓'}</Text> : null}
+                {isCompleted ? <Text style={[styles.checkmark, { color: colors.primaryText }]}>{'✓'}</Text> : null}
               </View>
               <Text
                 style={[
@@ -93,5 +93,8 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 1,
     marginTop: 12,
+  },
+  checkmark: {
+    fontSize: fontSizes.xs,
   },
 });

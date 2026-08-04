@@ -46,7 +46,7 @@ export const RadioButtonInput: React.FC<RadioButtonInputProps> = ({
       <View style={[styles.outer, { borderColor: selected ? colors.primary : colors.border }]}>
         {selected ? <View style={[styles.inner, { backgroundColor: colors.primary }]} /> : null}
       </View>
-      <Text style={{ color: colors.textPrimary, marginLeft: spacing.sm }}>{label}</Text>
+      <Text style={[styles.label, { color: colors.textPrimary }]}>{label}</Text>
     </TouchableOpacity>
   );
 };
@@ -69,5 +69,8 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
+  },
+  label: {
+    marginLeft: spacing.sm,
   },
 });

@@ -69,7 +69,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ label, children, style }) => {
               style,
             ]}
           >
-            <Text style={{ color: colors.textInverse, fontSize: fontSizes.xs }}>{label}</Text>
+            <Text style={[styles.tooltipText, { color: colors.textInverse }]}>{label}</Text>
           </View>
         </Pressable>
       </Modal>
@@ -86,5 +86,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.sm,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xxs,
+  },
+  tooltipText: {
+    fontSize: fontSizes.xs,
   },
 });

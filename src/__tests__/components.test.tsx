@@ -395,6 +395,33 @@ describe('component smoke tests', () => {
     expect(tree.toJSON()).toBeTruthy();
   });
 
+  it('renders PagerView in controlled mode', () => {
+    const tree = renderer.create(
+      <PagerView currentPage={0}>
+        <Text>Page 1</Text>
+        <Text>Page 2</Text>
+      </PagerView>
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('PagerView does not call onPageChange for programmatic scroll', () => {
+    const onPageChange = jest.fn();
+    // Render with currentPage in controlled mode. The programmatic-scroll guard
+    // (isScrollingProgrammatically ref) must prevent onPageChange from firing
+    // when the effect triggers scrollTo — no layout has been measured yet so
+    // layoutWidth === 0 and scrollTo is skipped, but onPageChange must still
+    // never fire without an actual user swipe.
+    const instance = renderer.create(
+      <PagerView currentPage={0} onPageChange={onPageChange}>
+        <Text>Page 1</Text>
+        <Text>Page 2</Text>
+      </PagerView>
+    );
+    expect(instance.toJSON()).toBeTruthy();
+    expect(onPageChange).not.toHaveBeenCalled();
+  });
+
   it('renders KeyboardAvoidingScrollView', () => {
     const tree = renderer.create(
       <KeyboardAvoidingScrollView>

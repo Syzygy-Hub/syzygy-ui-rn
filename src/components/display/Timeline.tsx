@@ -5,7 +5,7 @@ import { getColors } from '../../tokens/colors';
 import { spacing } from '../../tokens/spacing';
 import { fontSizes, fontWeights } from '../../tokens/typography';
 
-export interface TimelineEvent {
+export interface TimelineItem {
   key: string;
   title: string;
   subtitle?: string;
@@ -15,7 +15,7 @@ export interface TimelineEvent {
 }
 
 export interface TimelineProps {
-  events: TimelineEvent[];
+  events: TimelineItem[];
   /** Whether the dot/line sits on the leading or trailing edge of each row. */
   alignment?: 'leading' | 'trailing';
   style?: StyleProp<ViewStyle>;

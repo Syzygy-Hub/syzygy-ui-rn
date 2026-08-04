@@ -43,7 +43,7 @@ export function TabBar<T>({ items, selection, onSelectionChange, style }: TabBar
             style={styles.item}
           >
             {item.icon}
-            <Text style={{ color: selected ? colors.primary : colors.textSecondary, fontSize: fontSizes.xs }}>
+            <Text style={[styles.itemLabel, { color: selected ? colors.primary : colors.textSecondary }]}>
               {item.label}
             </Text>
           </TouchableOpacity>
@@ -64,5 +64,8 @@ const styles = StyleSheet.create({
     minHeight: 48,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  itemLabel: {
+    fontSize: fontSizes.xs,
   },
 });

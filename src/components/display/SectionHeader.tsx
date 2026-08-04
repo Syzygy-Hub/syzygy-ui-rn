@@ -32,12 +32,12 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   return (
     <View style={[styles.container, style]} accessibilityRole="header">
-      <Text style={{ color: colors.textPrimary, fontSize: fontSizes.lg, fontWeight: fontWeights.semibold }}>
+      <Text style={[styles.title, { color: colors.textPrimary }]}>
         {title}
       </Text>
       {actionLabel && onActionPress ? (
         <TouchableOpacity onPress={onActionPress} accessibilityRole="button" accessibilityLabel={actionLabel}>
-          <Text style={{ color: colors.primary, fontSize: fontSizes.sm }}>{actionLabel}</Text>
+          <Text style={[styles.actionLabel, { color: colors.primary }]}>{actionLabel}</Text>
         </TouchableOpacity>
       ) : null}
     </View>
@@ -51,5 +51,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: spacing.md,
+  },
+  title: {
+    fontSize: fontSizes.lg,
+    fontWeight: fontWeights.semibold,
+  },
+  actionLabel: {
+    fontSize: fontSizes.sm,
   },
 });

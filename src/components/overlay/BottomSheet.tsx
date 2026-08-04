@@ -28,7 +28,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ visible, onDismiss, ch
   }, [visible, translateY]);
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onDismiss}>
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onDismiss} accessibilityViewIsModal={true}>
       <Pressable style={[styles.backdrop, { backgroundColor: colors.overlay }]} onPress={onDismiss}>
         <Animated.View
           style={[

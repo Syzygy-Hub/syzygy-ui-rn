@@ -38,7 +38,7 @@ export const Avatar: React.FC<AvatarProps> = ({ initials, size = 'medium', style
         style,
       ]}
     >
-      <Text style={{ color: colors.primaryText, fontSize: fontSizes.sm, fontWeight: fontWeights.semibold }}>
+      <Text style={[styles.initials, { color: colors.primaryText }]}>
         {initials}
       </Text>
     </View>
@@ -49,5 +49,9 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  initials: {
+    fontSize: fontSizes.sm,
+    fontWeight: fontWeights.semibold,
   },
 });

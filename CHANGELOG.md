@@ -5,6 +5,21 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-08-04
+
+### Fixed
+- `ModalDialog`, `BottomSheet`, `SideMenu`: added `accessibilityViewIsModal={true}` on `Modal` so VoiceOver restricts focus to modal content on iOS
+- `Snackbar`: added `accessibilityLiveRegion="polite"` so Android TalkBack announces the message on appearance
+- `PagerView`: added `accessibilityRole="adjustable"` and `accessibilityLabel` on the scroll container
+- Inline styles: extracted static `fontSize`/`fontWeight`/`marginLeft` values to `StyleSheet.create` across 13 component files (`SectionHeader`, `AppBar`, `Avatar`, `AvatarGroup`, `CollapsibleView`, `QuantityStepper`, `ListRow`, `Chip`, `CheckboxInput`, `RadioButtonInput`, `SecureInput`, `SliderInput`, `StepIndicator`, `TabBar`, `CountBadge`, `Tooltip`)
+
+### Added
+- `PagerView`: `currentPage?: number` prop for controlled mode — host drives the active page programmatically; an `isScrollingProgrammatically` guard prevents the resulting `onMomentumScrollEnd` from re-firing `onPageChange` and looping
+- `Timeline`: renamed exported type `TimelineEvent` → `TimelineItem` — cross-platform naming alignment (breaking rename)
+
+### Changed
+- README: `PagerView` moved from Display to Navigation category (matches source folder placement); `NetworkStatusBanner` cross-platform note added
+
 ## [2.2.0] - 2026-08-04
 
 ### Added

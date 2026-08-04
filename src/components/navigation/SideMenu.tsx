@@ -32,7 +32,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, children, w
   }, [isOpen, width, translateX]);
 
   return (
-    <Modal visible={isOpen} transparent animationType="fade" onRequestClose={onClose}>
+    <Modal visible={isOpen} transparent animationType="fade" onRequestClose={onClose} accessibilityViewIsModal={true}>
       <Pressable style={[styles.backdrop, { backgroundColor: colors.overlay }]} onPress={onClose}>
         <Animated.View
           style={[

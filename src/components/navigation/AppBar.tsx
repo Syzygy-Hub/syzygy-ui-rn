@@ -27,7 +27,7 @@ export const AppBar: React.FC<AppBarProps> = ({ title, leading, trailing, style 
       accessibilityRole="header"
     >
       <View style={styles.side}>{leading}</View>
-      <Text style={{ color: colors.textPrimary, fontSize: fontSizes.lg, fontWeight: fontWeights.semibold }}>
+      <Text style={[styles.title, { color: colors.textPrimary }]}>
         {title}
       </Text>
       <View style={[styles.side, styles.trailing]}>{trailing}</View>
@@ -49,5 +49,9 @@ const styles = StyleSheet.create({
   },
   trailing: {
     alignItems: 'flex-end',
+  },
+  title: {
+    fontSize: fontSizes.lg,
+    fontWeight: fontWeights.semibold,
   },
 });

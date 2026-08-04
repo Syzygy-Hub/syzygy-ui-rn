@@ -21,7 +21,7 @@ export const ModalDialog: React.FC<ModalDialogProps> = ({ visible, onDismiss, ch
   const colors = getColors(scheme);
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onDismiss}>
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onDismiss} accessibilityViewIsModal={true}>
       <Pressable style={[styles.backdrop, { backgroundColor: colors.overlay }]} onPress={onDismiss}>
         <Pressable style={[styles.card, { backgroundColor: colors.surface }]}>
           {children}

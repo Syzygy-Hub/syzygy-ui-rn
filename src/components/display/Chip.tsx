@@ -30,7 +30,7 @@ export const Chip: React.FC<ChipProps> = ({ text, onRemove, style }) => {
       style={[styles.container, { backgroundColor: colors.surfaceAlt }, style]}
       accessibilityLabel={text}
     >
-      <Text style={{ color: colors.textPrimary, fontSize: fontSizes.sm }}>{text}</Text>
+      <Text style={[styles.text, { color: colors.textPrimary }]}>{text}</Text>
       {onRemove ? (
         <TouchableOpacity
           onPress={onRemove}
@@ -60,5 +60,8 @@ const styles = StyleSheet.create({
     minHeight: 20,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    fontSize: fontSizes.sm,
   },
 });

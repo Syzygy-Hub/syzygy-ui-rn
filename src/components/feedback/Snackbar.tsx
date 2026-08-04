@@ -51,6 +51,7 @@ export const Snackbar: React.FC<SnackbarProps> = ({
       style={[styles.container, { backgroundColor: colors.textPrimary }, style]}
       accessibilityRole="alert"
       accessibilityLabel={message}
+      accessibilityLiveRegion="polite"
     >
       <Text style={[styles.message, { color: colors.textInverse }]}>{message}</Text>
       {actionLabel ? (

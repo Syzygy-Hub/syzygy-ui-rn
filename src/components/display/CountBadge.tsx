@@ -28,7 +28,7 @@ export const CountBadge: React.FC<CountBadgeProps> = ({ count, maxDisplayCount =
         style={[styles.numeric, { backgroundColor: colors.destructive }, style]}
         accessibilityLabel={`${count} unread`}
       >
-        <Text style={{ color: colors.destructiveText, fontSize: fontSizes.xs }}>{display}</Text>
+        <Text style={[styles.count, { color: colors.destructiveText }]}>{display}</Text>
       </View>
     );
   }
@@ -54,5 +54,8 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
+  },
+  count: {
+    fontSize: fontSizes.xs,
   },
 });

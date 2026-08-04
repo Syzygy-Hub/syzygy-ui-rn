@@ -41,7 +41,7 @@ export const QuantityStepper: React.FC<QuantityStepperProps> = ({
         accessibilityLabel="Decrease"
         style={styles.button}
       >
-        <Text style={{ color: atMin ? colors.disabledText : colors.primary, fontWeight: fontWeights.bold }}>
+        <Text style={[styles.stepperGlyph, { color: atMin ? colors.disabledText : colors.primary }]}>
           {'−'}
         </Text>
       </TouchableOpacity>
@@ -55,7 +55,7 @@ export const QuantityStepper: React.FC<QuantityStepperProps> = ({
         accessibilityLabel="Increase"
         style={styles.button}
       >
-        <Text style={{ color: atMax ? colors.disabledText : colors.primary, fontWeight: fontWeights.bold }}>
+        <Text style={[styles.stepperGlyph, { color: atMax ? colors.disabledText : colors.primary }]}>
           {'+'}
         </Text>
       </TouchableOpacity>
@@ -81,5 +81,8 @@ const styles = StyleSheet.create({
   valueText: {
     minWidth: 24,
     textAlign: 'center',
+  },
+  stepperGlyph: {
+    fontWeight: fontWeights.bold,
   },
 });
