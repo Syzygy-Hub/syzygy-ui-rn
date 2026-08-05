@@ -1,23 +1,23 @@
 import React from 'react';
-import { StyleProp, StyleSheet, useColorScheme, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface CardViewProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 export const CardView: React.FC<CardViewProps> = ({
   children,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <View
@@ -25,8 +25,10 @@ export const CardView: React.FC<CardViewProps> = ({
       style={[
         styles.container,
         {
-          backgroundColor: colors.surface,
-          borderColor: colors.border,
+          borderRadius: theme.radius.lg,
+          padding: theme.spacing.md,
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
         },
         style,
       ]}
@@ -38,8 +40,6 @@ export const CardView: React.FC<CardViewProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: radius.lg,
     borderWidth: 1,
-    padding: spacing.md,
   },
 });

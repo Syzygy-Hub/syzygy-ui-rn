@@ -4,40 +4,68 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface SectionHeaderProps {
   title: string;
   actionLabel?: string;
   onActionPress?: () => void;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/** A section title with an optional trailing text action (e.g. "See All"). */
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
   title,
   actionLabel,
   onActionPress,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
-    <View style={[styles.container, style]} accessibilityRole="header">
-      <Text style={[styles.title, { color: colors.textPrimary }]}>
+    <View
+      style={[
+        styles.container,
+        { paddingHorizontal: theme.spacing.md },
+        style,
+      ]}
+      accessibilityRole="header"
+    >
+      <Text
+        style={[
+          styles.title,
+          {
+            fontSize: theme.typography.body.fontSize,
+            fontWeight: theme.typography.headline.fontWeight,
+            color: theme.colors.textPrimary,
+          },
+        ]}
+      >
         {title}
       </Text>
       {actionLabel && onActionPress ? (
-        <TouchableOpacity onPress={onActionPress} accessibilityRole="button" accessibilityLabel={actionLabel}>
-          <Text style={[styles.actionLabel, { color: colors.primary }]}>{actionLabel}</Text>
+        <TouchableOpacity
+          onPress={onActionPress}
+          accessibilityRole="button"
+          accessibilityLabel={actionLabel}
+        >
+          <Text
+            style={[
+              styles.actionLabel,
+              {
+                fontSize: theme.typography.footnote.fontSize,
+                color: theme.colors.primary,
+              },
+            ]}
+          >
+            {actionLabel}
+          </Text>
         </TouchableOpacity>
       ) : null}
     </View>
@@ -50,13 +78,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
   },
-  title: {
-    fontSize: fontSizes.lg,
-    fontWeight: fontWeights.semibold,
-  },
-  actionLabel: {
-    fontSize: fontSizes.sm,
-  },
+  title: {},
+  actionLabel: {},
 });

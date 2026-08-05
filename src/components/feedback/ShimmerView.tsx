@@ -1,17 +1,16 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleProp, StyleSheet, ViewStyle, useColorScheme } from 'react-native';
+import { Animated, StyleProp, StyleSheet, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface ShimmerViewProps {
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/** An animated skeleton placeholder for list/table rows while content loads. */
-export const ShimmerView: React.FC<ShimmerViewProps> = ({ style }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const ShimmerView: React.FC<ShimmerViewProps> = ({ style, theme: themeProp }) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const opacity = useRef(new Animated.Value(0.3)).current;
 
   useEffect(() => {
@@ -31,7 +30,11 @@ export const ShimmerView: React.FC<ShimmerViewProps> = ({ style }) => {
       importantForAccessibility="no"
       style={[
         styles.base,
-        { backgroundColor: colors.surfaceSecondary, opacity },
+        {
+          borderRadius: theme.radius.sm,
+          backgroundColor: theme.colors.surfaceSecondary,
+          opacity,
+        },
         style,
       ]}
     />
@@ -41,7 +44,6 @@ export const ShimmerView: React.FC<ShimmerViewProps> = ({ style }) => {
 const styles = StyleSheet.create({
   base: {
     height: 16,
-    borderRadius: radius.sm,
     width: '100%',
   },
 });

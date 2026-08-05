@@ -1,29 +1,28 @@
 import React from 'react';
-import { StyleProp, StyleSheet, TouchableOpacity, useColorScheme, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { elevation } from '../../tokens/elevation';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface FloatingActionButtonProps {
   icon: React.ReactNode;
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 /**
- * A circular elevated primary action button. Uses the `elevation` token,
- * which carries both Android's `elevation` prop and iOS's `shadow*` props on
- * one object — the standard way to express elevation cross-platform in RN.
+ * A circular elevated primary action button.
  */
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   icon,
   onPress,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <TouchableOpacity
@@ -32,8 +31,8 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
       accessibilityLabel={accessibilityLabel ?? 'Action'}
       style={[
         styles.base,
-        elevation.lg,
-        { backgroundColor: colors.primary },
+        { ...theme.elevation.lg },
+        { backgroundColor: theme.colors.primary },
         style,
       ]}
     >

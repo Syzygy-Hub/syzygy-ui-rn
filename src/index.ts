@@ -1,4 +1,5 @@
 export * from './tokens';
+export * from './theme';
 
 export * from './components/buttons/PrimaryButton';
 export * from './components/buttons/SecondaryButton';

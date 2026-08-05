@@ -1,11 +1,7 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { elevation } from '../../tokens/elevation';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 import { TabBarItem } from './TabBarItem';
 
@@ -14,25 +10,33 @@ export interface FloatingTabBarProps<T> {
   selection: T;
   onSelectionChange: (tag: T) => void;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A floating, icon-AND-label pill-style bottom navigation bar.
- *
- * This is deliberately distinct from the other two bottom-nav components,
- * filling the real gap in the 2x2 matrix of {edge-to-edge vs floating} x
- * {icon-only vs icon+label}: `TabBar` is edge-to-edge + icon-and-label,
- * `BottomNavigationBar` is floating + icon-only, so `FloatingTabBar` is
- * floating + icon-and-label — not a near-duplicate of either. Presentational
- * only, like the other nav components — wire `onSelectionChange` into your
- * own navigator.
- */
-export function FloatingTabBar<T>({ items, selection, onSelectionChange, style }: FloatingTabBarProps<T>) {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export function FloatingTabBar<T>({
+  items,
+  selection,
+  onSelectionChange,
+  style,
+  theme: themeProp,
+}: FloatingTabBarProps<T>) {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
-    <View style={[styles.container, elevation.md, { backgroundColor: colors.surface }, style]}>
+    <View
+      style={[
+        styles.container,
+        { ...theme.elevation.md },
+        {
+          borderRadius: theme.radius.full,
+          paddingVertical: theme.spacing.xs,
+          paddingHorizontal: theme.spacing.xs,
+          backgroundColor: theme.colors.surface,
+        },
+        style,
+      ]}
+    >
       {items.map((item, index) => {
         const selected = item.tag === selection;
         return (
@@ -42,14 +46,22 @@ export function FloatingTabBar<T>({ items, selection, onSelectionChange, style }
             accessibilityRole="button"
             accessibilityState={{ selected }}
             accessibilityLabel={item.label}
-            style={[styles.item, selected ? { backgroundColor: colors.primaryMuted } : null]}
+            style={[
+              styles.item,
+              {
+                borderRadius: theme.radius.full,
+                paddingHorizontal: theme.spacing.sm,
+                paddingVertical: theme.spacing.xs,
+              },
+              selected ? { backgroundColor: theme.colors.primaryMuted } : null,
+            ]}
           >
             {item.icon}
             <Text
               style={{
-                color: selected ? colors.primary : colors.textSecondary,
-                fontSize: fontSizes.xs,
-                marginTop: spacing.xxs,
+                color: selected ? theme.colors.primary : theme.colors.textSecondary,
+                fontSize: theme.typography.caption.fontSize,
+                marginTop: theme.spacing.xxs,
               }}
             >
               {item.label}
@@ -65,15 +77,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignSelf: 'center',
-    borderRadius: radius.full,
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.xs,
   },
   item: {
     minWidth: 64,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',
   },

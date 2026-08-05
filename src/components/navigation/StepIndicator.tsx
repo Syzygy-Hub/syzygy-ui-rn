@@ -1,27 +1,29 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface StepIndicatorProps {
   steps: string[];
   currentStep: number;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A horizontal step-progress indicator (also known as `WizardSteps`):
- * a filled circle for completed steps, a ring for the active step, a dot
- * for pending steps, connected by lines.
- */
-export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep, style }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const StepIndicator: React.FC<StepIndicatorProps> = ({
+  steps,
+  currentStep,
+  style,
+  theme: themeProp,
+}) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
-    <View style={[styles.container, style]} accessibilityLabel={`Step ${currentStep + 1} of ${steps.length}`}>
+    <View
+      style={[styles.container, style]}
+      accessibilityLabel={`Step ${currentStep + 1} of ${steps.length}`}
+    >
       {steps.map((label, index) => {
         const isCompleted = index < currentStep;
         const isActive = index === currentStep;
@@ -34,18 +36,40 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep
                 style={[
                   styles.node,
                   isCompleted
-                    ? { backgroundColor: colors.primary, borderColor: colors.primary }
+                    ? {
+                        backgroundColor: theme.colors.primary,
+                        borderColor: theme.colors.primary,
+                      }
                     : isActive
-                    ? [styles.nodeActive, { borderColor: colors.primary }]
-                    : { backgroundColor: colors.surfaceSecondary, borderColor: colors.border },
+                    ? [styles.nodeActive, { borderColor: theme.colors.primary }]
+                    : {
+                        backgroundColor: theme.colors.surfaceSecondary,
+                        borderColor: theme.colors.border,
+                      },
                 ]}
               >
-                {isCompleted ? <Text style={[styles.checkmark, { color: colors.onPrimary }]}>{'✓'}</Text> : null}
+                {isCompleted ? (
+                  <Text
+                    style={[
+                      styles.checkmark,
+                      {
+                        fontSize: theme.typography.caption.fontSize,
+                        color: theme.colors.onPrimary,
+                      },
+                    ]}
+                  >
+                    {'✓'}
+                  </Text>
+                ) : null}
               </View>
               <Text
                 style={[
                   styles.label,
-                  { color: isPending ? colors.textSecondary : colors.textPrimary },
+                  {
+                    fontSize: theme.typography.caption.fontSize,
+                    marginTop: theme.spacing.xxs,
+                    color: isPending ? theme.colors.textSecondary : theme.colors.textPrimary,
+                  },
                 ]}
                 numberOfLines={1}
               >
@@ -53,7 +77,14 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep
               </Text>
             </View>
             {index < steps.length - 1 ? (
-              <View style={[styles.connector, { backgroundColor: isCompleted ? colors.primary : colors.border }]} />
+              <View
+                style={[
+                  styles.connector,
+                  {
+                    backgroundColor: isCompleted ? theme.colors.primary : theme.colors.border,
+                  },
+                ]}
+              />
             ) : null}
           </React.Fragment>
         );
@@ -84,9 +115,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   label: {
-    fontSize: fontSizes.xs,
-    fontWeight: fontWeights.medium,
-    marginTop: spacing.xxs,
     textAlign: 'center',
   },
   connector: {
@@ -94,7 +122,5 @@ const styles = StyleSheet.create({
     height: 1,
     marginTop: 12,
   },
-  checkmark: {
-    fontSize: fontSizes.xs,
-  },
+  checkmark: {},
 });

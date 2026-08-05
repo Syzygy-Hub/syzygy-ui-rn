@@ -6,15 +6,11 @@ import {
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface SecureInputProps
   extends Omit<RNTextInputProps, 'style' | 'secureTextEntry'> {
@@ -22,6 +18,7 @@ export interface SecureInputProps
   error?: string;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 export const SecureInput: React.FC<SecureInputProps> = ({
@@ -29,30 +26,50 @@ export const SecureInput: React.FC<SecureInputProps> = ({
   error,
   style,
   accessibilityLabel,
+  theme: themeProp,
   ...rest
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const [visible, setVisible] = useState(false);
   const hasError = Boolean(error);
 
   return (
     <View style={style}>
-      <Text style={[styles.label, { color: colors.textSecondary }]}>{label}</Text>
+      <Text
+        style={[
+          styles.label,
+          {
+            fontSize: theme.typography.footnote.fontSize,
+            marginBottom: theme.spacing.xs,
+            color: theme.colors.textSecondary,
+          },
+        ]}
+      >
+        {label}
+      </Text>
       <View
         style={[
           styles.inputRow,
           {
-            backgroundColor: colors.surface,
-            borderColor: hasError ? colors.error : colors.border,
+            borderRadius: theme.radius.md,
+            paddingHorizontal: theme.spacing.md,
+            backgroundColor: theme.colors.surface,
+            borderColor: hasError ? theme.colors.error : theme.colors.border,
           },
         ]}
       >
         <RNTextInput
           accessibilityLabel={accessibilityLabel ?? label}
-          placeholderTextColor={colors.textSecondary}
+          placeholderTextColor={theme.colors.textSecondary}
           secureTextEntry={!visible}
-          style={[styles.input, { color: colors.textPrimary }]}
+          style={[
+            styles.input,
+            {
+              fontSize: theme.typography.callout.fontSize,
+              color: theme.colors.textPrimary,
+            },
+          ]}
           {...rest}
         />
         <TouchableOpacity
@@ -61,35 +78,46 @@ export const SecureInput: React.FC<SecureInputProps> = ({
           accessibilityLabel={visible ? 'Hide password' : 'Show password'}
           style={styles.toggle}
         >
-          <Text style={[styles.toggleText, { color: colors.primary }]}>
+          <Text
+            style={[
+              styles.toggleText,
+              {
+                color: theme.colors.primary,
+              },
+            ]}
+          >
             {visible ? 'Hide' : 'Show'}
           </Text>
         </TouchableOpacity>
       </View>
       {hasError ? (
-        <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
+        <Text
+          style={[
+            styles.error,
+            {
+              fontSize: theme.typography.caption.fontSize,
+              marginTop: theme.spacing.xs,
+              color: theme.colors.error,
+            },
+          ]}
+        >
+          {error}
+        </Text>
       ) : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: fontSizes.sm,
-    fontWeight: fontWeights.medium,
-    marginBottom: spacing.xs,
-  },
+  label: {},
   inputRow: {
     minHeight: 44,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
   },
   input: {
     flex: 1,
-    fontSize: fontSizes.md,
     minHeight: 44,
   },
   toggle: {
@@ -98,11 +126,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  error: {
-    fontSize: fontSizes.xs,
-    marginTop: spacing.xs,
-  },
-  toggleText: {
-    fontWeight: fontWeights.medium,
-  },
+  error: {},
+  toggleText: {},
 });

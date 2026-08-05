@@ -1,19 +1,23 @@
 import React from 'react';
 import { ScrollView, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
+import { SyzygyTheme } from '../../theme';
+
 export interface StickyHeaderProps {
   header: React.ReactNode;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A header that sticks to the top of a scroll container while content
- * scrolls beneath it, using React Native core's built-in
- * `ScrollView`/`stickyHeaderIndices` mechanism directly rather than
- * reimplementing sticky positioning manually.
- */
-export const StickyHeader: React.FC<StickyHeaderProps> = ({ header, children, style }) => {
+export const StickyHeader: React.FC<StickyHeaderProps> = ({
+  header,
+  children,
+  style,
+  // theme prop accepted but layout component does not consume it
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  theme: _theme,
+}) => {
   return (
     <ScrollView style={[styles.flex, style]} stickyHeaderIndices={[0]}>
       <View>{header}</View>

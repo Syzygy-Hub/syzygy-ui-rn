@@ -4,41 +4,57 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface ChipProps {
   text: string;
   onRemove?: () => void;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
 /** A compact tag/chip with an optional trailing remove button. */
-export const Chip: React.FC<ChipProps> = ({ text, onRemove, style }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const Chip: React.FC<ChipProps> = ({ text, onRemove, style, theme: themeProp }) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <View
-      style={[styles.container, { backgroundColor: colors.surfaceSecondary }, style]}
+      style={[
+        styles.container,
+        {
+          paddingHorizontal: theme.spacing.sm,
+          paddingVertical: theme.spacing.xs,
+          borderRadius: theme.radius.full,
+          backgroundColor: theme.colors.surfaceSecondary,
+        },
+        style,
+      ]}
       accessibilityLabel={text}
     >
-      <Text style={[styles.text, { color: colors.textPrimary }]}>{text}</Text>
+      <Text
+        style={[
+          styles.text,
+          {
+            fontSize: theme.typography.footnote.fontSize,
+            color: theme.colors.textPrimary,
+          },
+        ]}
+      >
+        {text}
+      </Text>
       {onRemove ? (
         <TouchableOpacity
           onPress={onRemove}
           accessibilityRole="button"
           accessibilityLabel={`Remove ${text}`}
-          style={styles.remove}
+          style={[styles.remove, { marginLeft: theme.spacing.xs }]}
         >
-          <Text style={{ color: colors.textSecondary }}>{'✕'}</Text>
+          <Text style={{ color: theme.colors.textSecondary }}>{'✕'}</Text>
         </TouchableOpacity>
       ) : null}
     </View>
@@ -50,18 +66,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.full,
   },
   remove: {
-    marginLeft: spacing.xs,
     minWidth: 20,
     minHeight: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: fontSizes.sm,
-  },
+  text: {},
 });

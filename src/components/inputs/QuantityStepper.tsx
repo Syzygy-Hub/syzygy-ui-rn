@@ -1,10 +1,7 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface QuantityStepperProps {
   value: number;
@@ -13,9 +10,9 @@ export interface QuantityStepperProps {
   maximumValue?: number;
   step?: number;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/** A +/- quantity control, bounded to [minimumValue, maximumValue]. */
 export const QuantityStepper: React.FC<QuantityStepperProps> = ({
   value,
   onValueChange,
@@ -23,15 +20,23 @@ export const QuantityStepper: React.FC<QuantityStepperProps> = ({
   maximumValue = 99,
   step = 1,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const atMin = value <= minimumValue;
   const atMax = value >= maximumValue;
 
   return (
     <View
-      style={[styles.container, { borderColor: colors.border }, style]}
+      style={[
+        styles.container,
+        {
+          borderRadius: theme.radius.md,
+          borderColor: theme.colors.border,
+        },
+        style,
+      ]}
       accessibilityLabel={`Quantity: ${value}`}
     >
       <TouchableOpacity
@@ -39,13 +44,29 @@ export const QuantityStepper: React.FC<QuantityStepperProps> = ({
         disabled={atMin}
         accessibilityRole="button"
         accessibilityLabel="Decrease"
-        style={styles.button}
+        style={[styles.button, { paddingHorizontal: theme.spacing.xs }]}
       >
-        <Text style={[styles.stepperGlyph, { color: atMin ? colors.textDisabled : colors.primary }]}>
+        <Text
+          style={[
+            styles.stepperGlyph,
+            {
+              fontWeight: theme.typography.display.fontWeight,
+              color: atMin ? theme.colors.textDisabled : theme.colors.primary,
+            },
+          ]}
+        >
           {'−'}
         </Text>
       </TouchableOpacity>
-      <Text style={[styles.valueText, { color: colors.textPrimary, fontSize: fontSizes.md }]}>
+      <Text
+        style={[
+          styles.valueText,
+          {
+            fontSize: theme.typography.callout.fontSize,
+            color: theme.colors.textPrimary,
+          },
+        ]}
+      >
         {value}
       </Text>
       <TouchableOpacity
@@ -53,9 +74,17 @@ export const QuantityStepper: React.FC<QuantityStepperProps> = ({
         disabled={atMax}
         accessibilityRole="button"
         accessibilityLabel="Increase"
-        style={styles.button}
+        style={[styles.button, { paddingHorizontal: theme.spacing.xs }]}
       >
-        <Text style={[styles.stepperGlyph, { color: atMax ? colors.textDisabled : colors.primary }]}>
+        <Text
+          style={[
+            styles.stepperGlyph,
+            {
+              fontWeight: theme.typography.display.fontWeight,
+              color: atMax ? theme.colors.textDisabled : theme.colors.primary,
+            },
+          ]}
+        >
           {'+'}
         </Text>
       </TouchableOpacity>
@@ -68,7 +97,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: radius.md,
     alignSelf: 'flex-start',
   },
   button: {
@@ -76,13 +104,10 @@ const styles = StyleSheet.create({
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: spacing.xs,
   },
   valueText: {
     minWidth: 24,
     textAlign: 'center',
   },
-  stepperGlyph: {
-    fontWeight: fontWeights.bold,
-  },
+  stepperGlyph: {},
 });

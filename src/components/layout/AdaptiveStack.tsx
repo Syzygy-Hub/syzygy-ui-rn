@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import { LayoutChangeEvent, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
+import { SyzygyTheme } from '../../theme';
+
 export interface AdaptiveStackProps {
   breakpoint: number;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A layout that arranges its children in a row when the available width is
- * above `breakpoint`, and in a column otherwise. Reads its own measured
- * width via `onLayout` (rather than `useWindowDimensions`, which reflects
- * the whole screen, not the space this component actually has) so it
- * adapts correctly even when nested inside a narrower parent.
- */
-export const AdaptiveStack: React.FC<AdaptiveStackProps> = ({ breakpoint, children, style }) => {
+export const AdaptiveStack: React.FC<AdaptiveStackProps> = ({
+  breakpoint,
+  children,
+  style,
+  // theme prop accepted but layout component does not consume it
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  theme: _theme,
+}) => {
   const [width, setWidth] = useState<number | null>(null);
 
   const handleLayout = (event: LayoutChangeEvent) => {

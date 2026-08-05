@@ -5,15 +5,11 @@ import {
   Text,
   TextInput as RNTextInput,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface SearchInputProps {
   value: string;
@@ -23,13 +19,9 @@ export interface SearchInputProps {
   onSearchTextChanged?: (text: string) => void;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A search field with a leading icon, trailing clear button, and built-in
- * debounce. Named `SearchInput` to match this library's `*Input` naming
- * convention (see `TextInput`/`SecureInput`).
- */
 export const SearchInput: React.FC<SearchInputProps> = ({
   value,
   onChangeText,
@@ -38,9 +30,10 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   onSearchTextChanged,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
@@ -56,18 +49,30 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     <View
       style={[
         styles.container,
-        { backgroundColor: colors.surface, borderColor: colors.border },
+        {
+          borderRadius: theme.radius.md,
+          paddingHorizontal: theme.spacing.sm,
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+        },
         style,
       ]}
     >
-      <Text style={{ color: colors.textSecondary }}>{'\u{1F50D}'}</Text>
+      <Text style={{ color: theme.colors.textSecondary }}>{'\u{1F50D}'}</Text>
       <RNTextInput
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={theme.colors.textSecondary}
         accessibilityLabel={accessibilityLabel ?? placeholder}
-        style={[styles.input, { color: colors.textPrimary }]}
+        style={[
+          styles.input,
+          {
+            marginLeft: theme.spacing.xs,
+            fontSize: theme.typography.callout.fontSize,
+            color: theme.colors.textPrimary,
+          },
+        ]}
       />
       {value.length > 0 ? (
         <TouchableOpacity
@@ -76,7 +81,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
           accessibilityLabel="Clear search"
           style={styles.clear}
         >
-          <Text style={{ color: colors.textSecondary }}>{'✕'}</Text>
+          <Text style={{ color: theme.colors.textSecondary }}>{'✕'}</Text>
         </TouchableOpacity>
       ) : null}
     </View>
@@ -89,14 +94,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.sm,
   },
   input: {
     flex: 1,
-    fontSize: fontSizes.md,
     minHeight: 44,
-    marginLeft: spacing.xs,
   },
   clear: {
     minWidth: 44,

@@ -8,15 +8,11 @@ import {
   Text,
   TextInput as RNTextInput,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface PhoneCountry {
   code: string;
@@ -25,12 +21,6 @@ export interface PhoneCountry {
   dialCode: string;
 }
 
-/**
- * A small, deliberately minimal starter set of 15 real countries with
- * correct flag emoji and dial codes. This is NOT an exhaustive ISO list —
- * consumers with broader needs should pass their own list via the
- * `countries` prop.
- */
 export const DEFAULT_PHONE_COUNTRIES: PhoneCountry[] = [
   { code: 'US', name: 'United States', flag: '🇺🇸', dialCode: '+1' },
   { code: 'CA', name: 'Canada', flag: '🇨🇦', dialCode: '+1' },
@@ -50,24 +40,18 @@ export const DEFAULT_PHONE_COUNTRIES: PhoneCountry[] = [
 ];
 
 export interface PhoneInputProps {
-  /** Formatted display string, e.g. "🇺🇸 +1 555 123 4567". */
   value: string;
-  /** Fires with both the raw digits-only number and the formatted display string. */
   onChangeText: (raw: string, formatted: string) => void;
   countries?: PhoneCountry[];
   selectedCountryCode?: string;
   onCountryChange?: (country: PhoneCountry) => void;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 const stripToDigits = (text: string) => text.replace(/[^0-9]/g, '');
 
-/**
- * A phone number field with a tappable country-code prefix selector
- * (flag emoji + dial code) and a numeric keypad. Exposes both a formatted
- * display string and the raw digits-only number via `onChangeText`.
- */
 export const PhoneInput: React.FC<PhoneInputProps> = ({
   value,
   onChangeText,
@@ -76,9 +60,10 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
   onCountryChange,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const [pickerOpen, setPickerOpen] = useState(false);
   const [country, setCountry] = useState<PhoneCountry>(
     countries.find((c) => c.code === selectedCountryCode) ?? countries[0]
@@ -99,24 +84,40 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
 
   return (
     <View style={style}>
-      <View style={[styles.row, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <View
+        style={[
+          styles.row,
+          {
+            borderRadius: theme.radius.md,
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border,
+          },
+        ]}
+      >
         <TouchableOpacity
           onPress={() => setPickerOpen(true)}
           accessibilityRole="button"
           accessibilityLabel={`Country code, ${country.name}, ${country.dialCode}`}
-          style={styles.prefix}
+          style={[styles.prefix, { paddingHorizontal: theme.spacing.sm }]}
         >
-          <Text style={{ color: colors.textPrimary }}>{`${country.flag} ${country.dialCode}`}</Text>
+          <Text style={{ color: theme.colors.textPrimary }}>{`${country.flag} ${country.dialCode}`}</Text>
         </TouchableOpacity>
-        <View style={[styles.divider, { backgroundColor: colors.border }]} />
+        <View style={[styles.divider, { backgroundColor: theme.colors.border }]} />
         <RNTextInput
           value={stripToDigits(value)}
           onChangeText={handleChangeText}
           keyboardType="phone-pad"
           placeholder="Phone number"
-          placeholderTextColor={colors.textSecondary}
+          placeholderTextColor={theme.colors.textSecondary}
           accessibilityLabel={accessibilityLabel ?? 'Phone number'}
-          style={[styles.input, { color: colors.textPrimary }]}
+          style={[
+            styles.input,
+            {
+              paddingHorizontal: theme.spacing.sm,
+              fontSize: theme.typography.callout.fontSize,
+              color: theme.colors.textPrimary,
+            },
+          ]}
         />
       </View>
       <Modal
@@ -125,14 +126,28 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({
         animationType="fade"
         onRequestClose={() => setPickerOpen(false)}
       >
-        <Pressable style={styles.backdrop} onPress={() => setPickerOpen(false)}>
-          <View style={[styles.sheet, { backgroundColor: colors.surface }]}>
+        <Pressable style={[styles.backdrop, { backgroundColor: `rgba(0,0,0,${theme.colors.overlayAlpha})` }]} onPress={() => setPickerOpen(false)}>
+          <View
+            style={[
+              styles.sheet,
+              {
+                borderTopLeftRadius: theme.radius.lg,
+                borderTopRightRadius: theme.radius.lg,
+                backgroundColor: theme.colors.surface,
+              },
+            ]}
+          >
             <FlatList
               data={countries}
               keyExtractor={(item) => item.code}
               renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => handleCountrySelect(item)} style={styles.option}>
-                  <Text style={{ color: colors.textPrimary }}>{`${item.flag}  ${item.name} (${item.dialCode})`}</Text>
+                <TouchableOpacity
+                  onPress={() => handleCountrySelect(item)}
+                  style={[styles.option, { paddingHorizontal: theme.spacing.md }]}
+                >
+                  <Text
+                    style={{ color: theme.colors.textPrimary }}
+                  >{`${item.flag}  ${item.name} (${item.dialCode})`}</Text>
                 </TouchableOpacity>
               )}
             />
@@ -147,38 +162,29 @@ const styles = StyleSheet.create({
   row: {
     minHeight: 44,
     borderWidth: 1,
-    borderRadius: radius.md,
     flexDirection: 'row',
     alignItems: 'center',
   },
   prefix: {
-    paddingHorizontal: spacing.sm,
     minHeight: 44,
     justifyContent: 'center',
   },
   divider: {
     width: StyleSheet.hairlineWidth,
     alignSelf: 'stretch',
-    marginVertical: spacing.xs,
   },
   input: {
     flex: 1,
-    paddingHorizontal: spacing.sm,
-    fontSize: fontSizes.md,
   },
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'flex-end',
   },
   sheet: {
-    borderTopLeftRadius: radius.lg,
-    borderTopRightRadius: radius.lg,
     maxHeight: '60%',
   },
   option: {
     minHeight: 44,
     justifyContent: 'center',
-    paddingHorizontal: spacing.md,
   },
 });

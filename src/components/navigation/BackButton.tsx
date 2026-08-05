@@ -4,20 +4,17 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface BackButtonProps {
   onPress: () => void;
   label?: string;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 export const BackButton: React.FC<BackButtonProps> = ({
@@ -25,19 +22,49 @@ export const BackButton: React.FC<BackButtonProps> = ({
   label = 'Back',
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <TouchableOpacity
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? label}
-      style={[styles.container, style]}
+      style={[
+        styles.container,
+        {
+          paddingHorizontal: theme.spacing.sm,
+          borderRadius: theme.radius.sm,
+        },
+        style,
+      ]}
     >
-      <Text style={[styles.arrow, { color: colors.primary }]}>{'‹'}</Text>
-      <Text style={[styles.label, { color: colors.primary }]}>{label}</Text>
+      <Text
+        style={[
+          styles.arrow,
+          {
+            fontSize: theme.typography.title.fontSize,
+            fontWeight: theme.typography.display.fontWeight,
+            marginRight: theme.spacing.xs,
+            color: theme.colors.primary,
+          },
+        ]}
+      >
+        {'‹'}
+      </Text>
+      <Text
+        style={[
+          styles.label,
+          {
+            fontSize: theme.typography.callout.fontSize,
+            color: theme.colors.primary,
+          },
+        ]}
+      >
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -48,16 +75,7 @@ const styles = StyleSheet.create({
     minWidth: 44,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.sm,
-    borderRadius: radius.sm,
   },
-  arrow: {
-    fontSize: fontSizes.xl,
-    fontWeight: fontWeights.bold,
-    marginRight: spacing.xs,
-  },
-  label: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.medium,
-  },
+  arrow: {},
+  label: {},
 });

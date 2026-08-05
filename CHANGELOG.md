@@ -5,6 +5,28 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-08-05
+
+### Added
+- `src/theme/` module: `SyzygyColors`, `SyzygyRadius`, `SyzygyTypography`, `SyzygySpacing`, `SyzygyElevation`, `SyzygyAnimation`, `SyzygyTheme` interfaces and default implementations
+- Three built-in themes: `defaultTheme`, `darkTheme`, `highContrastTheme`
+- `SyzygyThemeProvider` React context provider with runtime theme switching via `setTheme`
+- `useSyzygyTheme()` custom hook returning `{ theme, setTheme }`
+- `SyzygyThemeOverride` component for subtree-level theme overrides
+- `theme?: SyzygyTheme` prop on every component for per-instance theme injection
+- `accessibilityLiveRegion="polite"` on `ToastView`
+- `accessibilityRole="button"` and per-segment `accessibilityLabel` on `ButtonGroup`
+- Controlled `currentPage` prop on `PagerView`
+- Theme barrel export via `src/index.ts`
+
+### Changed
+- All 76+ components migrated from `useColorScheme()` + `getColors()` to `useSyzygyTheme()`
+- Color, spacing, radius, typography, and elevation references now sourced from `SyzygyTheme` instead of raw token imports
+- Theme-dependent styles moved from `StyleSheet.create()` to inline style objects
+
+### Fixed
+- Hardcoded literals flagged: `fontSize: 20` (star/rating glyph), `fontSize: 40` (error glyph), `backgroundColor: 'rgba(0,0,0,0.4)'` (modal backdrop) — intentionally retained as non-token values
+
 ## [2.3.0] - 2026-08-05
 
 ### Changed (Breaking)

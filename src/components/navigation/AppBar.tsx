@@ -1,33 +1,50 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface AppBarProps {
   title: string;
   leading?: React.ReactNode;
   trailing?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/** A top navigation bar with a centered title and optional leading/trailing accessories. */
-export const AppBar: React.FC<AppBarProps> = ({ title, leading, trailing, style }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const AppBar: React.FC<AppBarProps> = ({
+  title,
+  leading,
+  trailing,
+  style,
+  theme: themeProp,
+}) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <View
       style={[
         styles.container,
-        { backgroundColor: colors.surface, borderBottomColor: colors.border },
+        {
+          paddingHorizontal: theme.spacing.sm,
+          backgroundColor: theme.colors.surface,
+          borderBottomColor: theme.colors.border,
+        },
         style,
       ]}
       accessibilityRole="header"
     >
       <View style={styles.side}>{leading}</View>
-      <Text style={[styles.title, { color: colors.textPrimary }]}>
+      <Text
+        style={[
+          styles.title,
+          {
+            fontSize: theme.typography.body.fontSize,
+            fontWeight: theme.typography.headline.fontWeight,
+            color: theme.colors.textPrimary,
+          },
+        ]}
+      >
         {title}
       </Text>
       <View style={[styles.side, styles.trailing]}>{trailing}</View>
@@ -41,7 +58,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.sm,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   side: {
@@ -50,8 +66,5 @@ const styles = StyleSheet.create({
   trailing: {
     alignItems: 'flex-end',
   },
-  title: {
-    fontSize: fontSizes.lg,
-    fontWeight: fontWeights.semibold,
-  },
+  title: {},
 });

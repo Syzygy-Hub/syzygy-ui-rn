@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 import { TabBarItem } from './TabBarItem';
 
@@ -12,22 +10,28 @@ export interface TabBarProps<T> {
   selection: T;
   onSelectionChange: (tag: T) => void;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * An edge-to-edge, icon-and-label tab bar. Presentational only — this
- * library has no navigation dependency, so wire `onSelectionChange` into
- * your own navigator.
- */
-export function TabBar<T>({ items, selection, onSelectionChange, style }: TabBarProps<T>) {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export function TabBar<T>({
+  items,
+  selection,
+  onSelectionChange,
+  style,
+  theme: themeProp,
+}: TabBarProps<T>) {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <View
       style={[
         styles.container,
-        { backgroundColor: colors.surface, borderTopColor: colors.border },
+        {
+          paddingTop: theme.spacing.xs,
+          backgroundColor: theme.colors.surface,
+          borderTopColor: theme.colors.border,
+        },
         style,
       ]}
     >
@@ -43,7 +47,15 @@ export function TabBar<T>({ items, selection, onSelectionChange, style }: TabBar
             style={styles.item}
           >
             {item.icon}
-            <Text style={[styles.itemLabel, { color: selected ? colors.primary : colors.textSecondary }]}>
+            <Text
+              style={[
+                styles.itemLabel,
+                {
+                  fontSize: theme.typography.caption.fontSize,
+                  color: selected ? theme.colors.primary : theme.colors.textSecondary,
+                },
+              ]}
+            >
               {item.label}
             </Text>
           </TouchableOpacity>
@@ -57,7 +69,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     borderTopWidth: StyleSheet.hairlineWidth,
-    paddingTop: spacing.xs,
   },
   item: {
     flex: 1,
@@ -65,7 +76,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  itemLabel: {
-    fontSize: fontSizes.xs,
-  },
+  itemLabel: {},
 });

@@ -8,15 +8,11 @@ import {
   Text,
   TextInput as RNTextInput,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface SearchableDropdownProps<T> {
   label: string;
@@ -27,24 +23,9 @@ export interface SearchableDropdownProps<T> {
   searchPlaceholder?: string;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A `Dropdown` variant with an inline search field that filters the option
- * list as the user types (case-insensitive substring match against
- * `optionTitle(option)`).
- *
- * Implementation note: this mirrors `Dropdown`'s trigger + bottom sheet
- * rendering approach (same trigger row, same `Modal` + `FlatList` sheet)
- * rather than literally wrapping the `Dropdown` component. `Dropdown` has no
- * prop for injecting extra header content into its sheet or for controlling
- * its internally-owned `options` list, so composing around it would require
- * either forking its open state via re-implemented trigger UI anyway, or
- * reaching into its internals. Rebuilding the same small amount of
- * rendering logic here — with a search `TextInput` added to the sheet header
- * and the options list filtered before being handed to `FlatList` — was the
- * more genuine, less hacky option.
- */
 export function SearchableDropdown<T>({
   label,
   selection,
@@ -54,18 +35,19 @@ export function SearchableDropdown<T>({
   searchPlaceholder = 'Search…',
   style,
   accessibilityLabel,
+  theme: themeProp,
 }: SearchableDropdownProps<T>) {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
 
   const filteredOptions = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    if (!needle) {
-      return options;
-    }
-    return options.filter((option) => optionTitle(option).toLowerCase().includes(needle));
+    if (!needle) return options;
+    return options.filter((option) =>
+      optionTitle(option).toLowerCase().includes(needle)
+    );
   }, [options, optionTitle, query]);
 
   const close = () => {
@@ -75,29 +57,66 @@ export function SearchableDropdown<T>({
 
   return (
     <View style={style}>
-      <Text style={[styles.label, { color: colors.textSecondary }]}>{label}</Text>
+      <Text
+        style={[
+          styles.label,
+          {
+            fontSize: theme.typography.footnote.fontSize,
+            marginBottom: theme.spacing.xs,
+            color: theme.colors.textSecondary,
+          },
+        ]}
+      >
+        {label}
+      </Text>
       <TouchableOpacity
         onPress={() => setOpen(true)}
         accessibilityRole="button"
         accessibilityLabel={accessibilityLabel ?? label}
-        style={[styles.trigger, { backgroundColor: colors.surface, borderColor: colors.border }]}
+        style={[
+          styles.trigger,
+          {
+            borderRadius: theme.radius.md,
+            paddingHorizontal: theme.spacing.md,
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border,
+          },
+        ]}
       >
-        <Text style={{ color: colors.textPrimary }}>{optionTitle(selection)}</Text>
-        <Text style={{ color: colors.textSecondary }}>{'⌄'}</Text>
+        <Text style={{ color: theme.colors.textPrimary }}>{optionTitle(selection)}</Text>
+        <Text style={{ color: theme.colors.textSecondary }}>{'⌄'}</Text>
       </TouchableOpacity>
       <Modal visible={open} transparent animationType="fade" onRequestClose={close}>
-        <Pressable style={styles.backdrop} onPress={close}>
-          <View style={[styles.sheet, { backgroundColor: colors.surface }]}>
+        <Pressable style={[styles.backdrop, { backgroundColor: `rgba(0,0,0,${theme.colors.overlayAlpha})` }]} onPress={close}>
+          <View
+            style={[
+              styles.sheet,
+              {
+                borderTopLeftRadius: theme.radius.lg,
+                borderTopRightRadius: theme.radius.lg,
+                paddingTop: theme.spacing.sm,
+                backgroundColor: theme.colors.surface,
+              },
+            ]}
+          >
             <RNTextInput
               value={query}
               onChangeText={setQuery}
               placeholder={searchPlaceholder}
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={theme.colors.textSecondary}
               autoCorrect={false}
               autoCapitalize="none"
               style={[
                 styles.searchInput,
-                { color: colors.textPrimary, borderColor: colors.border, backgroundColor: colors.background },
+                {
+                  borderRadius: theme.radius.md,
+                  paddingHorizontal: theme.spacing.md,
+                  marginHorizontal: theme.spacing.md,
+                  marginBottom: theme.spacing.xs,
+                  color: theme.colors.textPrimary,
+                  borderColor: theme.colors.border,
+                  backgroundColor: theme.colors.background,
+                },
               ]}
               accessibilityLabel={searchPlaceholder}
             />
@@ -111,13 +130,24 @@ export function SearchableDropdown<T>({
                     onSelectionChange(item);
                     close();
                   }}
-                  style={styles.option}
+                  style={[styles.option, { paddingHorizontal: theme.spacing.md }]}
                 >
-                  <Text style={{ color: colors.textPrimary }}>{optionTitle(item)}</Text>
+                  <Text style={{ color: theme.colors.textPrimary }}>{optionTitle(item)}</Text>
                 </TouchableOpacity>
               )}
               ListEmptyComponent={
-                <Text style={[styles.empty, { color: colors.textSecondary }]}>No matches</Text>
+                <Text
+                  style={[
+                    styles.empty,
+                    {
+                      fontSize: theme.typography.footnote.fontSize,
+                      paddingVertical: theme.spacing.lg,
+                      color: theme.colors.textSecondary,
+                    },
+                  ]}
+                >
+                  No matches
+                </Text>
               }
             />
           </View>
@@ -128,46 +158,30 @@ export function SearchableDropdown<T>({
 }
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: fontSizes.sm,
-    marginBottom: spacing.xs,
-  },
+  label: {},
   trigger: {
     minHeight: 44,
     borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'flex-end',
   },
   sheet: {
-    borderTopLeftRadius: radius.lg,
-    borderTopRightRadius: radius.lg,
     maxHeight: '60%',
-    paddingTop: spacing.sm,
   },
   searchInput: {
     minHeight: 40,
     borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    marginHorizontal: spacing.md,
-    marginBottom: spacing.xs,
   },
   option: {
     minHeight: 44,
     justifyContent: 'center',
-    paddingHorizontal: spacing.md,
   },
   empty: {
-    fontSize: fontSizes.sm,
     textAlign: 'center',
-    paddingVertical: spacing.lg,
   },
 });

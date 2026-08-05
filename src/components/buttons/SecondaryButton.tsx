@@ -5,14 +5,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface SecondaryButtonProps {
   title: string;
@@ -21,6 +17,7 @@ export interface SecondaryButtonProps {
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
@@ -30,9 +27,10 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   loading = false,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const isDisabled = disabled || loading;
 
   return (
@@ -45,19 +43,26 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
       style={[
         styles.base,
         {
-          backgroundColor: isDisabled ? colors.disabled : colors.secondary,
-          borderColor: colors.border,
+          paddingHorizontal: theme.spacing.md,
+          paddingVertical: theme.spacing.sm,
+          borderRadius: theme.radius.md,
+          backgroundColor: isDisabled ? theme.colors.disabled : theme.colors.secondary,
+          borderColor: theme.colors.border,
         },
         style,
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.textPrimary} />
+        <ActivityIndicator color={theme.colors.textPrimary} />
       ) : (
         <Text
           style={[
             styles.text,
-            { color: isDisabled ? colors.textDisabled : colors.textPrimary },
+            {
+              fontSize: theme.typography.callout.fontSize,
+              fontWeight: theme.typography.headline.fontWeight,
+              color: isDisabled ? theme.colors.textDisabled : theme.colors.textPrimary,
+            },
           ]}
         >
           {title}
@@ -70,15 +75,9 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
 const styles = StyleSheet.create({
   base: {
     minHeight: 44,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.md,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.semibold,
-  },
+  text: {},
 });

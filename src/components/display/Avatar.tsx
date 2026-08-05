@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, useColorScheme, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export type AvatarSize = 'small' | 'medium' | 'large';
 
@@ -16,12 +15,13 @@ export interface AvatarProps {
   initials: string;
   size?: AvatarSize;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
 /** A circular avatar showing a fallback initials label. */
-export const Avatar: React.FC<AvatarProps> = ({ initials, size = 'medium', style }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const Avatar: React.FC<AvatarProps> = ({ initials, size = 'medium', style, theme: themeProp }) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const dimension = DIMENSIONS[size];
 
   return (
@@ -33,12 +33,21 @@ export const Avatar: React.FC<AvatarProps> = ({ initials, size = 'medium', style
           width: dimension,
           height: dimension,
           borderRadius: dimension / 2,
-          backgroundColor: colors.primary,
+          backgroundColor: theme.colors.primary,
         },
         style,
       ]}
     >
-      <Text style={[styles.initials, { color: colors.onPrimary }]}>
+      <Text
+        style={[
+          styles.initials,
+          {
+            fontSize: theme.typography.footnote.fontSize,
+            fontWeight: theme.typography.headline.fontWeight,
+            color: theme.colors.onPrimary,
+          },
+        ]}
+      >
         {initials}
       </Text>
     </View>
@@ -50,8 +59,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  initials: {
-    fontSize: fontSizes.sm,
-    fontWeight: fontWeights.semibold,
-  },
+  initials: {},
 });

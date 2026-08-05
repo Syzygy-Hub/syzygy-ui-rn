@@ -5,14 +5,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface LoadingButtonProps {
   label: string;
@@ -20,6 +16,7 @@ export interface LoadingButtonProps {
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 /** A primary button that swaps its label for a spinner while `isLoading`, and disables itself meanwhile. */
@@ -29,9 +26,10 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
   onPress,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <TouchableOpacity
@@ -42,14 +40,30 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
       accessibilityState={{ disabled: isLoading, busy: isLoading }}
       style={[
         styles.base,
-        { backgroundColor: isLoading ? colors.disabled : colors.primary },
+        {
+          paddingHorizontal: theme.spacing.md,
+          paddingVertical: theme.spacing.sm,
+          borderRadius: theme.radius.md,
+          backgroundColor: isLoading ? theme.colors.disabled : theme.colors.primary,
+        },
         style,
       ]}
     >
       {isLoading ? (
-        <ActivityIndicator color={colors.onPrimary} />
+        <ActivityIndicator color={theme.colors.onPrimary} />
       ) : (
-        <Text style={[styles.text, { color: colors.onPrimary }]}>{label}</Text>
+        <Text
+          style={[
+            styles.text,
+            {
+              fontSize: theme.typography.callout.fontSize,
+              fontWeight: theme.typography.headline.fontWeight,
+              color: theme.colors.onPrimary,
+            },
+          ]}
+        >
+          {label}
+        </Text>
       )}
     </TouchableOpacity>
   );
@@ -58,14 +72,8 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
 const styles = StyleSheet.create({
   base: {
     minHeight: 44,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.semibold,
-  },
+  text: {},
 });

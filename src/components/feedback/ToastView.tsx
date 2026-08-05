@@ -3,15 +3,11 @@ import {
   StyleProp,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export type ToastVariant = 'success' | 'warning' | 'error';
 
@@ -20,6 +16,7 @@ export interface ToastViewProps {
   variant?: ToastVariant;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 export const ToastView: React.FC<ToastViewProps> = ({
@@ -27,31 +24,52 @@ export const ToastView: React.FC<ToastViewProps> = ({
   variant = 'success',
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   const backgroundColor =
     variant === 'success'
-      ? colors.success
+      ? theme.colors.success
       : variant === 'warning'
-      ? colors.warning
-      : colors.error;
+      ? theme.colors.warning
+      : theme.colors.error;
 
   const textColor =
     variant === 'success'
-      ? colors.onSuccess
+      ? theme.colors.onSuccess
       : variant === 'warning'
-      ? colors.onWarning
-      : colors.onError;
+      ? theme.colors.onWarning
+      : theme.colors.onError;
 
   return (
     <View
-      style={[styles.container, { backgroundColor }, style]}
+      style={[
+        styles.container,
+        {
+          borderRadius: theme.radius.md,
+          paddingHorizontal: theme.spacing.md,
+          paddingVertical: theme.spacing.sm,
+          backgroundColor,
+        },
+        style,
+      ]}
       accessibilityRole="alert"
+      accessibilityLiveRegion="polite"
       accessibilityLabel={accessibilityLabel ?? message}
     >
-      <Text style={[styles.text, { color: textColor }]}>{message}</Text>
+      <Text
+        style={[
+          styles.text,
+          {
+            fontSize: theme.typography.footnote.fontSize,
+            color: textColor,
+          },
+        ]}
+      >
+        {message}
+      </Text>
     </View>
   );
 };
@@ -59,13 +77,7 @@ export const ToastView: React.FC<ToastViewProps> = ({
 const styles = StyleSheet.create({
   container: {
     minHeight: 44,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
     justifyContent: 'center',
   },
-  text: {
-    fontSize: fontSizes.sm,
-    fontWeight: fontWeights.medium,
-  },
+  text: {},
 });

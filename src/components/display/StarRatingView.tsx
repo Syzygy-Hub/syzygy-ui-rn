@@ -1,27 +1,25 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface StarRatingViewProps {
   rating: number;
   maxRating?: number;
   onRatingChanged?: (rating: number) => void;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A star rating display. Pass `onRatingChanged` to make it interactively
- * tappable; omit it for a read-only display.
- */
 export const StarRatingView: React.FC<StarRatingViewProps> = ({
   rating,
   maxRating = 5,
   onRatingChanged,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const stars = Array.from({ length: maxRating }, (_, i) => i + 1);
 
   return (
@@ -32,7 +30,7 @@ export const StarRatingView: React.FC<StarRatingViewProps> = ({
       {stars.map((star) => {
         const filled = star <= rating;
         const glyph = filled ? '★' : '☆';
-        const color = filled ? colors.warning : colors.textSecondary;
+        const color = filled ? theme.colors.warning : theme.colors.textSecondary;
 
         if (!onRatingChanged) {
           return (
@@ -68,6 +66,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   starText: {
-    fontSize: 20,
+    fontSize: 20, // Hardcoded: star glyph size, not a typography token
   },
 });

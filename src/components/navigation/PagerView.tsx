@@ -9,37 +9,37 @@ import {
   ViewStyle,
 } from 'react-native';
 
+import { SyzygyTheme } from '../../theme';
+
 export interface PagerViewProps {
   onPageChange?: (page: number) => void;
   /**
    * When provided, scrolls the pager to the given zero-based page index.
-   * Setting this prop puts the component in *controlled* mode. The host is
-   * responsible for keeping it in sync with `onPageChange` callbacks.
+   * Setting this prop puts the component in *controlled* mode.
    */
   currentPage?: number;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * Swipeable, paged content — e.g. onboarding screens or an image carousel.
- * Distinct from `TabBar`, which is navigation chrome; this has no chrome of
- * its own, just paged content via a horizontally-paging `ScrollView`.
- *
- * Pass `currentPage` to enter controlled mode, where the host drives which
- * page is shown programmatically in addition to (or instead of) swipe input.
- */
-export const PagerView: React.FC<PagerViewProps> = ({ onPageChange, currentPage, children, style }) => {
+export const PagerView: React.FC<PagerViewProps> = ({
+  onPageChange,
+  currentPage,
+  children,
+  style,
+  // theme prop accepted for API consistency
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  theme: _theme,
+}) => {
   const scrollRef = useRef<ScrollView>(null);
   const layoutWidth = useRef<number>(0);
-  // Guards against re-firing onPageChange during a programmatic scroll.
   const isScrollingProgrammatically = useRef(false);
-
   const [, setLayoutReady] = useState(false);
 
   const handleLayout = (e: LayoutChangeEvent) => {
     layoutWidth.current = e.nativeEvent.layout.width;
-    setLayoutReady(true); // trigger a re-render so the effect can fire after layout
+    setLayoutReady(true);
   };
 
   useEffect(() => {

@@ -5,14 +5,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface PrimaryButtonProps {
   title: string;
@@ -21,6 +17,7 @@ export interface PrimaryButtonProps {
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
@@ -30,9 +27,10 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   loading = false,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const isDisabled = disabled || loading;
 
   return (
@@ -45,18 +43,25 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
       style={[
         styles.base,
         {
-          backgroundColor: isDisabled ? colors.disabled : colors.primary,
+          paddingHorizontal: theme.spacing.md,
+          paddingVertical: theme.spacing.sm,
+          borderRadius: theme.radius.md,
+          backgroundColor: isDisabled ? theme.colors.disabled : theme.colors.primary,
         },
         style,
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.onPrimary} />
+        <ActivityIndicator color={theme.colors.onPrimary} />
       ) : (
         <Text
           style={[
             styles.text,
-            { color: isDisabled ? colors.textDisabled : colors.onPrimary },
+            {
+              fontSize: theme.typography.callout.fontSize,
+              fontWeight: theme.typography.headline.fontWeight,
+              color: isDisabled ? theme.colors.textDisabled : theme.colors.onPrimary,
+            },
           ]}
         >
           {title}
@@ -69,14 +74,8 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({
 const styles = StyleSheet.create({
   base: {
     minHeight: 44,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.semibold,
-  },
+  text: {},
 });

@@ -1,10 +1,7 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, useColorScheme, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export type InlineAlertVariant = 'info' | 'success' | 'warning' | 'error';
 
@@ -12,50 +9,67 @@ export interface InlineAlertProps {
   message: string;
   variant: InlineAlertVariant;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/** An inline status banner (also known as `Banner`), using the `*Muted` background tokens per variant. */
-export const InlineAlert: React.FC<InlineAlertProps> = ({ message, variant, style }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const InlineAlert: React.FC<InlineAlertProps> = ({
+  message,
+  variant,
+  style,
+  theme: themeProp,
+}) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   const backgroundColor =
     variant === 'success'
-      ? colors.successMuted
+      ? theme.colors.successMuted
       : variant === 'warning'
-      ? colors.warningMuted
+      ? theme.colors.warningMuted
       : variant === 'error'
-      ? colors.destructiveMuted
-      : colors.primaryMuted;
+      ? theme.colors.destructiveMuted
+      : theme.colors.primaryMuted;
 
   const textColor =
     variant === 'success'
-      ? colors.success
+      ? theme.colors.success
       : variant === 'warning'
-      ? colors.warning
+      ? theme.colors.warning
       : variant === 'error'
-      ? colors.error
-      : colors.primary;
+      ? theme.colors.error
+      : theme.colors.primary;
 
   return (
     <View
-      style={[styles.container, { backgroundColor }, style]}
+      style={[
+        styles.container,
+        {
+          borderRadius: theme.radius.md,
+          paddingHorizontal: theme.spacing.md,
+          paddingVertical: theme.spacing.sm,
+          backgroundColor,
+        },
+        style,
+      ]}
       accessibilityRole="alert"
       accessibilityLabel={message}
     >
-      <Text style={[styles.text, { color: textColor }]}>{message}</Text>
+      <Text
+        style={[
+          styles.text,
+          {
+            fontSize: theme.typography.footnote.fontSize,
+            color: textColor,
+          },
+        ]}
+      >
+        {message}
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  text: {
-    fontSize: fontSizes.sm,
-    fontWeight: fontWeights.medium,
-  },
+  container: {},
+  text: {},
 });

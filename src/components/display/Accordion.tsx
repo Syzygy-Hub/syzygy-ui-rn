@@ -9,12 +9,9 @@ import {
   UIManager,
   View,
   ViewStyle,
-  useColorScheme,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -33,25 +30,18 @@ export interface AccordionProps {
   /** Keys of initially expanded sections. */
   initiallyOpenKeys?: string[];
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A vertically stacked list of expandable/collapsible sections, single-open
- * at a time by default (opening one section closes the others), or
- * `allowMultipleOpen` to let several stay open independently.
- *
- * Mirrors `CollapsibleView`'s `LayoutAnimation`-driven expand/collapse for
- * each individual section, but coordinates open/closed state across the
- * whole group rather than owning it per-section.
- */
 export const Accordion: React.FC<AccordionProps> = ({
   sections,
   allowMultipleOpen = false,
   initiallyOpenKeys,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const [openKeys, setOpenKeys] = useState<string[]>(initiallyOpenKeys ?? []);
 
   const toggle = (key: string) => {
@@ -66,24 +56,59 @@ export const Accordion: React.FC<AccordionProps> = ({
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.surface }, style]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.surface }, style]}
+    >
       {sections.map((section, index) => {
         const expanded = openKeys.includes(section.key);
         return (
           <View
             key={section.key}
-            style={index > 0 ? [styles.sectionDivider, { borderTopColor: colors.border }] : null}
+            style={
+              index > 0
+                ? [styles.sectionDivider, { borderTopColor: theme.colors.border }]
+                : null
+            }
           >
             <TouchableOpacity
               onPress={() => toggle(section.key)}
               accessibilityRole="button"
               accessibilityLabel={`${section.title}, ${expanded ? 'expanded' : 'collapsed'}`}
-              style={styles.header}
+              style={[
+                styles.header,
+                {
+                  paddingHorizontal: theme.spacing.md,
+                  paddingVertical: theme.spacing.sm,
+                },
+              ]}
             >
-              <Text style={[styles.title, { color: colors.textPrimary }]}>{section.title}</Text>
-              <Text style={{ color: colors.textSecondary }}>{expanded ? '⌃' : '⌄'}</Text>
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    fontSize: theme.typography.body.fontSize,
+                    fontWeight: theme.typography.headline.fontWeight,
+                    color: theme.colors.textPrimary,
+                  },
+                ]}
+              >
+                {section.title}
+              </Text>
+              <Text style={{ color: theme.colors.textSecondary }}>{expanded ? '⌃' : '⌄'}</Text>
             </TouchableOpacity>
-            {expanded ? <View style={styles.content}>{section.content}</View> : null}
+            {expanded ? (
+              <View
+                style={[
+                  styles.content,
+                  {
+                    paddingHorizontal: theme.spacing.md,
+                    paddingBottom: theme.spacing.md,
+                  },
+                ]}
+              >
+                {section.content}
+              </View>
+            ) : null}
           </View>
         );
       })}
@@ -103,15 +128,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
   },
-  title: {
-    fontSize: fontSizes.lg,
-    fontWeight: fontWeights.semibold,
-  },
-  content: {
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.md,
-  },
+  title: {},
+  content: {},
 });

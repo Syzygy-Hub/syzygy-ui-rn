@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, useColorScheme, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 import { Avatar, AvatarProps } from './Avatar';
 
@@ -10,14 +9,20 @@ export interface AvatarGroupProps {
   avatars: AvatarProps[];
   max?: number;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
 const OVERLAP = -12;
 
 /** An overlapping stack of `Avatar`s, showing up to `max` with a "+N" overflow badge for the rest. */
-export const AvatarGroup: React.FC<AvatarGroupProps> = ({ avatars, max = 4, style }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const AvatarGroup: React.FC<AvatarGroupProps> = ({
+  avatars,
+  max = 4,
+  style,
+  theme: themeProp,
+}) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const visible = avatars.slice(0, max);
   const overflow = avatars.length - visible.length;
 
@@ -26,12 +31,12 @@ export const AvatarGroup: React.FC<AvatarGroupProps> = ({ avatars, max = 4, styl
       {visible.map((avatarProps, index) => {
         const dynamicItemStyle = {
           marginLeft: index === 0 ? 0 : OVERLAP,
-          borderColor: colors.background,
+          borderColor: theme.colors.background,
           zIndex: visible.length - index,
         };
         return (
           <View key={index} style={[styles.item, dynamicItemStyle]}>
-            <Avatar {...avatarProps} />
+            <Avatar {...avatarProps} theme={theme} />
           </View>
         );
       })}
@@ -42,12 +47,21 @@ export const AvatarGroup: React.FC<AvatarGroupProps> = ({ avatars, max = 4, styl
             styles.overflow,
             {
               marginLeft: OVERLAP,
-              borderColor: colors.background,
-              backgroundColor: colors.surfaceSecondary,
+              borderColor: theme.colors.background,
+              backgroundColor: theme.colors.surfaceSecondary,
             },
           ]}
         >
-          <Text style={[styles.overflowText, { color: colors.textPrimary }]}>
+          <Text
+            style={[
+              styles.overflowText,
+              {
+                fontSize: theme.typography.footnote.fontSize,
+                fontWeight: theme.typography.headline.fontWeight,
+                color: theme.colors.textPrimary,
+              },
+            ]}
+          >
             {`+${overflow}`}
           </Text>
         </View>
@@ -72,8 +86,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  overflowText: {
-    fontSize: fontSizes.sm,
-    fontWeight: fontWeights.semibold,
-  },
+  overflowText: {},
 });

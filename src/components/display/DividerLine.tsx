@@ -1,22 +1,23 @@
 import React from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface DividerLineProps {
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
 /** A hairline horizontal rule. */
-export const DividerLine: React.FC<DividerLineProps> = ({ style }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const DividerLine: React.FC<DividerLineProps> = ({ style, theme: themeProp }) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <View
       accessibilityElementsHidden
       importantForAccessibility="no"
-      style={[styles.line, { backgroundColor: colors.border }, style]}
+      style={[styles.line, { backgroundColor: theme.colors.border }, style]}
     />
   );
 };

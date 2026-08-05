@@ -8,18 +8,20 @@ import {
   ViewStyle,
 } from 'react-native';
 
+import { SyzygyTheme } from '../../theme';
+
 export interface KeyboardAvoidingScrollViewProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A scrollable container that automatically insets its content to avoid the
- * on-screen keyboard, wrapping React Native's core `KeyboardAvoidingView`.
- */
 export const KeyboardAvoidingScrollView: React.FC<KeyboardAvoidingScrollViewProps> = ({
   children,
   style,
+  // theme prop accepted but layout component does not consume it
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  theme: _theme,
 }) => {
   return (
     <KeyboardAvoidingView

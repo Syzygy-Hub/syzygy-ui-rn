@@ -1,26 +1,25 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Modal, Pressable, StyleSheet, useColorScheme } from 'react-native';
+import { Animated, Modal, Pressable, StyleSheet } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { spacing } from '../../tokens/spacing';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface SideMenuProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
   width?: number;
+  theme?: SyzygyTheme;
 }
 
-
-/**
- * A slide-in side navigation panel (also known as a `Drawer`), sliding in
- * from the leading edge via `Animated.timing` with a dimming scrim behind
- * it, using the `overlay` color token — same presentation family as
- * `BottomSheet`/`ModalDialog` but anchored to the side instead of bottom/center.
- */
-export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, children, width = 280 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const SideMenu: React.FC<SideMenuProps> = ({
+  isOpen,
+  onClose,
+  children,
+  width = 280,
+  theme: themeProp,
+}) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const translateX = useRef(new Animated.Value(-width)).current;
 
   useEffect(() => {
@@ -32,14 +31,24 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, children, w
   }, [isOpen, width, translateX]);
 
   return (
-    <Modal visible={isOpen} transparent animationType="fade" onRequestClose={onClose} accessibilityViewIsModal={true}>
-      <Pressable style={[styles.backdrop, { backgroundColor: colors.overlay }]} onPress={onClose}>
+    <Modal
+      visible={isOpen}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+      accessibilityViewIsModal={true}
+    >
+      <Pressable
+        style={[styles.backdrop, { backgroundColor: theme.colors.overlay }]}
+        onPress={onClose}
+      >
         <Animated.View
           style={[
             styles.panel,
             {
               width,
-              backgroundColor: colors.surface,
+              padding: theme.spacing.md,
+              backgroundColor: theme.colors.surface,
               transform: [{ translateX }],
             },
           ]}
@@ -60,6 +69,5 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     bottom: 0,
-    padding: spacing.md,
   },
 });

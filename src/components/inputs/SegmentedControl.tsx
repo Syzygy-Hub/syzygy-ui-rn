@@ -1,10 +1,7 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface SegmentedControlProps<T> {
   options: T[];
@@ -12,25 +9,32 @@ export interface SegmentedControlProps<T> {
   onSelectionChange: (option: T) => void;
   optionTitle: (option: T) => string;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * An inline, single-row segmented picker for switching between a small set
- * of content states — distinct from `TabBar`/`BottomNavigationBar`, which
- * are for primary app navigation.
- */
 export function SegmentedControl<T>({
   options,
   selection,
   onSelectionChange,
   optionTitle,
   style,
+  theme: themeProp,
 }: SegmentedControlProps<T>) {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.surface, borderColor: colors.border }, style]}>
+    <View
+      style={[
+        styles.container,
+        {
+          borderRadius: theme.radius.md,
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+        },
+        style,
+      ]}
+    >
       {options.map((option, index) => {
         const selected = option === selection;
         return (
@@ -40,9 +44,21 @@ export function SegmentedControl<T>({
             accessibilityRole="button"
             accessibilityState={{ selected }}
             accessibilityLabel={optionTitle(option)}
-            style={[styles.segment, selected ? { backgroundColor: colors.primary } : null]}
+            style={[
+              styles.segment,
+              {
+                borderRadius: theme.radius.sm,
+                paddingHorizontal: theme.spacing.sm,
+              },
+              selected ? { backgroundColor: theme.colors.primary } : null,
+            ]}
           >
-            <Text style={{ color: selected ? colors.onPrimary : colors.textPrimary, fontSize: fontSizes.sm }}>
+            <Text
+              style={{
+                color: selected ? theme.colors.onPrimary : theme.colors.textPrimary,
+                fontSize: theme.typography.footnote.fontSize,
+              }}
+            >
               {optionTitle(option)}
             </Text>
           </TouchableOpacity>
@@ -56,7 +72,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     borderWidth: 1,
-    borderRadius: radius.md,
     padding: 2,
   },
   segment: {
@@ -64,7 +79,5 @@ const styles = StyleSheet.create({
     minHeight: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: radius.sm,
-    paddingHorizontal: spacing.sm,
   },
 });

@@ -3,15 +3,11 @@ import {
   StyleProp,
   StyleSheet,
   TextInput as RNTextInput,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 import { Chip } from '../display/Chip';
 
 export interface TagInputProps {
@@ -20,18 +16,19 @@ export interface TagInputProps {
   placeholder?: string;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
-/** A text input that renders entered tags as dismissible `Chip`s, adding a new tag on submit. */
 export const TagInput: React.FC<TagInputProps> = ({
   tags,
   onTagsChange,
   placeholder = 'Add a tag',
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const [draft, setDraft] = useState('');
 
   const commitDraft = () => {
@@ -48,11 +45,26 @@ export const TagInput: React.FC<TagInputProps> = ({
 
   return (
     <View
-      style={[styles.container, { backgroundColor: colors.surface, borderColor: colors.border }, style]}
+      style={[
+        styles.container,
+        {
+          borderRadius: theme.radius.md,
+          padding: theme.spacing.xs,
+          backgroundColor: theme.colors.surface,
+          borderColor: theme.colors.border,
+        },
+        style,
+      ]}
       accessibilityLabel={accessibilityLabel ?? 'Tags'}
     >
       {tags.map((tag, index) => (
-        <Chip key={`${tag}-${index}`} text={tag} onRemove={() => removeTag(index)} style={styles.chip} />
+        <Chip
+          key={`${tag}-${index}`}
+          text={tag}
+          onRemove={() => removeTag(index)}
+          style={[styles.chip, { marginRight: theme.spacing.xs, marginBottom: theme.spacing.xs }]}
+          theme={theme}
+        />
       ))}
       <RNTextInput
         value={draft}
@@ -60,8 +72,15 @@ export const TagInput: React.FC<TagInputProps> = ({
         onSubmitEditing={commitDraft}
         onBlur={commitDraft}
         placeholder={placeholder}
-        placeholderTextColor={colors.textSecondary}
-        style={[styles.input, { color: colors.textPrimary }]}
+        placeholderTextColor={theme.colors.textSecondary}
+        style={[
+          styles.input,
+          {
+            fontSize: theme.typography.callout.fontSize,
+            paddingHorizontal: theme.spacing.xs,
+            color: theme.colors.textPrimary,
+          },
+        ]}
       />
     </View>
   );
@@ -73,18 +92,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: radius.md,
-    padding: spacing.xs,
   },
-  chip: {
-    marginRight: spacing.xs,
-    marginBottom: spacing.xs,
-  },
+  chip: {},
   input: {
     flexGrow: 1,
     minWidth: 80,
     minHeight: 32,
-    fontSize: fontSizes.md,
-    paddingHorizontal: spacing.xs,
   },
 });

@@ -1,27 +1,32 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface RatingInputProps {
   rating: number;
   onRatingChange: (rating: number) => void;
   maxRating?: number;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * An interactive, always-tappable counterpart to `StarRatingView` (which is
- * read-only unless its optional `onRatingChanged` is supplied). Use
- * `RatingInput` whenever the star row is meant to collect input.
- */
-export const RatingInput: React.FC<RatingInputProps> = ({ rating, onRatingChange, maxRating = 5, style }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const RatingInput: React.FC<RatingInputProps> = ({
+  rating,
+  onRatingChange,
+  maxRating = 5,
+  style,
+  theme: themeProp,
+}) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const stars = Array.from({ length: maxRating }, (_, i) => i + 1);
 
   return (
-    <View style={[styles.container, style]} accessibilityLabel={`Rating: ${rating} out of ${maxRating} stars`}>
+    <View
+      style={[styles.container, style]}
+      accessibilityLabel={`Rating: ${rating} out of ${maxRating} stars`}
+    >
       {stars.map((star) => {
         const filled = star <= rating;
         return (
@@ -32,7 +37,12 @@ export const RatingInput: React.FC<RatingInputProps> = ({ rating, onRatingChange
             accessibilityLabel={`${star} star${star === 1 ? '' : 's'}`}
             style={styles.star}
           >
-            <Text style={[styles.starText, { color: filled ? colors.warning : colors.textSecondary }]}>
+            <Text
+              style={[
+                styles.starText,
+                { color: filled ? theme.colors.warning : theme.colors.textSecondary },
+              ]}
+            >
               {filled ? '★' : '☆'}
             </Text>
           </TouchableOpacity>
@@ -53,6 +63,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   starText: {
-    fontSize: 20,
+    fontSize: 20, // Hardcoded: star glyph size, not a typography token
   },
 });

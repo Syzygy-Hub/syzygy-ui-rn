@@ -8,12 +8,9 @@ import {
   Text,
   View,
   ViewStyle,
-  useColorScheme,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface SliderInputProps {
   label: string;
@@ -23,13 +20,9 @@ export interface SliderInputProps {
   maximumValue?: number;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A labeled slider with a live value readout. React Native's core `Slider`
- * was removed in favor of a community package, so this is a lightweight
- * `PanResponder`-based implementation with no third-party dependency.
- */
 export const SliderInput: React.FC<SliderInputProps> = ({
   label,
   value,
@@ -38,9 +31,10 @@ export const SliderInput: React.FC<SliderInputProps> = ({
   maximumValue = 1,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const [trackWidth, setTrackWidth] = useState(0);
 
   const clamp = (v: number) => Math.min(maximumValue, Math.max(minimumValue, v));
@@ -64,14 +58,31 @@ export const SliderInput: React.FC<SliderInputProps> = ({
   ).current;
 
   const ratio = (clamp(value) - minimumValue) / (maximumValue - minimumValue);
-
   const onLayout = (e: LayoutChangeEvent) => setTrackWidth(e.nativeEvent.layout.width);
 
   return (
     <View style={style}>
       <View style={styles.header}>
-        <Text style={[styles.headerText, { color: colors.textPrimary }]}>{label}</Text>
-        <Text style={[styles.headerText, { color: colors.textSecondary }]}>
+        <Text
+          style={[
+            styles.headerText,
+            {
+              fontSize: theme.typography.footnote.fontSize,
+              color: theme.colors.textPrimary,
+            },
+          ]}
+        >
+          {label}
+        </Text>
+        <Text
+          style={[
+            styles.headerText,
+            {
+              fontSize: theme.typography.footnote.fontSize,
+              color: theme.colors.textSecondary,
+            },
+          ]}
+        >
           {value.toFixed(2)}
         </Text>
       </View>
@@ -81,18 +92,31 @@ export const SliderInput: React.FC<SliderInputProps> = ({
         accessibilityRole="adjustable"
         accessibilityLabel={accessibilityLabel ?? label}
         accessibilityValue={{ min: minimumValue, max: maximumValue, now: value }}
-        style={[styles.track, { backgroundColor: colors.border }]}
+        style={[
+          styles.track,
+          {
+            borderRadius: theme.radius.full,
+            backgroundColor: theme.colors.border,
+          },
+        ]}
       >
         <View
           style={[
             styles.fill,
-            { width: `${ratio * 100}%`, backgroundColor: colors.primary },
+            {
+              width: `${ratio * 100}%`,
+              borderRadius: theme.radius.full,
+              backgroundColor: theme.colors.primary,
+            },
           ]}
         />
         <View
           style={[
             styles.thumb,
-            { left: `${ratio * 100}%`, backgroundColor: colors.primary },
+            {
+              left: `${ratio * 100}%`,
+              backgroundColor: theme.colors.primary,
+            },
           ]}
         />
       </View>
@@ -107,20 +131,16 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: spacing.xs,
+    marginBottom: 4,
   },
-  headerText: {
-    fontSize: fontSizes.sm,
-  },
+  headerText: {},
   track: {
     height: TRACK_HEIGHT,
-    borderRadius: TRACK_HEIGHT / 2,
     justifyContent: 'center',
     marginVertical: (44 - TRACK_HEIGHT) / 2,
   },
   fill: {
     height: TRACK_HEIGHT,
-    borderRadius: TRACK_HEIGHT / 2,
     position: 'absolute',
     left: 0,
   },

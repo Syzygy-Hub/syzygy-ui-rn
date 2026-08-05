@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleProp, ViewStyle, useColorScheme } from 'react-native';
+import { Animated, StyleProp, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export type SkeletonShape = 'rectangle' | 'circle';
 
@@ -12,21 +11,19 @@ export interface SkeletonViewProps {
   height?: number;
   borderRadius?: number;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A shimmering placeholder for content that hasn't loaded yet, parameterized
- * by shape and size. Mirrors `ShimmerView`'s `Animated`-driven opacity pulse.
- */
 export const SkeletonView: React.FC<SkeletonViewProps> = ({
   shape = 'rectangle',
   width = '100%',
   height = 16,
   borderRadius,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const opacity = useRef(new Animated.Value(0.3)).current;
 
   useEffect(() => {
@@ -40,7 +37,7 @@ export const SkeletonView: React.FC<SkeletonViewProps> = ({
     return () => loop.stop();
   }, [opacity]);
 
-  const resolvedRadius = shape === 'circle' ? height / 2 : borderRadius ?? radius.sm;
+  const resolvedRadius = shape === 'circle' ? height / 2 : borderRadius ?? theme.radius.sm;
 
   return (
     <Animated.View
@@ -51,7 +48,7 @@ export const SkeletonView: React.FC<SkeletonViewProps> = ({
           width: shape === 'circle' ? height : width,
           height,
           borderRadius: resolvedRadius,
-          backgroundColor: colors.surfaceSecondary,
+          backgroundColor: theme.colors.surfaceSecondary,
           opacity,
         },
         style,

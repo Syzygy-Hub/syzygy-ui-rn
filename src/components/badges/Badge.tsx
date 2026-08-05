@@ -3,15 +3,11 @@ import {
   StyleProp,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export type BadgeVariant = 'primary' | 'success' | 'warning' | 'error';
 
@@ -20,6 +16,7 @@ export interface BadgeProps {
   variant?: BadgeVariant;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -27,35 +24,56 @@ export const Badge: React.FC<BadgeProps> = ({
   variant = 'primary',
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   const backgroundColor =
     variant === 'primary'
-      ? colors.primary
+      ? theme.colors.primary
       : variant === 'success'
-      ? colors.success
+      ? theme.colors.success
       : variant === 'warning'
-      ? colors.warning
-      : colors.error;
+      ? theme.colors.warning
+      : theme.colors.error;
 
   const textColor =
     variant === 'primary'
-      ? colors.onPrimary
+      ? theme.colors.onPrimary
       : variant === 'success'
-      ? colors.onSuccess
+      ? theme.colors.onSuccess
       : variant === 'warning'
-      ? colors.onWarning
-      : colors.onError;
+      ? theme.colors.onWarning
+      : theme.colors.onError;
 
   return (
     <View
-      style={[styles.container, { backgroundColor }, style]}
+      style={[
+        styles.container,
+        {
+          paddingHorizontal: theme.spacing.sm,
+          paddingVertical: theme.spacing.xs,
+          borderRadius: theme.radius.full,
+          backgroundColor,
+        },
+        style,
+      ]}
       accessibilityRole="text"
       accessibilityLabel={accessibilityLabel ?? text}
     >
-      <Text style={[styles.text, { color: textColor }]}>{text}</Text>
+      <Text
+        style={[
+          styles.text,
+          {
+            fontSize: theme.typography.caption.fontSize,
+            fontWeight: theme.typography.headline.fontWeight,
+            color: textColor,
+          },
+        ]}
+      >
+        {text}
+      </Text>
     </View>
   );
 };
@@ -63,12 +81,6 @@ export const Badge: React.FC<BadgeProps> = ({
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'flex-start',
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.full,
   },
-  text: {
-    fontSize: fontSizes.xs,
-    fontWeight: fontWeights.semibold,
-  },
+  text: {},
 });

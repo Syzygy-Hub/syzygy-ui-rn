@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 import { TabBarItem } from './TabBarItem';
 
@@ -12,23 +10,31 @@ export interface BottomNavigationBarProps<T> {
   selection: T;
   onSelectionChange: (tag: T) => void;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A floating, icon-only bottom navigation pill — a visual alternative to
- * `TabBar` for screens that want a compact, inset navigation surface.
- */
 export function BottomNavigationBar<T>({
   items,
   selection,
   onSelectionChange,
   style,
+  theme: themeProp,
 }: BottomNavigationBarProps<T>) {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.surface }, style]}>
+    <View
+      style={[
+        styles.container,
+        {
+          borderRadius: theme.radius.full,
+          padding: theme.spacing.xs,
+          backgroundColor: theme.colors.surface,
+        },
+        style,
+      ]}
+    >
       {items.map((item, index) => {
         const selected = item.tag === selection;
         return (
@@ -38,7 +44,10 @@ export function BottomNavigationBar<T>({
             accessibilityRole="button"
             accessibilityState={{ selected }}
             accessibilityLabel={item.label}
-            style={[styles.item, selected ? { backgroundColor: colors.primary } : null]}
+            style={[
+              styles.item,
+              selected ? { backgroundColor: theme.colors.primary } : null,
+            ]}
           >
             {item.icon}
           </TouchableOpacity>
@@ -52,8 +61,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignSelf: 'flex-start',
-    borderRadius: radius.full,
-    padding: spacing.xs,
   },
   item: {
     width: 44,

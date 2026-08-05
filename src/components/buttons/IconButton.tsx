@@ -3,13 +3,10 @@ import {
   StyleProp,
   StyleSheet,
   TouchableOpacity,
-  useColorScheme,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface IconButtonProps {
   icon: React.ReactNode;
@@ -17,6 +14,7 @@ export interface IconButtonProps {
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel: string;
+  theme?: SyzygyTheme;
 }
 
 export const IconButton: React.FC<IconButtonProps> = ({
@@ -25,9 +23,10 @@ export const IconButton: React.FC<IconButtonProps> = ({
   disabled = false,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <TouchableOpacity
@@ -39,7 +38,9 @@ export const IconButton: React.FC<IconButtonProps> = ({
       style={[
         styles.base,
         {
-          backgroundColor: disabled ? colors.disabled : colors.surfaceSecondary,
+          borderRadius: theme.radius.full,
+          padding: theme.spacing.xs,
+          backgroundColor: disabled ? theme.colors.disabled : theme.colors.surfaceSecondary,
         },
         style,
       ]}
@@ -53,9 +54,7 @@ const styles = StyleSheet.create({
   base: {
     width: 44,
     height: 44,
-    borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: spacing.xs,
   },
 });

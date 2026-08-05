@@ -1,22 +1,25 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Dimensions, Modal, Pressable, StyleSheet, useColorScheme } from 'react-native';
+import { Animated, Dimensions, Modal, Pressable, StyleSheet } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface BottomSheetProps {
   visible: boolean;
   onDismiss: () => void;
   children: React.ReactNode;
+  theme?: SyzygyTheme;
 }
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-/** A bottom-anchored sheet with a dimmed scrim, sliding up from the bottom edge. */
-export const BottomSheet: React.FC<BottomSheetProps> = ({ visible, onDismiss, children }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const BottomSheet: React.FC<BottomSheetProps> = ({
+  visible,
+  onDismiss,
+  children,
+  theme: themeProp,
+}) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
 
   useEffect(() => {
@@ -28,15 +31,30 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ visible, onDismiss, ch
   }, [visible, translateY]);
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onDismiss} accessibilityViewIsModal={true}>
-      <Pressable style={[styles.backdrop, { backgroundColor: colors.overlay }]} onPress={onDismiss}>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onDismiss}
+      accessibilityViewIsModal={true}
+    >
+      <Pressable
+        style={[styles.backdrop, { backgroundColor: theme.colors.overlay }]}
+        onPress={onDismiss}
+      >
         <Animated.View
           style={[
             styles.sheet,
-            { backgroundColor: colors.surface, transform: [{ translateY }] },
+            {
+              borderTopLeftRadius: theme.radius.lg,
+              borderTopRightRadius: theme.radius.lg,
+              padding: theme.spacing.lg,
+              backgroundColor: theme.colors.surface,
+              transform: [{ translateY }],
+            },
           ]}
         >
-          <Pressable style={[styles.handle, { backgroundColor: colors.border }]} />
+          <Pressable style={[styles.handle, { backgroundColor: theme.colors.border, marginBottom: theme.spacing.md }]} />
           {children}
         </Animated.View>
       </Pressable>
@@ -49,16 +67,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
   },
-  sheet: {
-    borderTopLeftRadius: radius.lg,
-    borderTopRightRadius: radius.lg,
-    padding: spacing.lg,
-  },
+  sheet: {},
   handle: {
     alignSelf: 'center',
     width: 36,
     height: 4,
     borderRadius: 2,
-    marginBottom: spacing.md,
   },
 });

@@ -4,15 +4,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface EmptyStateViewProps {
   icon?: React.ReactNode;
@@ -21,6 +17,7 @@ export interface EmptyStateViewProps {
   ctaLabel?: string;
   onCtaPress?: () => void;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
 export const EmptyStateView: React.FC<EmptyStateViewProps> = ({
@@ -30,16 +27,40 @@ export const EmptyStateView: React.FC<EmptyStateViewProps> = ({
   ctaLabel,
   onCtaPress,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
-    <View style={[styles.container, style]} accessibilityRole="text">
-      {icon ? <View style={styles.icon}>{icon}</View> : null}
-      <Text style={[styles.title, { color: colors.textPrimary }]}>{title}</Text>
+    <View
+      style={[styles.container, { padding: theme.spacing.xl }, style]}
+      accessibilityRole="text"
+    >
+      {icon ? <View style={[styles.icon, { marginBottom: theme.spacing.md }]}>{icon}</View> : null}
+      <Text
+        style={[
+          styles.title,
+          {
+            fontSize: theme.typography.body.fontSize,
+            fontWeight: theme.typography.headline.fontWeight,
+            color: theme.colors.textPrimary,
+          },
+        ]}
+      >
+        {title}
+      </Text>
       {subtitle ? (
-        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+        <Text
+          style={[
+            styles.subtitle,
+            {
+              fontSize: theme.typography.footnote.fontSize,
+              marginTop: theme.spacing.xs,
+              color: theme.colors.textSecondary,
+            },
+          ]}
+        >
           {subtitle}
         </Text>
       ) : null}
@@ -48,9 +69,26 @@ export const EmptyStateView: React.FC<EmptyStateViewProps> = ({
           onPress={onCtaPress}
           accessibilityRole="button"
           accessibilityLabel={ctaLabel}
-          style={[styles.cta, { backgroundColor: colors.primary }]}
+          style={[
+            styles.cta,
+            {
+              paddingHorizontal: theme.spacing.lg,
+              borderRadius: theme.radius.md,
+              marginTop: theme.spacing.md,
+              backgroundColor: theme.colors.primary,
+            },
+          ]}
         >
-          <Text style={[styles.ctaText, { color: colors.onPrimary }]}>
+          <Text
+            style={[
+              styles.ctaText,
+              {
+                fontSize: theme.typography.callout.fontSize,
+                fontWeight: theme.typography.headline.fontWeight,
+                color: theme.colors.onPrimary,
+              },
+            ]}
+          >
             {ctaLabel}
           </Text>
         </TouchableOpacity>
@@ -63,31 +101,19 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: spacing.xl,
   },
-  icon: {
-    marginBottom: spacing.md,
-  },
+  icon: {},
   title: {
-    fontSize: fontSizes.lg,
-    fontWeight: fontWeights.semibold,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: fontSizes.sm,
     textAlign: 'center',
-    marginTop: spacing.xs,
   },
   cta: {
     minHeight: 44,
-    paddingHorizontal: spacing.lg,
     justifyContent: 'center',
-    borderRadius: radius.md,
-    marginTop: spacing.md,
   },
   ctaText: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.semibold,
     textAlign: 'center',
   },
 });

@@ -8,33 +8,25 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
-  useColorScheme,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { elevation } from '../../tokens/elevation';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface TooltipProps {
   label: string;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A small floating label revealed on long-press of `children`.
- *
- * Uses the same measure-and-absolutely-position approach as `Popover`
- * (React Native core has no native anchor-positioning primitive), composed
- * directly here rather than wrapping `Popover` since a tooltip's trigger
- * gesture (`onLongPress`) and lifecycle (auto-dismiss on release) differ
- * enough from a tap-triggered popover to keep them separate and simple.
- */
-export const Tooltip: React.FC<TooltipProps> = ({ label, children, style }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const Tooltip: React.FC<TooltipProps> = ({
+  label,
+  children,
+  style,
+  theme: themeProp,
+}) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const anchorRef = useRef<View>(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0, width: 0, height: 0 });
@@ -60,16 +52,29 @@ export const Tooltip: React.FC<TooltipProps> = ({ label, children, style }) => {
           <View
             style={[
               styles.bubble,
-              elevation.sm,
+              { ...theme.elevation.sm },
               {
-                backgroundColor: colors.textPrimary,
-                top: Math.max(spacing.xs, position.y - 36),
+                borderRadius: theme.radius.sm,
+                paddingHorizontal: theme.spacing.sm,
+                paddingVertical: theme.spacing.xxs,
+                backgroundColor: theme.colors.textPrimary,
+                top: Math.max(theme.spacing.xs, position.y - 36),
                 left: position.x,
               },
               style,
             ]}
           >
-            <Text style={[styles.tooltipText, { color: colors.textInverse }]}>{label}</Text>
+            <Text
+              style={[
+                styles.tooltipText,
+                {
+                  fontSize: theme.typography.caption.fontSize,
+                  color: theme.colors.textInverse,
+                },
+              ]}
+            >
+              {label}
+            </Text>
           </View>
         </Pressable>
       </Modal>
@@ -83,11 +88,6 @@ const styles = StyleSheet.create({
   },
   bubble: {
     position: 'absolute',
-    borderRadius: radius.sm,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xxs,
   },
-  tooltipText: {
-    fontSize: fontSizes.xs,
-  },
+  tooltipText: {},
 });

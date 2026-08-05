@@ -5,15 +5,11 @@ import {
   Text,
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights, lineHeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface TextAreaProps extends Omit<RNTextInputProps, 'style' | 'multiline'> {
   label: string;
@@ -22,9 +18,9 @@ export interface TextAreaProps extends Omit<RNTextInputProps, 'style' | 'multili
   maxLines?: number;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
-/** A multi-line text input, matching `TextInput`'s visual conventions. */
 export const TextArea: React.FC<TextAreaProps> = ({
   label,
   error,
@@ -33,20 +29,34 @@ export const TextArea: React.FC<TextAreaProps> = ({
   style,
   accessibilityLabel,
   value,
+  theme: themeProp,
   ...rest
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const hasError = Boolean(error);
-  const minHeight = lineHeights.md * minLines + spacing.sm * 2;
-  const maxHeight = lineHeights.md * maxLines + spacing.sm * 2;
+  // Use body lineHeight (22) for min/maxHeight calculation
+  const lineHeight = theme.typography.body.lineHeight ?? 22;
+  const minHeight = (lineHeight as number) * minLines + theme.spacing.sm * 2;
+  const maxHeight = (lineHeight as number) * maxLines + theme.spacing.sm * 2;
 
   return (
     <View style={style}>
-      <Text style={[styles.label, { color: colors.textSecondary }]}>{label}</Text>
+      <Text
+        style={[
+          styles.label,
+          {
+            fontSize: theme.typography.footnote.fontSize,
+            marginBottom: theme.spacing.xs,
+            color: theme.colors.textSecondary,
+          },
+        ]}
+      >
+        {label}
+      </Text>
       <RNTextInput
         accessibilityLabel={accessibilityLabel ?? label}
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={theme.colors.textSecondary}
         multiline
         numberOfLines={minLines}
         style={[
@@ -54,35 +64,41 @@ export const TextArea: React.FC<TextAreaProps> = ({
           {
             minHeight,
             maxHeight,
-            backgroundColor: colors.surface,
-            borderColor: hasError ? colors.error : colors.border,
-            color: colors.textPrimary,
+            borderRadius: theme.radius.md,
+            paddingHorizontal: theme.spacing.md,
+            paddingVertical: theme.spacing.sm,
+            fontSize: theme.typography.callout.fontSize,
+            backgroundColor: theme.colors.surface,
+            borderColor: hasError ? theme.colors.error : theme.colors.border,
+            color: theme.colors.textPrimary,
           },
         ]}
         value={value}
         {...rest}
       />
-      {hasError ? <Text style={[styles.error, { color: colors.error }]}>{error}</Text> : null}
+      {hasError ? (
+        <Text
+          style={[
+            styles.error,
+            {
+              fontSize: theme.typography.caption.fontSize,
+              marginTop: theme.spacing.xs,
+              color: theme.colors.error,
+            },
+          ]}
+        >
+          {error}
+        </Text>
+      ) : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: fontSizes.sm,
-    fontWeight: fontWeights.medium,
-    marginBottom: spacing.xs,
-  },
+  label: {},
   input: {
     borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    fontSize: fontSizes.md,
     textAlignVertical: 'top',
   },
-  error: {
-    fontSize: fontSizes.xs,
-    marginTop: spacing.xs,
-  },
+  error: {},
 });

@@ -1,10 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, useColorScheme } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 import { ModalDialog } from '../overlay/ModalDialog';
 
 export interface ConfirmDialogProps {
@@ -15,16 +12,10 @@ export interface ConfirmDialogProps {
   cancelLabel?: string;
   onConfirm: () => void;
   onCancel: () => void;
-  /** Styles the confirm button in the destructive/error color token. */
   isDestructive?: boolean;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A preset confirm/cancel modal built on top of `ModalDialog` (rather than
- * re-implementing modal presentation): title, optional message, and two
- * action buttons. Pass `isDestructive` to tint the confirm button with the
- * destructive/error color token for actions like delete.
- */
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   visible,
   title,
@@ -34,24 +25,65 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onConfirm,
   onCancel,
   isDestructive = false,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
-    <ModalDialog visible={visible} onDismiss={onCancel}>
-      <Text style={[styles.title, { color: colors.textPrimary }]}>{title}</Text>
+    <ModalDialog visible={visible} onDismiss={onCancel} theme={theme}>
+      <Text
+        style={[
+          styles.title,
+          {
+            fontSize: theme.typography.body.fontSize,
+            fontWeight: theme.typography.headline.fontWeight,
+            color: theme.colors.textPrimary,
+          },
+        ]}
+      >
+        {title}
+      </Text>
       {message ? (
-        <Text style={[styles.message, { color: colors.textSecondary }]}>{message}</Text>
+        <Text
+          style={[
+            styles.message,
+            {
+              fontSize: theme.typography.footnote.fontSize,
+              marginTop: theme.spacing.sm,
+              color: theme.colors.textSecondary,
+            },
+          ]}
+        >
+          {message}
+        </Text>
       ) : null}
-      <View style={styles.actions}>
+      <View style={[styles.actions, { marginTop: theme.spacing.lg }]}>
         <TouchableOpacity
           onPress={onCancel}
           accessibilityRole="button"
           accessibilityLabel={cancelLabel}
-          style={[styles.button, styles.cancelButton, { backgroundColor: colors.secondary }]}
+          style={[
+            styles.button,
+            {
+              paddingHorizontal: theme.spacing.md,
+              borderRadius: theme.radius.md,
+              marginRight: theme.spacing.sm,
+              backgroundColor: theme.colors.secondary,
+            },
+          ]}
         >
-          <Text style={[styles.buttonText, { color: colors.textPrimary }]}>{cancelLabel}</Text>
+          <Text
+            style={[
+              styles.buttonText,
+              {
+                fontSize: theme.typography.callout.fontSize,
+                color: theme.colors.textPrimary,
+              },
+            ]}
+          >
+            {cancelLabel}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={onConfirm}
@@ -59,13 +91,20 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           accessibilityLabel={confirmLabel}
           style={[
             styles.button,
-            { backgroundColor: isDestructive ? colors.destructive : colors.primary },
+            {
+              paddingHorizontal: theme.spacing.md,
+              borderRadius: theme.radius.md,
+              backgroundColor: isDestructive ? theme.colors.destructive : theme.colors.primary,
+            },
           ]}
         >
           <Text
             style={[
               styles.buttonText,
-              { color: isDestructive ? colors.onDestructive : colors.onPrimary },
+              {
+                fontSize: theme.typography.callout.fontSize,
+                color: isDestructive ? theme.colors.onDestructive : theme.colors.onPrimary,
+              },
             ]}
           >
             {confirmLabel}
@@ -77,31 +116,16 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: fontSizes.lg,
-    fontWeight: fontWeights.semibold,
-  },
-  message: {
-    fontSize: fontSizes.sm,
-    marginTop: spacing.sm,
-  },
+  title: {},
+  message: {},
   actions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: spacing.lg,
   },
   button: {
     minHeight: 44,
-    paddingHorizontal: spacing.md,
-    borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  cancelButton: {
-    marginRight: spacing.sm,
-  },
-  buttonText: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.medium,
-  },
+  buttonText: {},
 });

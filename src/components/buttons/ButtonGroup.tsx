@@ -1,10 +1,7 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, TouchableOpacity, useColorScheme, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface ButtonGroupProps {
   options: string[];
@@ -12,6 +9,7 @@ export interface ButtonGroupProps {
   onSelectionChange: (selectedIndices: number[]) => void;
   multiSelect?: boolean;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
 /**
@@ -25,9 +23,10 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   onSelectionChange,
   multiSelect = false,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   const handlePress = (index: number) => {
     if (multiSelect) {
@@ -41,7 +40,13 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   };
 
   return (
-    <View style={[styles.container, { borderColor: colors.border }, style]}>
+    <View
+      style={[
+        styles.container,
+        { borderColor: theme.colors.border, borderRadius: theme.radius.md },
+        style,
+      ]}
+    >
       {options.map((option, index) => {
         const selected = selectedIndices.includes(index);
         return (
@@ -53,11 +58,20 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
             accessibilityLabel={option}
             style={[
               styles.item,
-              index > 0 ? [styles.itemDivider, { borderLeftColor: colors.border }] : null,
-              selected ? { backgroundColor: colors.primary } : null,
+              { paddingHorizontal: theme.spacing.md },
+              index > 0 ? [styles.itemDivider, { borderLeftColor: theme.colors.border }] : null,
+              selected ? { backgroundColor: theme.colors.primary } : null,
             ]}
           >
-            <Text style={[styles.itemLabel, { color: selected ? colors.onPrimary : colors.textPrimary }]}>
+            <Text
+              style={[
+                styles.itemLabel,
+                {
+                  fontSize: theme.typography.footnote.fontSize,
+                  color: selected ? theme.colors.onPrimary : theme.colors.textPrimary,
+                },
+              ]}
+            >
               {option}
             </Text>
           </TouchableOpacity>
@@ -72,19 +86,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-start',
     borderWidth: 1,
-    borderRadius: radius.md,
     overflow: 'hidden',
   },
   item: {
     minHeight: 40,
-    paddingHorizontal: spacing.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
   itemDivider: {
     borderLeftWidth: 1,
   },
-  itemLabel: {
-    fontSize: fontSizes.sm,
-  },
+  itemLabel: {},
 });

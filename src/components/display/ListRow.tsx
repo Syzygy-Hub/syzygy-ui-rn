@@ -4,14 +4,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface ListRowProps {
   title: string;
@@ -20,10 +17,9 @@ export interface ListRowProps {
   trailing?: React.ReactNode;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/** A styled, optionally-tappable row wrapper with a leading slot, title,
- * subtitle, and a trailing accessory slot. */
 export const ListRow: React.FC<ListRowProps> = ({
   title,
   subtitle,
@@ -31,20 +27,48 @@ export const ListRow: React.FC<ListRowProps> = ({
   trailing,
   onPress,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   const content = (
     <View
-      style={[styles.container, style]}
+      style={[
+        styles.container,
+        {
+          paddingHorizontal: theme.spacing.md,
+          paddingVertical: theme.spacing.sm,
+        },
+        style,
+      ]}
       accessibilityLabel={subtitle ? `${title}, ${subtitle}` : title}
     >
       {leading}
-      <View style={styles.textContainer}>
-        <Text style={[styles.title, { color: colors.textPrimary }]}>{title}</Text>
+      <View style={[styles.textContainer, { marginLeft: theme.spacing.sm }]}>
+        <Text
+          style={[
+            styles.title,
+            {
+              fontSize: theme.typography.callout.fontSize,
+              color: theme.colors.textPrimary,
+            },
+          ]}
+        >
+          {title}
+        </Text>
         {subtitle ? (
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
+          <Text
+            style={[
+              styles.subtitle,
+              {
+                fontSize: theme.typography.footnote.fontSize,
+                color: theme.colors.textSecondary,
+              },
+            ]}
+          >
+            {subtitle}
+          </Text>
         ) : null}
       </View>
       {trailing}
@@ -66,17 +90,10 @@ const styles = StyleSheet.create({
     minHeight: 44,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
   },
   textContainer: {
     flex: 1,
-    marginLeft: spacing.sm,
   },
-  title: {
-    fontSize: fontSizes.md,
-  },
-  subtitle: {
-    fontSize: fontSizes.sm,
-  },
+  title: {},
+  subtitle: {},
 });

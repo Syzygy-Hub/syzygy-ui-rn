@@ -1,38 +1,25 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, Easing, StyleProp, StyleSheet, View, ViewStyle, useColorScheme } from 'react-native';
+import { Animated, Easing, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface CircularProgressProps {
-  /** 0-1 for determinate mode; omit for a continuously spinning indeterminate mode. */
   progress?: number;
   size?: number;
   strokeWidth?: number;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A circular progress indicator.
- *
- * Implementation approach: React Native core has no native circular
- * progress/arc-drawing primitive (that would normally come from `react-native-svg`,
- * a third-party dependency this library avoids). Determinate progress is
- * therefore approximated by rotating a half-transparent bordered circle: a
- * full ring is drawn at low opacity as the track, and a second ring segment
- * is rotated via `transform: rotate` proportional to `progress` to sweep in
- * the filled portion. This is a visual approximation, not a precise arc
- * render — for a pixel-accurate arc, an SVG-based solution would be needed.
- * Indeterminate mode (`progress` omitted) spins the ring continuously via
- * `Animated.loop`.
- */
 export const CircularProgress: React.FC<CircularProgressProps> = ({
   progress,
   size = 40,
   strokeWidth = 4,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const spin = useRef(new Animated.Value(0)).current;
   const isIndeterminate = progress == null;
 
@@ -71,7 +58,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
             height: size,
             borderRadius: size / 2,
             borderWidth: strokeWidth,
-            borderColor: colors.surfaceSecondary,
+            borderColor: theme.colors.surfaceSecondary,
           },
         ]}
       />
@@ -84,7 +71,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
             height: size,
             borderRadius: size / 2,
             borderWidth: strokeWidth,
-            borderTopColor: colors.primary,
+            borderTopColor: theme.colors.primary,
             transform: [{ rotate: rotateDeg }],
           },
         ]}

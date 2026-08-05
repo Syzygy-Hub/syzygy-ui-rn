@@ -1,24 +1,25 @@
 import React from 'react';
-import { RefreshControl, ScrollView, StyleProp, ViewStyle, useColorScheme } from 'react-native';
+import { RefreshControl, ScrollView, StyleProp, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface PullToRefreshProps {
   refreshing: boolean;
   onRefresh: () => void;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
-/** A scrollable container with native pull-to-refresh wired to a refresh handler. */
 export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   refreshing,
   onRefresh,
   children,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <ScrollView
@@ -27,8 +28,8 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          tintColor={colors.primary}
-          colors={[colors.primary]}
+          tintColor={theme.colors.primary}
+          colors={[theme.colors.primary]}
         />
       }
     >

@@ -5,21 +5,18 @@ import {
   Text,
   TextInput as RNTextInput,
   TextInputProps as RNTextInputProps,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface TextInputProps extends Omit<RNTextInputProps, 'style'> {
   label: string;
   error?: string;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -29,24 +26,39 @@ export const TextInput: React.FC<TextInputProps> = ({
   accessibilityLabel,
   maxLength,
   value,
+  theme: themeProp,
   ...rest
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const hasError = Boolean(error);
 
   return (
     <View style={style}>
-      <Text style={[styles.label, { color: colors.textSecondary }]}>{label}</Text>
+      <Text
+        style={[
+          styles.label,
+          {
+            fontSize: theme.typography.footnote.fontSize,
+            marginBottom: theme.spacing.xs,
+            color: theme.colors.textSecondary,
+          },
+        ]}
+      >
+        {label}
+      </Text>
       <RNTextInput
         accessibilityLabel={accessibilityLabel ?? label}
-        placeholderTextColor={colors.textSecondary}
+        placeholderTextColor={theme.colors.textSecondary}
         style={[
           styles.input,
           {
-            backgroundColor: colors.surface,
-            borderColor: hasError ? colors.error : colors.border,
-            color: colors.textPrimary,
+            borderRadius: theme.radius.md,
+            paddingHorizontal: theme.spacing.md,
+            fontSize: theme.typography.callout.fontSize,
+            backgroundColor: theme.colors.surface,
+            borderColor: hasError ? theme.colors.error : theme.colors.border,
+            color: theme.colors.textPrimary,
           },
         ]}
         maxLength={maxLength}
@@ -54,10 +66,30 @@ export const TextInput: React.FC<TextInputProps> = ({
         {...rest}
       />
       {hasError ? (
-        <Text style={[styles.error, { color: colors.error }]}>{error}</Text>
+        <Text
+          style={[
+            styles.error,
+            {
+              fontSize: theme.typography.caption.fontSize,
+              marginTop: theme.spacing.xs,
+              color: theme.colors.error,
+            },
+          ]}
+        >
+          {error}
+        </Text>
       ) : null}
       {maxLength != null ? (
-        <Text style={[styles.counter, { color: colors.textSecondary }]}>
+        <Text
+          style={[
+            styles.counter,
+            {
+              fontSize: theme.typography.caption.fontSize,
+              marginTop: theme.spacing.xs,
+              color: theme.colors.textSecondary,
+            },
+          ]}
+        >
           {`${(value ?? '').length}/${maxLength}`}
         </Text>
       ) : null}
@@ -66,25 +98,13 @@ export const TextInput: React.FC<TextInputProps> = ({
 };
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: fontSizes.sm,
-    fontWeight: fontWeights.medium,
-    marginBottom: spacing.xs,
-  },
+  label: {},
   input: {
     minHeight: 44,
     borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    fontSize: fontSizes.md,
   },
-  error: {
-    fontSize: fontSizes.xs,
-    marginTop: spacing.xs,
-  },
+  error: {},
   counter: {
-    fontSize: fontSizes.xs,
-    marginTop: spacing.xs,
     textAlign: 'right',
   },
 });

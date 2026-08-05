@@ -4,14 +4,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface CheckboxInputProps {
   label: string;
@@ -19,21 +16,24 @@ export interface CheckboxInputProps {
   onValueChange: (checked: boolean) => void;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
-/** A labeled checkbox. React Native has no core `Checkbox`, so this owns the name. */
 export const CheckboxInput: React.FC<CheckboxInputProps> = ({
   label,
   checked,
   onValueChange,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
-  const dynamicBoxStyle = {
-    backgroundColor: checked ? colors.primary : 'transparent',
-    borderColor: checked ? colors.primary : colors.border,
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
+
+  const boxStyle = {
+    borderRadius: theme.radius.sm,
+    backgroundColor: checked ? theme.colors.primary : ('transparent' as const),
+    borderColor: checked ? theme.colors.primary : theme.colors.border,
   };
 
   return (
@@ -44,10 +44,14 @@ export const CheckboxInput: React.FC<CheckboxInputProps> = ({
       accessibilityLabel={accessibilityLabel ?? label}
       style={[styles.container, style]}
     >
-      <View style={[styles.box, dynamicBoxStyle]}>
-        {checked ? <Text style={{ color: colors.onPrimary }}>{'✓'}</Text> : null}
+      <View
+        style={[styles.box, boxStyle]}
+      >
+        {checked ? <Text style={{ color: theme.colors.onPrimary }}>{'✓'}</Text> : null}
       </View>
-      <Text style={[styles.label, { color: colors.textPrimary }]}>{label}</Text>
+      <Text style={[styles.label, { marginLeft: theme.spacing.sm, color: theme.colors.textPrimary }]}>
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -62,11 +66,8 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderWidth: 2,
-    borderRadius: radius.sm,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  label: {
-    marginLeft: spacing.sm,
-  },
+  label: {},
 });

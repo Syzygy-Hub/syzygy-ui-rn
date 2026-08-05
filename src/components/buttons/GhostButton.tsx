@@ -5,14 +5,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface GhostButtonProps {
   title: string;
@@ -21,6 +17,7 @@ export interface GhostButtonProps {
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
 export const GhostButton: React.FC<GhostButtonProps> = ({
@@ -30,9 +27,10 @@ export const GhostButton: React.FC<GhostButtonProps> = ({
   loading = false,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const isDisabled = disabled || loading;
 
   return (
@@ -42,15 +40,27 @@ export const GhostButton: React.FC<GhostButtonProps> = ({
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? title}
       accessibilityState={{ disabled: isDisabled, busy: loading }}
-      style={[styles.base, style]}
+      style={[
+        styles.base,
+        {
+          paddingHorizontal: theme.spacing.md,
+          paddingVertical: theme.spacing.sm,
+          borderRadius: theme.radius.md,
+        },
+        style,
+      ]}
     >
       {loading ? (
-        <ActivityIndicator color={colors.primary} />
+        <ActivityIndicator color={theme.colors.primary} />
       ) : (
         <Text
           style={[
             styles.text,
-            { color: isDisabled ? colors.textDisabled : colors.primary },
+            {
+              fontSize: theme.typography.callout.fontSize,
+              fontWeight: theme.typography.headline.fontWeight,
+              color: isDisabled ? theme.colors.textDisabled : theme.colors.primary,
+            },
           ]}
         >
           {title}
@@ -63,15 +73,9 @@ export const GhostButton: React.FC<GhostButtonProps> = ({
 const styles = StyleSheet.create({
   base: {
     minHeight: 44,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.md,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
   },
-  text: {
-    fontSize: fontSizes.md,
-    fontWeight: fontWeights.semibold,
-  },
+  text: {},
 });

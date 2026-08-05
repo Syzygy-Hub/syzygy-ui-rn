@@ -1,33 +1,33 @@
 import React, { useState } from 'react';
-import { Image, StyleProp, StyleSheet, Text, View, ViewStyle, useColorScheme } from 'react-native';
+import { Image, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 import { ShimmerView } from '../feedback/ShimmerView';
 
 export interface LazyImageViewProps {
   uri: string | null | undefined;
   style?: StyleProp<ViewStyle>;
   resizeMode?: 'cover' | 'contain' | 'stretch' | 'center';
+  theme?: SyzygyTheme;
 }
 
-/**
- * Asynchronously loads a remote image using React Native's core `Image`
- * component (which handles async loading and caching natively — no
- * third-party image-loading dependency needed), showing a `ShimmerView`
- * placeholder while loading and a fallback glyph if the load fails.
- */
-export const LazyImageView: React.FC<LazyImageViewProps> = ({ uri, style, resizeMode = 'cover' }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+export const LazyImageView: React.FC<LazyImageViewProps> = ({
+  uri,
+  style,
+  resizeMode = 'cover',
+  theme: themeProp,
+}) => {
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>(uri ? 'loading' : 'error');
 
   if (!uri || status === 'error') {
     return (
       <View
-        style={[styles.fallback, { backgroundColor: colors.surfaceSecondary }, style]}
+        style={[styles.fallback, { backgroundColor: theme.colors.surfaceSecondary }, style]}
         accessibilityLabel="Image failed to load"
       >
-        <Text style={{ color: colors.textSecondary }}>{'🖼'}</Text>
+        <Text style={{ color: theme.colors.textSecondary }}>{'🖼'}</Text>
       </View>
     );
   }
@@ -35,7 +35,7 @@ export const LazyImageView: React.FC<LazyImageViewProps> = ({ uri, style, resize
   return (
     <View style={style}>
       {status === 'loading' ? (
-        <ShimmerView style={StyleSheet.absoluteFill} />
+        <ShimmerView style={StyleSheet.absoluteFill} theme={theme} />
       ) : null}
       <Image
         source={{ uri }}

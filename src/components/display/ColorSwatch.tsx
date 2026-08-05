@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleProp, StyleSheet, Text, View, ViewStyle, useColorScheme } from 'react-native';
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface ColorSwatchProps {
   color: string;
@@ -12,15 +10,11 @@ export interface ColorSwatchProps {
   isSelected?: boolean;
   size?: number;
   style?: StyleProp<ViewStyle>;
+  theme?: SyzygyTheme;
 }
 
 const SIZE_DEFAULT = 36;
 
-/**
- * A circle or square displaying a single color, with an optional label
- * beneath it. When `isSelected` is true, a border is drawn using the
- * `focus` color token (v2.1.0) to indicate the current selection.
- */
 export const ColorSwatch: React.FC<ColorSwatchProps> = ({
   color,
   shape = 'circle',
@@ -28,15 +22,16 @@ export const ColorSwatch: React.FC<ColorSwatchProps> = ({
   isSelected = false,
   size = SIZE_DEFAULT,
   style,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const dynamicSwatchStyle = {
     width: size,
     height: size,
     borderRadius: shape === 'circle' ? size / 2 : 6,
     backgroundColor: color,
-    borderColor: isSelected ? colors.focus : 'transparent',
+    borderColor: isSelected ? theme.colors.focus : 'transparent',
   };
 
   return (
@@ -47,7 +42,20 @@ export const ColorSwatch: React.FC<ColorSwatchProps> = ({
         accessibilityLabel={label ?? color}
         accessibilityState={{ selected: isSelected }}
       />
-      {label ? <Text style={[styles.label, { color: colors.textSecondary }]}>{label}</Text> : null}
+      {label ? (
+        <Text
+          style={[
+            styles.label,
+            {
+              fontSize: theme.typography.caption.fontSize,
+              marginTop: theme.spacing.xxs,
+              color: theme.colors.textSecondary,
+            },
+          ]}
+        >
+          {label}
+        </Text>
+      ) : null}
     </View>
   );
 };
@@ -59,8 +67,5 @@ const styles = StyleSheet.create({
   swatch: {
     borderWidth: 2,
   },
-  label: {
-    fontSize: fontSizes.xs,
-    marginTop: spacing.xxs,
-  },
+  label: {},
 });

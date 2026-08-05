@@ -7,15 +7,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface DropdownProps<T> {
   label: string;
@@ -25,9 +21,9 @@ export interface DropdownProps<T> {
   optionTitle: (option: T) => string;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
-/** A labeled dropdown / picker, selecting from a fixed list of options. */
 export function Dropdown<T>({
   label,
   selection,
@@ -36,26 +32,55 @@ export function Dropdown<T>({
   optionTitle,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }: DropdownProps<T>) {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const [open, setOpen] = useState(false);
 
   return (
     <View style={style}>
-      <Text style={[styles.label, { color: colors.textSecondary }]}>{label}</Text>
+      <Text
+        style={[
+          styles.label,
+          {
+            fontSize: theme.typography.footnote.fontSize,
+            marginBottom: theme.spacing.xs,
+            color: theme.colors.textSecondary,
+          },
+        ]}
+      >
+        {label}
+      </Text>
       <TouchableOpacity
         onPress={() => setOpen(true)}
         accessibilityRole="button"
         accessibilityLabel={accessibilityLabel ?? label}
-        style={[styles.trigger, { backgroundColor: colors.surface, borderColor: colors.border }]}
+        style={[
+          styles.trigger,
+          {
+            borderRadius: theme.radius.md,
+            paddingHorizontal: theme.spacing.md,
+            backgroundColor: theme.colors.surface,
+            borderColor: theme.colors.border,
+          },
+        ]}
       >
-        <Text style={{ color: colors.textPrimary }}>{optionTitle(selection)}</Text>
-        <Text style={{ color: colors.textSecondary }}>{'⌄'}</Text>
+        <Text style={{ color: theme.colors.textPrimary }}>{optionTitle(selection)}</Text>
+        <Text style={{ color: theme.colors.textSecondary }}>{'⌄'}</Text>
       </TouchableOpacity>
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
-        <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
-          <View style={[styles.sheet, { backgroundColor: colors.surface }]}>
+        <Pressable style={[styles.backdrop, { backgroundColor: `rgba(0,0,0,${theme.colors.overlayAlpha})` }]} onPress={() => setOpen(false)}>
+          <View
+            style={[
+              styles.sheet,
+              {
+                borderTopLeftRadius: theme.radius.lg,
+                borderTopRightRadius: theme.radius.lg,
+                backgroundColor: theme.colors.surface,
+              },
+            ]}
+          >
             <FlatList
               data={options}
               keyExtractor={(item, index) => `${optionTitle(item)}-${index}`}
@@ -65,9 +90,9 @@ export function Dropdown<T>({
                     onSelectionChange(item);
                     setOpen(false);
                   }}
-                  style={styles.option}
+                  style={[styles.option, { paddingHorizontal: theme.spacing.md }]}
                 >
-                  <Text style={{ color: colors.textPrimary }}>{optionTitle(item)}</Text>
+                  <Text style={{ color: theme.colors.textPrimary }}>{optionTitle(item)}</Text>
                 </TouchableOpacity>
               )}
             />
@@ -79,32 +104,23 @@ export function Dropdown<T>({
 }
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: fontSizes.sm,
-    marginBottom: spacing.xs,
-  },
+  label: {},
   trigger: {
     minHeight: 44,
     borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'flex-end',
   },
   sheet: {
-    borderTopLeftRadius: radius.lg,
-    borderTopRightRadius: radius.lg,
     maxHeight: '60%',
   },
   option: {
     minHeight: 44,
     justifyContent: 'center',
-    paddingHorizontal: spacing.md,
   },
 });

@@ -3,14 +3,11 @@ import {
   StyleProp,
   StyleSheet,
   TextInput as RNTextInput,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface OTPInputProps {
   length?: number;
@@ -18,18 +15,19 @@ export interface OTPInputProps {
   onCodeChange: (code: string) => void;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
-/** A row of fixed single-character boxes for OTP/PIN entry, auto-advancing focus as each digit is typed. */
 export const OTPInput: React.FC<OTPInputProps> = ({
   length = 6,
   code,
   onCodeChange,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const inputs = useRef<(RNTextInput | null)[]>([]);
   const boxes = Array.from({ length }, (_, i) => i);
 
@@ -39,7 +37,6 @@ export const OTPInput: React.FC<OTPInputProps> = ({
     chars[index] = digit;
     const next = chars.join('').slice(0, length);
     onCodeChange(next);
-
     if (digit && index < length - 1) {
       inputs.current[index + 1]?.focus();
     }
@@ -68,9 +65,12 @@ export const OTPInput: React.FC<OTPInputProps> = ({
           style={[
             styles.box,
             {
-              backgroundColor: colors.surface,
-              borderColor: colors.border,
-              color: colors.textPrimary,
+              borderRadius: theme.radius.md,
+              fontSize: theme.typography.body.fontSize,
+              fontWeight: theme.typography.headline.fontWeight,
+              backgroundColor: theme.colors.surface,
+              borderColor: theme.colors.border,
+              color: theme.colors.textPrimary,
             },
           ]}
         />
@@ -88,9 +88,6 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderWidth: 1,
-    borderRadius: radius.md,
     textAlign: 'center',
-    fontSize: fontSizes.lg,
-    fontWeight: fontWeights.semibold,
   },
 });

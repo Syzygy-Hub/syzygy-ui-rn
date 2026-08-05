@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import { StyleProp, StyleSheet, Text, TouchableOpacity, useColorScheme, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { radius } from '../../tokens/radius';
-import { spacing } from '../../tokens/spacing';
-import { fontSizes, fontWeights } from '../../tokens/typography';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface TimePickerFieldProps {
   label: string;
@@ -14,32 +11,22 @@ export interface TimePickerFieldProps {
   formatTime?: (time: Date) => string;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A tappable field that displays a formatted time and manages its own
- * open/closed visual state.
- *
- * NOTE (platform limitation, not a shortcut): same situation as
- * `DatePickerField` — React Native core has no built-in time picker
- * equivalent to SwiftUI's/Compose's, and this library takes on no
- * third-party dependencies. This component owns only the field/trigger UI
- * and open state; wire an actual native time picker (host-app-provided or a
- * platform dependency added at the app level) into `onPress`, and call
- * `onTimeChange` with its result.
- */
 export const TimePickerField: React.FC<TimePickerFieldProps> = ({
   label,
   time,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onTimeChange, // Public API prop — consumed by the caller, not internally
+  onTimeChange,
   onPress,
   formatTime = (t) => t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
   const [isOpen, setIsOpen] = useState(false);
 
   const handlePress = () => {
@@ -49,7 +36,18 @@ export const TimePickerField: React.FC<TimePickerFieldProps> = ({
 
   return (
     <View style={style}>
-      <Text style={[styles.label, { color: colors.textSecondary }]}>{label}</Text>
+      <Text
+        style={[
+          styles.label,
+          {
+            fontSize: theme.typography.footnote.fontSize,
+            marginBottom: theme.spacing.xs,
+            color: theme.colors.textSecondary,
+          },
+        ]}
+      >
+        {label}
+      </Text>
       <TouchableOpacity
         onPress={handlePress}
         accessibilityRole="button"
@@ -58,12 +56,19 @@ export const TimePickerField: React.FC<TimePickerFieldProps> = ({
         style={[
           styles.trigger,
           {
-            backgroundColor: colors.surface,
-            borderColor: isOpen ? colors.focus : colors.border,
+            borderRadius: theme.radius.md,
+            paddingHorizontal: theme.spacing.md,
+            backgroundColor: theme.colors.surface,
+            borderColor: isOpen ? theme.colors.focus : theme.colors.border,
           },
         ]}
       >
-        <Text style={{ color: time ? colors.textPrimary : colors.textSecondary, fontSize: fontSizes.md }}>
+        <Text
+          style={{
+            color: time ? theme.colors.textPrimary : theme.colors.textSecondary,
+            fontSize: theme.typography.callout.fontSize,
+          }}
+        >
           {time ? formatTime(time) : 'Select time'}
         </Text>
       </TouchableOpacity>
@@ -72,16 +77,10 @@ export const TimePickerField: React.FC<TimePickerFieldProps> = ({
 };
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: fontSizes.sm,
-    fontWeight: fontWeights.medium,
-    marginBottom: spacing.xs,
-  },
+  label: {},
   trigger: {
     minHeight: 44,
     borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
     justifyContent: 'center',
   },
 });

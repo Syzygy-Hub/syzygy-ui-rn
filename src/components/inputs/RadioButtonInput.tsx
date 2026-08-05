@@ -4,13 +4,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
   ViewStyle,
 } from 'react-native';
 
-import { getColors } from '../../tokens/colors';
-import { spacing } from '../../tokens/spacing';
+import { SyzygyTheme, useSyzygyTheme } from '../../theme';
 
 export interface RadioButtonInputProps {
   label: string;
@@ -18,22 +16,19 @@ export interface RadioButtonInputProps {
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
   accessibilityLabel?: string;
+  theme?: SyzygyTheme;
 }
 
-/**
- * A single labeled radio option. Compose several with shared parent state to
- * build a radio group. React Native has no core `RadioButton`, so this owns
- * the name.
- */
 export const RadioButtonInput: React.FC<RadioButtonInputProps> = ({
   label,
   selected,
   onPress,
   style,
   accessibilityLabel,
+  theme: themeProp,
 }) => {
-  const scheme = useColorScheme();
-  const colors = getColors(scheme);
+  const { theme: contextTheme } = useSyzygyTheme();
+  const theme = themeProp ?? contextTheme;
 
   return (
     <TouchableOpacity
@@ -43,10 +38,24 @@ export const RadioButtonInput: React.FC<RadioButtonInputProps> = ({
       accessibilityLabel={accessibilityLabel ?? label}
       style={[styles.container, style]}
     >
-      <View style={[styles.outer, { borderColor: selected ? colors.primary : colors.border }]}>
-        {selected ? <View style={[styles.inner, { backgroundColor: colors.primary }]} /> : null}
+      <View
+        style={[
+          styles.outer,
+          { borderColor: selected ? theme.colors.primary : theme.colors.border },
+        ]}
+      >
+        {selected ? (
+          <View style={[styles.inner, { backgroundColor: theme.colors.primary }]} />
+        ) : null}
       </View>
-      <Text style={[styles.label, { color: colors.textPrimary }]}>{label}</Text>
+      <Text
+        style={[
+          styles.label,
+          { marginLeft: theme.spacing.sm, color: theme.colors.textPrimary },
+        ]}
+      >
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -70,7 +79,5 @@ const styles = StyleSheet.create({
     height: 12,
     borderRadius: 6,
   },
-  label: {
-    marginLeft: spacing.sm,
-  },
+  label: {},
 });
