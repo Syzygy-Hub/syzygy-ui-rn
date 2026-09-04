@@ -5,6 +5,26 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+### Changed
+
+### Fixed
+
+---
+
+## [2.5.0] - 2026-09-04
+
+### Changed
+
+- CI workflow improvements: tags-ignore trigger, lint order fix, Node/runner updates
+- Release workflow: added required permissions block
+- RN: added publish-npm job for reliable npm OIDC publishing
+
+---
+
 ## [2.4.0] - 2026-08-05
 
 ### Added
@@ -133,3 +153,6 @@ This repo required no carry-over patch fixes for this release (PagerView's Displ
 ## [1.0.0] - v1.0.0
 
 - Initial release with TextInput character counter.
+
+[2.5.0]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/2.4.0...2.5.0
+[2.4.0]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/2.3.0...2.4.0

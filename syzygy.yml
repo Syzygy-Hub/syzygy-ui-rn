@@ -1,0 +1,10 @@
+# Syzygy Repository Manifest
+# Schema: https://github.com/Syzygy-Hub/.github/blob/main/engineering/standards/repository-standard.md
+
+name: syzygy-ui-rn
+type: ui
+platform: rn
+language: typescript
+package_manager: npm
+license: MIT
+version: 2.5.0
