@@ -2,17 +2,25 @@
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![npm](https://img.shields.io/npm/v/syzygy-ui-rn?label=npm&color=2F6FED)](https://www.npmjs.com/package/syzygy-ui-rn)
-[![Version](https://img.shields.io/badge/version-2.4.0-2F6FED)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.5.0-2F6FED)](CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android%20%7C%20Web-lightgrey)](https://reactnative.dev)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![CI](https://github.com/Syzygy-Hub/syzygy-ui-rn/actions/workflows/node.yml/badge.svg)](https://github.com/Syzygy-Hub/syzygy-ui-rn/actions/workflows/node.yml)
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Syzygy-Hub/syzygy-brand-assets/main/Assets/syzygy-banner-dark-2400.png">
-  <img src="https://raw.githubusercontent.com/Syzygy-Hub/syzygy-brand-assets/main/Assets/syzygy-banner-light-2400.png" alt="Syzygy" width="500">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Syzygy-Hub/.github/main/brand/assets/banners/syzygy-banner-dark-2400.png">
+  <img src="https://raw.githubusercontent.com/Syzygy-Hub/.github/main/brand/assets/banners/syzygy-banner-light-2400.png" alt="Syzygy" width="500">
 </picture>
 
+The cross-platform design system layer of the Syzygy ecosystem — providing SyzygyTheme, runtime theme switching, and UI components across iOS, Android, React Native and Flutter.
+
 Production-ready React Native component library with design tokens, Dark Mode, and zero third-party dependencies.
+
+## Role in the Syzygy Ecosystem
+
+`syzygy-ui-rn` is the design system layer. It depends only on `syzygy-foundation-rn` and is independently usable without adopting Core, Services or AI.
+
+Full ecosystem architecture: [ecosystem-fragment.md](https://github.com/Syzygy-Hub/.github/blob/main/docs/ecosystem-fragment.md)
 
 ## Requirements
 - React Native 0.70+
@@ -24,6 +32,102 @@ Production-ready React Native component library with design tokens, Dark Mode, a
 npm install syzygy-ui-rn
 ```
 
+## Theming
+
+syzygy-ui-rn v2.4.0 ships a first-class theming system built on React Context.
+
+### Setup
+
+Wrap your app with `SyzygyThemeProvider`:
+
+```tsx
+import { SyzygyThemeProvider, darkTheme } from 'syzygy-ui-rn';
+
+export default function App() {
+  return (
+    <SyzygyThemeProvider theme={darkTheme}>
+      {/* your screens */}
+    </SyzygyThemeProvider>
+  );
+}
+```
+
+### Built-in themes
+
+| Name | Description |
+|------|-------------|
+| `defaultTheme` | Light theme — default when no provider is present |
+| `darkTheme` | Dark surfaces with adjusted color palette |
+| `highContrastTheme` | Maximum contrast for accessibility; sharp radii |
+
+### Runtime theme switching
+
+```tsx
+import { useSyzygyTheme, darkTheme, defaultTheme } from 'syzygy-ui-rn';
+
+function ThemeToggle() {
+  const { theme, setTheme } = useSyzygyTheme();
+  return (
+    <Button
+      title="Toggle"
+      onPress={() => setTheme(theme === defaultTheme ? darkTheme : defaultTheme)}
+    />
+  );
+}
+```
+
+### Component-level overrides
+
+Use `SyzygyThemeOverride` to apply a different theme to a subtree without affecting the global theme:
+
+```tsx
+import { SyzygyThemeOverride, highContrastTheme } from 'syzygy-ui-rn';
+
+<SyzygyThemeOverride theme={highContrastTheme}>
+  <MyAccessibleSection />
+</SyzygyThemeOverride>
+```
+
+### `theme` prop
+
+Every component accepts an optional `theme?: SyzygyTheme` prop. When provided it overrides the context theme for that component only:
+
+```tsx
+import { PrimaryButton, darkTheme } from 'syzygy-ui-rn';
+
+<PrimaryButton title="Dark Button" onPress={...} theme={darkTheme} />
+```
+
+### `useSyzygyTheme()` hook
+
+```tsx
+import { useSyzygyTheme } from 'syzygy-ui-rn';
+
+function MyComponent() {
+  const { theme, setTheme } = useSyzygyTheme();
+  return <View style={{ backgroundColor: theme.colors.surface }} />;
+}
+```
+
+The hook returns `{ theme: SyzygyTheme; setTheme: (t: SyzygyTheme) => void }`.
+
+### Custom themes
+
+Build your own theme by composing the primitive objects:
+
+```tsx
+import { defaultTheme, SyzygyTheme } from 'syzygy-ui-rn';
+
+const brandTheme: SyzygyTheme = {
+  ...defaultTheme,
+  colors: {
+    ...defaultTheme.colors,
+    primary: '#FF6600',
+    onPrimary: '#FFFFFF',
+  },
+};
+```
+
 ## Components
 
 79 components across 9 categories, plus a set of `Animated`-driven transition helpers.
@@ -33,11 +137,13 @@ npm install syzygy-ui-rn
 - **Display:** Avatar, DividerLine, Chip, ListRow, SectionHeader, LazyImageView, StarRatingView, CountBadge, AvatarGroup (overlapping stack with "+N" overflow), StatsCard (aka MetricCard; label + value + trend), RatingInput (tappable counterpart to the read-only StarRatingView), PageControl (aka DotIndicator; read-only page-position dots, syncs with PagerView), Accordion (vertically stacked expandable sections; single-open by default, `allowMultipleOpen` for independent toggling), Timeline (aka ActivityFeed; connected dots/icons with title, subtitle, timestamp; `leading`/`trailing` alignment), ColorSwatch (circle/square color preview with optional label; `isSelected` border uses the `focus` token)
 - **Feedback:** LoadingView, EmptyStateView, ToastView, ShimmerView, ProgressBar, PullToRefresh, ErrorStateView, SkeletonView (shape-aware shimmer placeholder), CircularProgress (determinate + indeterminate), InlineAlert (aka Banner; 4 variants using the `*Muted` tokens), Snackbar (auto-dismissing, optional action), NetworkStatusBanner (controlled/presentational — accepts `isOffline` rather than self-detecting; see cross-platform note below), ConfirmDialog (preset confirm/cancel modal built on ModalDialog; `isDestructive` tints the confirm button)
 - **Overlay:** ModalDialog, BottomSheet, CollapsibleView, ActionSheet (bottom-anchored action list), Popover (anchored floating content), Tooltip (long-press label)
-- **Navigation:** BackButton, TabBar, BottomNavigationBar, AppBar, SideMenu (aka Drawer), FloatingTabBar (floating pill, icon **+** label — distinct from BottomNavigationBar's floating icon-only pill), StepIndicator (aka WizardSteps), Breadcrumbs, PagerView (swipeable paged content; `onPageChange` reports the current page index for local state or navigator wiring) — presentational only; this library has no navigation dependency, so wire `onPress`/`onSelectionChange` into your own navigator
+- **Navigation:** BackButton, TabBar, BottomNavigationBar, AppBar, SideMenu (aka Drawer), FloatingTabBar (floating pill, icon **+** label — distinct from BottomNavigationBar's floating icon-only pill), StepIndicator (aka WizardSteps), Breadcrumbs — presentational only; this library has no navigation dependency, so wire `onPress`/`onSelectionChange` into your own navigator
 - **Cards:** CardView
 - **Badges:** Badge
-- **Layout:** KeyboardAvoidingScrollView, AdaptiveStack (row above `breakpoint` width, column below), FlowLayout (wrapping row with consistent inter-item spacing), StickyHeader (via core `ScrollView`'s `stickyHeaderIndices`), SafeAreaWrapper (core-only best-effort safe-area inset wrapper — real `SafeAreaView` on iOS, `StatusBar.currentHeight` top-inset fallback on Android; no bottom-gesture-bar insets or precise cutout handling on Android — use `react-native-safe-area-context` if you need that), LabeledDivider (DividerLine segments flanking a centered/leading/trailing label)
+- **Layout:** KeyboardAvoidingScrollView, PagerView (swipeable paged content; `onPageChange` reports the current page index for local state or navigator wiring), AdaptiveStack (row above `breakpoint` width, column below), FlowLayout (wrapping row with consistent inter-item spacing), StickyHeader (via core `ScrollView`'s `stickyHeaderIndices`), SafeAreaWrapper (core-only best-effort safe-area inset wrapper — real `SafeAreaView` on iOS, `StatusBar.currentHeight` top-inset fallback on Android; no bottom-gesture-bar insets or precise cutout handling on Android — use `react-native-safe-area-context` if you need that), LabeledDivider (DividerLine segments flanking a centered/leading/trailing label)
 - **Transitions:** `slideTransition`, `crossFadeTransition`, `slideVerticalTransition`, `modalPresentationTransition`, `scaleTransition`, `fadeThroughTransition` — `Animated`-driven style helpers
+
+**PagerView — placement note**: PagerView is a presentational paged-content component, not a navigation element. It has been moved from **Navigation** to **Layout** for that reason — wire its `onPageChange` output into your own navigator if you want navigation semantics.
 
 **NetworkStatusBanner — cross-platform note**: On iOS and Android, `NetworkStatusBanner` self-detects connectivity via first-party OS APIs and requires no `isOffline` prop. On React Native and Flutter, real network detection requires a third-party package that this library deliberately does not bundle, so the banner is controlled/presentational — pass `isOffline` from your own network state (e.g. `@react-native-community/netinfo`).
 
@@ -213,102 +319,6 @@ Follow semver: `v{major}.{minor}.{patch}`
 | `npm run typecheck` | Type check without emitting files |
 | `npm run clean` | Remove dist/ and node_modules/ |
 | `npm run reinstall` | Clean and reinstall all dependencies |
-
-## Theming
-
-syzygy-ui-rn v2.4.0 ships a first-class theming system built on React Context.
-
-### Setup
-
-Wrap your app with `SyzygyThemeProvider`:
-
-```tsx
-import { SyzygyThemeProvider, darkTheme } from 'syzygy-ui-rn';
-
-export default function App() {
-  return (
-    <SyzygyThemeProvider theme={darkTheme}>
-      {/* your screens */}
-    </SyzygyThemeProvider>
-  );
-}
-```
-
-### Built-in themes
-
-| Name | Description |
-|------|-------------|
-| `defaultTheme` | Light theme — default when no provider is present |
-| `darkTheme` | Dark surfaces with adjusted color palette |
-| `highContrastTheme` | Maximum contrast for accessibility; sharp radii |
-
-### Runtime theme switching
-
-```tsx
-import { useSyzygyTheme, darkTheme, defaultTheme } from 'syzygy-ui-rn';
-
-function ThemeToggle() {
-  const { theme, setTheme } = useSyzygyTheme();
-  return (
-    <Button
-      title="Toggle"
-      onPress={() => setTheme(theme === defaultTheme ? darkTheme : defaultTheme)}
-    />
-  );
-}
-```
-
-### Component-level overrides
-
-Use `SyzygyThemeOverride` to apply a different theme to a subtree without affecting the global theme:
-
-```tsx
-import { SyzygyThemeOverride, highContrastTheme } from 'syzygy-ui-rn';
-
-<SyzygyThemeOverride theme={highContrastTheme}>
-  <MyAccessibleSection />
-</SyzygyThemeOverride>
-```
-
-### `theme` prop
-
-Every component accepts an optional `theme?: SyzygyTheme` prop. When provided it overrides the context theme for that component only:
-
-```tsx
-import { PrimaryButton, darkTheme } from 'syzygy-ui-rn';
-
-<PrimaryButton title="Dark Button" onPress={...} theme={darkTheme} />
-```
-
-### `useSyzygyTheme()` hook
-
-```tsx
-import { useSyzygyTheme } from 'syzygy-ui-rn';
-
-function MyComponent() {
-  const { theme, setTheme } = useSyzygyTheme();
-  return <View style={{ backgroundColor: theme.colors.surface }} />;
-}
-```
-
-The hook returns `{ theme: SyzygyTheme; setTheme: (t: SyzygyTheme) => void }`.
-
-### Custom themes
-
-Build your own theme by composing the primitive objects:
-
-```tsx
-import { defaultTheme, SyzygyTheme } from 'syzygy-ui-rn';
-
-const brandTheme: SyzygyTheme = {
-  ...defaultTheme,
-  colors: {
-    ...defaultTheme.colors,
-    primary: '#FF6600',
-    onPrimary: '#FFFFFF',
-  },
-};
-```
 
 ## License
 MIT

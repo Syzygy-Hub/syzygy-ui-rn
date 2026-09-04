@@ -1,82 +1,40 @@
 name: Release
 
 on:
-  workflow_run:
-    workflows: ['Node CI']
-    types:
-      - completed
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
   release:
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      startsWith(github.event.workflow_run.head_commit.message, 'release:')
+    uses: Syzygy-Hub/.github/.github/workflows/rn-release.yml@main
+    secrets: inherit
+
+  publish-npm:
+    needs: release
     runs-on: ubuntu-latest
     permissions:
-      contents: write
       id-token: write
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Extract version
-        id: version
-        run: |
-          COMMIT_MSG="${{ github.event.workflow_run.head_commit.message }}"
-          VERSION=$(echo "$COMMIT_MSG" | sed -n 's/^release: *//p' | head -n1 | awk '{print $1}')
-          VERSION="${VERSION#v}"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-
-      - name: Sync package.json version
-        run: |
-          COMMIT_VERSION="${{ env.VERSION }}"
-          PKG_VERSION=$(node -p "require('./package.json').version")
-          if [ "$PKG_VERSION" != "$COMMIT_VERSION" ]; then
-            echo "Version mismatch: package.json=$PKG_VERSION, commit=$COMMIT_VERSION — updating package.json"
-            npm version $COMMIT_VERSION --no-git-tag-version
-          else
-            echo "Versions match: $PKG_VERSION"
-          fi
-
-      - name: Setup Node.js
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Update npm to latest
-        run: npm install -g npm@latest
+          package-manager-cache: false
 
       - name: Install dependencies
         run: npm ci
 
       - name: Publish to npm
-        continue-on-error: false
         run: npm publish --access=public --provenance
-
-      - name: Wait for npm registry propagation
-        run: sleep 30
-
-      - name: Verify npm publish
-        run: |
-          PKG_VERSION=$(node -p "require('./package.json').version")
-          npm view syzygy-ui-rn@$PKG_VERSION version || (echo "Publish verification failed" && exit 1)
-
-      - name: Delete existing tag if exists
-        run: git push origin :refs/tags/${{ env.VERSION }} || true
-
-      - name: Create GitHub Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "${{ steps.version.outputs.version }}" \
-            --title "${{ steps.version.outputs.version }}" \
-            --notes "${{ github.event.workflow_run.head_commit.message }}" \
-            --target "${{ github.event.workflow_run.head_sha }}"
-
-      - name: Summary
-        run: |
-          echo "✅ Published syzygy-ui-rn@${{ env.VERSION }} to npm"
-          echo "✅ GitHub Release ${{ env.VERSION }} created"
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
