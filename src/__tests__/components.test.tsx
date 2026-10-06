@@ -81,26 +81,27 @@ import { CollapsibleView } from '../components/overlay/CollapsibleView';
 import { ModalDialog } from '../components/overlay/ModalDialog';
 import { Popover } from '../components/overlay/Popover';
 import { Tooltip } from '../components/overlay/Tooltip';
+import {
+  SyzygyThemeProvider,
+  SyzygyThemeOverride,
+  useSyzygyTheme,
+  defaultTheme,
+  darkTheme,
+} from '../theme';
 
 describe('component smoke tests', () => {
   it('renders PrimaryButton', () => {
-    const tree = renderer.create(
-      <PrimaryButton title="Continue" onPress={() => {}} />
-    );
+    const tree = renderer.create(<PrimaryButton title="Continue" onPress={() => {}} />);
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders SecondaryButton', () => {
-    const tree = renderer.create(
-      <SecondaryButton title="Cancel" onPress={() => {}} />
-    );
+    const tree = renderer.create(<SecondaryButton title="Cancel" onPress={() => {}} />);
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders DestructiveButton', () => {
-    const tree = renderer.create(
-      <DestructiveButton title="Delete" onPress={() => {}} />
-    );
+    const tree = renderer.create(<DestructiveButton title="Delete" onPress={() => {}} />);
     expect(tree.toJSON()).toBeTruthy();
   });
 
@@ -111,50 +112,32 @@ describe('component smoke tests', () => {
 
   it('renders IconButton', () => {
     const tree = renderer.create(
-      <IconButton
-        icon={<Text>+</Text>}
-        onPress={() => {}}
-        accessibilityLabel="Add"
-      />
+      <IconButton icon={<Text>+</Text>} onPress={() => {}} accessibilityLabel="Add" />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders TextInput', () => {
-    const tree = renderer.create(
-      <TextInput label="Email" value="" onChangeText={() => {}} />
-    );
+    const tree = renderer.create(<TextInput label="Email" value="" onChangeText={() => {}} />);
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders TextInput with error', () => {
     const tree = renderer.create(
-      <TextInput
-        label="Email"
-        value=""
-        onChangeText={() => {}}
-        error="Required"
-      />
+      <TextInput label="Email" value="" onChangeText={() => {}} error="Required" />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders TextInput with maxLength counter', () => {
     const tree = renderer.create(
-      <TextInput
-        label="Bio"
-        value="Hello"
-        onChangeText={() => {}}
-        maxLength={100}
-      />
+      <TextInput label="Bio" value="Hello" onChangeText={() => {}} maxLength={100} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders SecureInput', () => {
-    const tree = renderer.create(
-      <SecureInput label="Password" value="" onChangeText={() => {}} />
-    );
+    const tree = renderer.create(<SecureInput label="Password" value="" onChangeText={() => {}} />);
     expect(tree.toJSON()).toBeTruthy();
   });
 
@@ -170,7 +153,7 @@ describe('component smoke tests', () => {
         subtitle="Try again later"
         ctaLabel="Retry"
         onCtaPress={() => {}}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -184,7 +167,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <CardView>
         <Text>Card content</Text>
-      </CardView>
+      </CardView>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -206,28 +189,28 @@ describe('component smoke tests', () => {
 
   it('renders ToggleSwitch', () => {
     const tree = renderer.create(
-      <ToggleSwitch label="Notifications" value={true} onValueChange={() => {}} />
+      <ToggleSwitch label="Notifications" value={true} onValueChange={() => {}} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders CheckboxInput', () => {
     const tree = renderer.create(
-      <CheckboxInput label="Remember me" checked={false} onValueChange={() => {}} />
+      <CheckboxInput label="Remember me" checked={false} onValueChange={() => {}} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders RadioButtonInput', () => {
     const tree = renderer.create(
-      <RadioButtonInput label="Option A" selected={true} onPress={() => {}} />
+      <RadioButtonInput label="Option A" selected={true} onPress={() => {}} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders SliderInput', () => {
     const tree = renderer.create(
-      <SliderInput label="Volume" value={0.5} onValueChange={() => {}} />
+      <SliderInput label="Volume" value={0.5} onValueChange={() => {}} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -240,7 +223,7 @@ describe('component smoke tests', () => {
         options={['USA', 'Canada']}
         onSelectionChange={() => {}}
         optionTitle={(o) => o}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -252,7 +235,7 @@ describe('component smoke tests', () => {
         selection="Day"
         onSelectionChange={() => {}}
         optionTitle={(o) => o}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -319,14 +302,14 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <PullToRefresh refreshing={false} onRefresh={() => {}}>
         <Text>Content</Text>
-      </PullToRefresh>
+      </PullToRefresh>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders ErrorStateView', () => {
     const tree = renderer.create(
-      <ErrorStateView title="Something went wrong" onRetryPress={() => {}} />
+      <ErrorStateView title="Something went wrong" onRetryPress={() => {}} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -335,7 +318,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <ModalDialog visible={true} onDismiss={() => {}}>
         <Text>Content</Text>
-      </ModalDialog>
+      </ModalDialog>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -344,7 +327,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <BottomSheet visible={true} onDismiss={() => {}}>
         <Text>Content</Text>
-      </BottomSheet>
+      </BottomSheet>,
     );
     expect(tree.toJSON()).toBeTruthy();
     tree.unmount();
@@ -354,7 +337,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <CollapsibleView title="Details">
         <Text>Content</Text>
-      </CollapsibleView>
+      </CollapsibleView>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -365,7 +348,7 @@ describe('component smoke tests', () => {
         items={[{ tag: 'home', icon: <Text>H</Text>, label: 'Home' }]}
         selection="home"
         onSelectionChange={() => {}}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -376,7 +359,7 @@ describe('component smoke tests', () => {
         items={[{ tag: 'home', icon: <Text>H</Text>, label: 'Home' }]}
         selection="home"
         onSelectionChange={() => {}}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -390,7 +373,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <PagerView>
         <Text>Page 1</Text>
-      </PagerView>
+      </PagerView>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -400,7 +383,7 @@ describe('component smoke tests', () => {
       <PagerView currentPage={0}>
         <Text>Page 1</Text>
         <Text>Page 2</Text>
-      </PagerView>
+      </PagerView>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -416,7 +399,7 @@ describe('component smoke tests', () => {
       <PagerView currentPage={0} onPageChange={onPageChange}>
         <Text>Page 1</Text>
         <Text>Page 2</Text>
-      </PagerView>
+      </PagerView>,
     );
     expect(instance.toJSON()).toBeTruthy();
     expect(onPageChange).not.toHaveBeenCalled();
@@ -426,35 +409,33 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <KeyboardAvoidingScrollView>
         <Text>Content</Text>
-      </KeyboardAvoidingScrollView>
+      </KeyboardAvoidingScrollView>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders LoadingButton', () => {
     const tree = renderer.create(
-      <LoadingButton label="Save" isLoading={false} onPress={() => {}} />
+      <LoadingButton label="Save" isLoading={false} onPress={() => {}} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders LoadingButton while loading', () => {
     const tree = renderer.create(
-      <LoadingButton label="Save" isLoading={true} onPress={() => {}} />
+      <LoadingButton label="Save" isLoading={true} onPress={() => {}} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders FloatingActionButton', () => {
-    const tree = renderer.create(
-      <FloatingActionButton icon={<Text>+</Text>} onPress={() => {}} />
-    );
+    const tree = renderer.create(<FloatingActionButton icon={<Text>+</Text>} onPress={() => {}} />);
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders ButtonGroup', () => {
     const tree = renderer.create(
-      <ButtonGroup options={['Day', 'Week']} selectedIndices={[0]} onSelectionChange={() => {}} />
+      <ButtonGroup options={['Day', 'Week']} selectedIndices={[0]} onSelectionChange={() => {}} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -476,14 +457,14 @@ describe('component smoke tests', () => {
 
   it('renders DatePickerField', () => {
     const tree = renderer.create(
-      <DatePickerField label="Birthday" date={null} onDateChange={() => {}} />
+      <DatePickerField label="Birthday" date={null} onDateChange={() => {}} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders TimePickerField', () => {
     const tree = renderer.create(
-      <TimePickerField label="Reminder" time={null} onTimeChange={() => {}} />
+      <TimePickerField label="Reminder" time={null} onTimeChange={() => {}} />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -492,7 +473,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <FormField label="Email" helperText="We'll never share it">
         <Text>input</Text>
-      </FormField>
+      </FormField>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -501,7 +482,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <FormField label="Email" error="Required">
         <Text>input</Text>
-      </FormField>
+      </FormField>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -513,14 +494,17 @@ describe('component smoke tests', () => {
 
   it('renders AvatarGroup', () => {
     const tree = renderer.create(
-      <AvatarGroup avatars={[{ initials: 'AK' }, { initials: 'JS' }, { initials: 'TS' }]} max={2} />
+      <AvatarGroup
+        avatars={[{ initials: 'AK' }, { initials: 'JS' }, { initials: 'TS' }]}
+        max={2}
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders StatsCard', () => {
     const tree = renderer.create(
-      <StatsCard label="Revenue" value="$12,400" trend="up" trendValue="+12%" />
+      <StatsCard label="Revenue" value="$12,400" trend="up" trendValue="+12%" />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -554,7 +538,13 @@ describe('component smoke tests', () => {
 
   it('renders Snackbar', () => {
     const tree = renderer.create(
-      <Snackbar message="Undo?" actionLabel="Undo" isVisible={true} onDismiss={() => {}} onAction={() => {}} />
+      <Snackbar
+        message="Undo?"
+        actionLabel="Undo"
+        isVisible={true}
+        onDismiss={() => {}}
+        onAction={() => {}}
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
     // Snackbar schedules an auto-dismiss setTimeout while visible; unmount to
@@ -568,7 +558,7 @@ describe('component smoke tests', () => {
         visible={true}
         onClose={() => {}}
         actions={[{ label: 'Delete', isDestructive: true, onPress: () => {} }]}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -577,7 +567,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <Popover trigger={<Text>Open</Text>}>
         <Text>Content</Text>
-      </Popover>
+      </Popover>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -586,7 +576,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <Tooltip label="More info">
         <Text>Hover me</Text>
-      </Tooltip>
+      </Tooltip>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -595,7 +585,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <SideMenu isOpen={true} onClose={() => {}}>
         <Text>Menu</Text>
-      </SideMenu>
+      </SideMenu>,
     );
     expect(tree.toJSON()).toBeTruthy();
     tree.unmount();
@@ -607,13 +597,15 @@ describe('component smoke tests', () => {
         items={[{ tag: 'home', icon: <Text>H</Text>, label: 'Home' }]}
         selection="home"
         onSelectionChange={() => {}}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
 
   it('renders StepIndicator', () => {
-    const tree = renderer.create(<StepIndicator steps={['Info', 'Payment', 'Review']} currentStep={1} />);
+    const tree = renderer.create(
+      <StepIndicator steps={['Info', 'Payment', 'Review']} currentStep={1} />,
+    );
     expect(tree.toJSON()).toBeTruthy();
   });
 
@@ -624,7 +616,7 @@ describe('component smoke tests', () => {
           { label: 'Home', onPress: () => {} },
           { label: 'Settings', onPress: () => {} },
         ]}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -634,7 +626,7 @@ describe('component smoke tests', () => {
       <AdaptiveStack breakpoint={600}>
         <Text>A</Text>
         <Text>B</Text>
-      </AdaptiveStack>
+      </AdaptiveStack>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -644,7 +636,7 @@ describe('component smoke tests', () => {
       <FlowLayout>
         <Text>Tag 1</Text>
         <Text>Tag 2</Text>
-      </FlowLayout>
+      </FlowLayout>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -653,7 +645,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <StickyHeader header={<Text>Header</Text>}>
         <Text>Content</Text>
-      </StickyHeader>
+      </StickyHeader>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -670,7 +662,7 @@ describe('component smoke tests', () => {
           { key: 'a', title: 'Section A', content: <Text>Content A</Text> },
           { key: 'b', title: 'Section B', content: <Text>Content B</Text> },
         ]}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -679,10 +671,15 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <Timeline
         events={[
-          { key: '1', title: 'Order placed', subtitle: 'Your order was placed', timestamp: '9:00 AM' },
+          {
+            key: '1',
+            title: 'Order placed',
+            subtitle: 'Your order was placed',
+            timestamp: '9:00 AM',
+          },
           { key: '2', title: 'Shipped', timestamp: '2:00 PM' },
         ]}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -700,7 +697,7 @@ describe('component smoke tests', () => {
         options={['USA', 'Canada', 'Mexico']}
         onSelectionChange={() => {}}
         optionTitle={(option) => option}
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -729,7 +726,7 @@ describe('component smoke tests', () => {
         onConfirm={() => {}}
         onCancel={() => {}}
         isDestructive
-      />
+      />,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -738,7 +735,7 @@ describe('component smoke tests', () => {
     const tree = renderer.create(
       <SafeAreaWrapper>
         <Text>Content</Text>
-      </SafeAreaWrapper>
+      </SafeAreaWrapper>,
     );
     expect(tree.toJSON()).toBeTruthy();
   });
@@ -746,5 +743,79 @@ describe('component smoke tests', () => {
   it('renders LabeledDivider', () => {
     const tree = renderer.create(<LabeledDivider label="OR" alignment="center" />);
     expect(tree.toJSON()).toBeTruthy();
+  });
+});
+
+// ─── Theme provider ───────────────────────────────────────────────────────────
+
+/** Helper: a consumer that exposes the current theme colours via a Text node. */
+const ThemeConsumer: React.FC = () => {
+  const { theme } = useSyzygyTheme();
+  return <Text testID="primary-color">{theme.colors.primary}</Text>;
+};
+
+/** Helper: a consumer that calls setTheme when rendered, for mutation tests. */
+const ThemeSwitcher: React.FC<{ nextTheme: typeof defaultTheme }> = ({ nextTheme }) => {
+  const { setTheme } = useSyzygyTheme();
+  React.useEffect(() => {
+    setTheme(nextTheme);
+  }, [nextTheme, setTheme]);
+  return <ThemeConsumer />;
+};
+
+describe('SyzygyThemeProvider', () => {
+  it('renders its children', () => {
+    const tree = renderer.create(
+      <SyzygyThemeProvider>
+        <Text>child</Text>
+      </SyzygyThemeProvider>,
+    );
+    expect(tree.toJSON()).toBeTruthy();
+  });
+
+  it('provides the default theme when no theme prop is given', () => {
+    const tree = renderer.create(
+      <SyzygyThemeProvider>
+        <ThemeConsumer />
+      </SyzygyThemeProvider>,
+    );
+    const node = tree.root.findByProps({ testID: 'primary-color' });
+    expect(node.props.children).toBe(defaultTheme.colors.primary);
+  });
+
+  it('provides the theme passed via the theme prop', () => {
+    const tree = renderer.create(
+      <SyzygyThemeProvider theme={darkTheme}>
+        <ThemeConsumer />
+      </SyzygyThemeProvider>,
+    );
+    const node = tree.root.findByProps({ testID: 'primary-color' });
+    expect(node.props.children).toBe(darkTheme.colors.primary);
+  });
+
+  it('responds to runtime theme changes via setTheme', () => {
+    let tree!: renderer.ReactTestRenderer;
+    renderer.act(() => {
+      tree = renderer.create(
+        <SyzygyThemeProvider theme={defaultTheme}>
+          <ThemeSwitcher nextTheme={darkTheme} />
+        </SyzygyThemeProvider>,
+      );
+    });
+    // After the effect runs the consumer should reflect the dark theme.
+    const node = tree.root.findByProps({ testID: 'primary-color' });
+    expect(node.props.children).toBe(darkTheme.colors.primary);
+  });
+
+  it('SyzygyThemeOverride provides a subtree-level theme', () => {
+    const tree = renderer.create(
+      <SyzygyThemeProvider theme={defaultTheme}>
+        <SyzygyThemeOverride theme={darkTheme}>
+          <ThemeConsumer />
+        </SyzygyThemeOverride>
+      </SyzygyThemeProvider>,
+    );
+    const node = tree.root.findByProps({ testID: 'primary-color' });
+    expect(node.props.children).toBe(darkTheme.colors.primary);
   });
 });

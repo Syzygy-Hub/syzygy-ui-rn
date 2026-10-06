@@ -2,10 +2,10 @@
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![npm](https://img.shields.io/npm/v/syzygy-ui-rn?label=npm&color=2F6FED)](https://www.npmjs.com/package/syzygy-ui-rn)
-[![Version](https://img.shields.io/badge/version-2.5.0-2F6FED)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-3.0.0-2F6FED)](CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android%20%7C%20Web-lightgrey)](https://reactnative.dev)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CI](https://github.com/Syzygy-Hub/syzygy-ui-rn/actions/workflows/node.yml/badge.svg)](https://github.com/Syzygy-Hub/syzygy-ui-rn/actions/workflows/node.yml)
+[![CI](https://github.com/Syzygy-Hub/syzygy-ui-rn/actions/workflows/ci.yml/badge.svg)](https://github.com/Syzygy-Hub/syzygy-ui-rn/actions/workflows/ci.yml)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Syzygy-Hub/.github/main/brand/assets/banners/syzygy-banner-dark-2400.png">
@@ -26,15 +26,16 @@ Full ecosystem architecture: [ecosystem-fragment.md](https://github.com/Syzygy-H
 - React Native 0.70+
 - React 18+
 - TypeScript 5+
+- syzygy-foundation-rn >= 3.0.0
 
 ## Installation
 ```sh
-npm install syzygy-ui-rn
+npm install syzygy-ui-rn@3.0.0
 ```
 
 ## Theming
 
-syzygy-ui-rn v2.4.0 ships a first-class theming system built on React Context.
+syzygy-ui-rn ships a first-class theming system built on React Context.
 
 ### Setup
 
@@ -147,7 +148,13 @@ const brandTheme: SyzygyTheme = {
 
 **NetworkStatusBanner — cross-platform note**: On iOS and Android, `NetworkStatusBanner` self-detects connectivity via first-party OS APIs and requires no `isOffline` prop. On React Native and Flutter, real network detection requires a third-party package that this library deliberately does not bundle, so the banner is controlled/presentational — pass `isOffline` from your own network state (e.g. `@react-native-community/netinfo`).
 
-See [CHANGELOG.md](CHANGELOG.md) for version history.
+## Upgrading to 3.0.0
+
+- **Foundation 3.0.0 is now required** — add `"syzygy-foundation-rn": "^3.0.0"` to your `package.json` dependencies.
+- **Radius.xl corrected to 24** (was 16) — if you have hardcoded the value `16` for `xl` corner radius, update to `24`.
+- Install with: `npm install syzygy-ui-rn@3.0.0`
+
+See [CHANGELOG.md](CHANGELOG.md) for the full list of changes.
 
 ## Design Tokens
 
@@ -218,7 +225,7 @@ Falls back to light for `'unspecified'`/`null`/`undefined`. Every color also has
 | `sm` | 4 |
 | `md` | 8 |
 | `lg` | 16 |
-| `xl` | 16 |
+| `xl` | 24 |
 | `full` | 9999 (pill/capsule shapes) |
 
 ### Elevation (`elevation`)
@@ -292,7 +299,7 @@ Releases are fully automated. To publish a new version:
 
 2. Commit with the release prefix:
 ```sh
-   git commit -m "release: v1.2.0 — description of changes"
+   git commit -m "release: 1.2.0 — description of changes"
    git push origin main
 ```
 
@@ -303,10 +310,10 @@ Releases are fully automated. To publish a new version:
    - Create a GitHub release with the version tag
 
 ### Version format
-Follow semver: `v{major}.{minor}.{patch}`
-- Patch: `v1.0.1` — bug fixes
-- Minor: `v1.1.0` — new components or features
-- Major: `v2.0.0` — breaking changes
+Follow semver: `{major}.{minor}.{patch}`
+- Patch: `1.0.1` — bug fixes
+- Minor: `1.1.0` — new components or features
+- Major: `2.0.0` — breaking changes
 
 ### Scripts
 

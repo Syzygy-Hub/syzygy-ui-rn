@@ -7,11 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+---
 
-### Changed
+## [3.0.0] - 2026-10-06
 
-### Fixed
+### Changed — BREAKING
+
+- **Foundation 3.0.0 minimum dependency added**: `syzygy-foundation-rn >=3.0.0` is now a required peer dependency.
+- **Radius.xl corrected**: `Radius.xl` corrected from 16 to 24.
 
 ---
 
@@ -142,17 +145,27 @@ This repo required no carry-over patch fixes for this release (PagerView's Displ
 - CI's `lint` job now fetches the shared ESLint/Prettier config from `syzygy-lint-config` (pinned to `v1.0.0`) instead of using only the local `.eslintrc.js`.
 - Added `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-react-native`, `eslint-plugin-import`, `eslint-config-prettier`, and `prettier` as devDependencies — required by the shared config's rules, previously missing.
 
-## [1.0.2] - v1.0.2
+## [1.0.2] - 2026-01-01
 
 - Fix `getColors` to handle unspecified color scheme.
 
-## [1.0.1] - v1.0.1
+## [1.0.1] - 2026-01-01
 
 - OIDC npm publishing, scoped package, lint and typecheck in CI.
 
-## [1.0.0] - v1.0.0
+## [1.0.0] - 2026-01-01
 
 - Initial release with TextInput character counter.
 
+[Unreleased]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/2.5.0...3.0.0
 [2.5.0]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/2.4.0...2.5.0
 [2.4.0]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/2.3.0...2.4.0
+[2.3.0]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/2.2.1...2.3.0
+[2.2.1]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/2.2.0...2.2.1
+[2.2.0]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/2.1.0...2.2.0
+[2.1.0]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/2.0.0...2.1.0
+[2.0.0]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/1.0.2...2.0.0
+[1.0.2]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/1.0.1...1.0.2
+[1.0.1]: https://github.com/Syzygy-Hub/syzygy-ui-rn/compare/1.0.0...1.0.1
+[1.0.0]: https://github.com/Syzygy-Hub/syzygy-ui-rn/releases/tag/1.0.0
